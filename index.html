@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2027 妙高赤倉滑雪旅行 | Myoko Akakura</title>
+    <!-- 引入 Google Fonts，使用具現代感的 Inter 字體 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 導覽列 Navbar -->
+    <nav class="navbar">
+        <div class="logo">Myoko 2027</div>
+        <ul class="nav-links">
+            <li><a href="#hero">首頁</a></li>
+            <li><a href="#flights">航班資訊</a></li>
+            <li><a href="#transport">交通住宿</a></li>
+            <li><a href="#itinerary">每日行程</a></li>
+            <li><a href="#resort">雪場周邊</a></li>
+            <li><a href="#expenses">公費分帳</a></li>
+            <li><a href="#gear">裝備清單</a></li>
+            <li><a href="#gallery">影音回憶</a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- 主視覺 Hero Section -->
+    <section id="hero" class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">2027 妙高赤倉滑雪旅行</h1>
+            <p class="hero-subtitle">Myoko Akakura Snowboard Trip</p>
+            <div class="countdown-container">
+                <h2>距離出發還有</h2>
+                <div id="countdown" class="countdown">
+                    <!-- 倒數計時將由 JavaScript 動態寫入 -->
+                </div>
+            </div>
+            <a href="#flights" class="btn-primary">開始探索</a>
+        </div>
+    </section>
+
+    <!-- 航班資訊 Section -->
+    <section id="flights" class="section">
+        <div class="container">
+            <h2 class="section-title">航班資訊 <span>Flights</span></h2>
+            <div class="cards-grid">
+                <!-- 去程航班卡片 -->
+                <div class="glass-card flight-card">
+                    <div class="flight-type">去程 Departure</div>
+                    <h3 class="flight-number">JX802</h3>
+                    <div class="flight-details">
+                        <div class="time-loc">
+                            <span class="time">08:30</span>
+                            <span class="loc">TPE (桃園)</span>
+                        </div>
+                        <div class="arrow">✈️</div>
+                        <div class="time-loc">
+                            <span class="time">12:45</span>
+                            <span class="loc">NRT (成田)</span>
+                        </div>
+                    </div>
+                    <p class="flight-date">2027-03-01 (一)</p>
+                </div>
+                <!-- 回程航班卡片 -->
+                <div class="glass-card flight-card">
+                    <div class="flight-type">回程 Return</div>
+                    <h3 class="flight-number">JX805</h3>
+                    <div class="flight-details">
+                        <div class="time-loc">
+                            <span class="time">14:00</span>
+                            <span class="loc">NRT (成田)</span>
+                        </div>
+                        <div class="arrow">✈️</div>
+                        <div class="time-loc">
+                            <span class="time">17:15</span>
+                            <span class="loc">TPE (桃園)</span>
+                        </div>
+                    </div>
+                    <p class="flight-date">2027-03-06 (六)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 交通與住宿 Section -->
+    <section id="transport" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">交通與住宿 <span>Transport & Stay</span></h2>
+            <div class="info-grid">
+                <div class="glass-card info-card">
+                    <h3>🚆 機場到赤倉溫泉區</h3>
+                    <p>成田機場搭乘 <strong>Skyliner</strong> 至上野 (Ueno)。</p>
+                    <p>轉乘 <strong>北陸新幹線</strong> (Hokuriku Shinkansen) 至上越妙高站 (Joetsumyoko)。</p>
+                    <p>轉乘當地接駁巴士或計程車直達赤倉溫泉區。</p>
+                </div>
+                <div class="glass-card info-card">
+                    <h3>🏨 住宿資訊</h3>
+                    <p><strong>飯店名稱：</strong> Hotel Akakura (暫定)</p>
+                    <p><strong>入住時間：</strong> 15:00 後</p>
+                    <p><strong>退房時間：</strong> 10:00 前</p>
+                    <a href="https://maps.google.com" target="_blank" class="btn-secondary">查看 Google Map 地圖</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 每日行程表 Section (Timeline) -->
+    <section id="itinerary" class="section">
+        <div class="container">
+            <h2 class="section-title">每日行程 <span>Itinerary</span></h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <h3>Day 1 - 3/1 (一)</h3>
+                        <p>抵達日本，搭乘新幹線前往妙高赤倉。辦理入住，雪具店租借裝備，晚上享受溫泉與迎賓晚餐。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <h3>Day 2 - 3/2 (二)</h3>
+                        <p>全日滑雪：赤倉溫泉滑雪場 (Akakura Onsen)。熟悉雪況，初級至中級雪道巡禮。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <h3>Day 3 - 3/3 (三)</h3>
+                        <p>全日滑雪：赤倉觀光度假滑雪場 (Akakura Kanko)。體驗粉雪與長距離樹林雪道。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <h3>Day 4 - 3/4 (四)</h3>
+                        <p>全日滑雪：可選擇前往周邊雪場 (如池之平或杉之原)，或在赤倉溫泉街隨意逛逛、喝咖啡。</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <h3>Day 5 - 3/5 (五)</h3>
+                        <p>最後衝刺滑雪半日。下午歸還雪具，採買伴手禮。晚上舉行慶功宴！</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <h3>Day 6 - 3/6 (六)</h3>
+                        <p>早晨啟程返回東京成田機場，搭機返台。結束美好的雪國之旅。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 雪場與周邊 Section -->
+    <section id="resort" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">雪場與周邊 <span>Resort & Info</span></h2>
+            <div class="cards-grid three-cols">
+                <div class="glass-card">
+                    <h3>🏂 妙高赤倉雪場</h3>
+                    <p>降雪量驚人，擁有全日本首屈一指的頂級粉雪 (Japow)。寬闊的雪道適合各程度的玩家。</p>
+                </div>
+                <div class="glass-card">
+                    <h3>🍜 推薦餐廳</h3>
+                    <ul class="custom-list" style="margin-left: 1.5rem; margin-top: 1rem;">
+                        <li>赤倉居酒屋 - 必點烤肉串</li>
+                        <li>雪山拉麵亭 - 暖胃首選</li>
+                        <li>日式可麗餅小頭 - 下午茶必備</li>
+                    </ul>
+                </div>
+                <div class="glass-card">
+                    <h3>♨️ 必泡溫泉</h3>
+                    <ul class="custom-list" style="margin-left: 1.5rem; margin-top: 1rem;">
+                        <li>露天野溪溫泉 (需預約)</li>
+                        <li>飯店內大浴場</li>
+                        <li>赤倉足湯 (免費)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 公費與分帳表 Section -->
+    <section id="expenses" class="section">
+        <div class="container">
+            <h2 class="section-title">公費與分帳表 <span>Expenses</span></h2>
+            <div class="table-responsive glass-card">
+                <table class="expense-table">
+                    <thead>
+                        <tr>
+                            <th>姓名 (Name)</th>
+                            <th>機票費用</th>
+                            <th>住宿費用</th>
+                            <th>雪票/裝備</th>
+                            <th>公費代墊</th>
+                            <th>應補/應退</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Bonnie</td><td>TWD 15,000</td><td>TWD 10,000</td><td>JPY 20,000</td><td>TWD 5,000</td><td class="positive">退 TWD 2,000</td></tr>
+                        <tr><td>Leo</td><td>TWD 15,000</td><td>TWD 10,000</td><td>JPY 20,000</td><td>0</td><td class="negative">補 TWD 3,000</td></tr>
+                        <tr><td>Yuk</td><td>TWD 15,000</td><td>TWD 10,000</td><td>JPY 20,000</td><td>0</td><td class="negative">補 TWD 3,000</td></tr>
+                        <tr><td>Dino</td><td>TWD 15,000</td><td>TWD 10,000</td><td>JPY 20,000</td><td>TWD 10,000</td><td class="positive">退 TWD 7,000</td></tr>
+                        <tr><td>Ian</td><td>TWD 15,000</td><td>TWD 10,000</td><td>JPY 15,000</td><td>0</td><td class="negative">補 TWD 3,000</td></tr>
+                        <tr><td>Connie</td><td>TWD 15,000</td><td>TWD 10,000</td><td>JPY 15,000</td><td>0</td><td class="negative">補 TWD 3,000</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 裝備清單 Section -->
+    <section id="gear" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">裝備清單 <span>Gear Checklist</span></h2>
+            <div class="gear-container glass-card">
+                <div class="checklist">
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        <span class="item-text">滑雪板 (Snowboard) & 固定器 (Bindings)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        <span class="item-text">雪鞋 (Boots)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        <span class="item-text">防水雪衣 (Snow Jacket) & 雪褲 (Snow Pants)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        <span class="item-text">保暖排汗內衣褲 (Base Layers)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        <span class="item-text">護具 (安全帽、護臀、護膝、護腕)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        <span class="item-text">雪鏡 (Goggles) & 備用鏡片</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        <span class="item-text">滑雪手套 (Gloves/Mittens)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" checked>
+                        <span class="checkmark"></span>
+                        <span class="item-text">運動相機與配件 (如 Insta360 GO Ultra、腳架、備用電池)</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        <span class="item-text">護照 & 日幣現金</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 影音回憶錄 Section -->
+    <section id="gallery" class="section">
+        <div class="container">
+            <h2 class="section-title">影音回憶錄 <span>Memories</span></h2>
+            <p class="gallery-desc">我們的精彩瞬間將於此呈現。</p>
+            <!-- 這裡將由 mediaData.js 與 script.js 動態生成內容 -->
+            <div id="media-grid" class="media-grid"></div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2027 Myoko Akakura Snowboard Trip. All rights reserved.</p>
+    </footer>
+
+    <!-- 引入資料檔案與主程式檔案 -->
+    <script src="mediaData.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

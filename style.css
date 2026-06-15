@@ -1,0 +1,661 @@
+/* -------------------------------------------------------------------------- */
+/*  CSS 變數定義 (雪國暗黑現代風格)                                             */
+/* -------------------------------------------------------------------------- */
+:root {
+    --bg-main: #0B1121; /* 深邃夜空藍 */
+    --bg-alt: #151E32; /* 稍淺的深色區塊 */
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --accent: #38BDF8; /* 冰晶藍 */
+    --accent-hover: #0EA5E9;
+    --glass-bg: rgba(30, 41, 59, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --font-main: 'Inter', 'Noto Sans TC', sans-serif;
+    --transition-speed: 0.3s;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  基礎設定                                                                 */
+/* -------------------------------------------------------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth; /* 支援平滑滾動 */
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  共用元件                                                                 */
+/* -------------------------------------------------------------------------- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.section {
+    padding: 6rem 0;
+}
+
+.alt-bg {
+    background-color: var(--bg-alt);
+}
+
+.section-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background-color: var(--accent);
+    border-radius: 2px;
+}
+
+.section-title span {
+    display: block;
+    font-size: 1rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 0.5rem;
+}
+
+/* 毛玻璃卡片設計 (Glassmorphism) */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--glass-shadow);
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.btn-primary {
+    display: inline-block;
+    background-color: var(--accent);
+    color: #fff;
+    padding: 1rem 2.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+    transform: scale(1.05);
+}
+
+.btn-secondary {
+    display: inline-block;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    padding: 0.8rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all var(--transition-speed);
+    margin-top: 1rem;
+}
+
+.btn-secondary:hover {
+    background-color: var(--accent);
+    color: #fff;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  導覽列 Navbar                                                            */
+/* -------------------------------------------------------------------------- */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 5%;
+    z-index: 1000;
+    background: rgba(11, 17, 33, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: padding 0.3s;
+}
+
+.navbar.scrolled {
+    padding: 1rem 5%;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-links a {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: color var(--transition-speed);
+    position: relative;
+}
+
+.nav-links a:hover {
+    color: var(--accent);
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: var(--accent);
+    transition: width var(--transition-speed);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.hamburger {
+    display: none;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: var(--text-primary);
+    border-radius: 3px;
+    transition: all 0.3s;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  首頁主視覺 Hero                                                          */
+/* -------------------------------------------------------------------------- */
+.hero-section {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    /* 背景圖設定，可替換 src */
+    background: linear-gradient(rgba(11, 17, 33, 0.7), rgba(11, 17, 33, 0.3)), url('assets/myoko_hero_1781516502253.png') center/cover no-repeat;
+    background-attachment: fixed;
+}
+
+.hero-content {
+    z-index: 2;
+    padding: 0 20px;
+    animation: fadeIn 1.5s ease-out;
+}
+
+.hero-title {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-bottom: 3rem;
+    letter-spacing: 3px;
+}
+
+/* 倒數計時器 */
+.countdown-container {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    padding: 2rem;
+    border-radius: 16px;
+    margin-bottom: 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.countdown-container h2 {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.time-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.time-box span.num {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+}
+
+.time-box span.label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  網格排版 (Flights, Transport, Resort)                                    */
+/* -------------------------------------------------------------------------- */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+
+.cards-grid.three-cols {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+/* 航班卡片細節 */
+.flight-card {
+    text-align: center;
+}
+
+.flight-type {
+    color: var(--accent);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+.flight-number {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.flight-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.time-loc {
+    display: flex;
+    flex-direction: column;
+}
+
+.time-loc .time {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.time-loc .loc {
+    color: var(--text-secondary);
+}
+
+.flight-details .arrow {
+    font-size: 2rem;
+    color: var(--accent);
+}
+
+.flight-date {
+    border-top: 1px solid var(--glass-border);
+    padding-top: 1rem;
+    color: var(--text-secondary);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  時間軸 Itinerary                                                         */
+/* -------------------------------------------------------------------------- */
+.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    background-color: var(--glass-border);
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    border-radius: 2px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+    padding-left: 60px;
+}
+
+.timeline-dot {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: var(--accent);
+    border-radius: 50%;
+    left: 12px;
+    top: 20px;
+    box-shadow: 0 0 10px var(--accent);
+}
+
+.timeline-content h3 {
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  公費與分帳表 Expenses                                                    */
+/* -------------------------------------------------------------------------- */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.expense-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.expense-table th, .expense-table td {
+    padding: 1.2rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.expense-table th {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: var(--accent);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.expense-table tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.positive {
+    color: #4ADE80; /* 綠色 */
+    font-weight: bold;
+}
+
+.negative {
+    color: #F87171; /* 紅色 */
+    font-weight: bold;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  裝備清單 Gear Checklist                                                  */
+/* -------------------------------------------------------------------------- */
+.gear-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 45px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    user-select: none;
+    transition: color 0.3s;
+}
+
+.checkbox-item:hover {
+    color: var(--accent);
+}
+
+.checkbox-item input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 28px;
+    width: 28px;
+    background-color: rgba(255,255,255,0.1);
+    border: 2px solid var(--glass-border);
+    border-radius: 6px;
+    transition: all 0.3s;
+}
+
+.checkbox-item:hover input ~ .checkmark {
+    background-color: rgba(255,255,255,0.2);
+}
+
+.checkbox-item input:checked ~ .checkmark {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkbox-item input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.checkbox-item .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-item input:checked ~ .item-text {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  影音回憶錄 Gallery (動態渲染)                                             */
+/* -------------------------------------------------------------------------- */
+.gallery-desc {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.media-item {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+    background-color: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    transition: transform 0.3s;
+}
+
+.media-item:hover {
+    transform: scale(1.03);
+    z-index: 2;
+}
+
+.media-item img, .media-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s;
+}
+
+.media-item:hover img, .media-item:hover video {
+    transform: scale(1.05);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Footer                                                                   */
+/* -------------------------------------------------------------------------- */
+.footer {
+    text-align: center;
+    padding: 3rem;
+    border-top: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  RWD 響應式設計 (平板與手機)                                               */
+/* -------------------------------------------------------------------------- */
+@media screen and (max-width: 992px) {
+    .cards-grid, .cards-grid.three-cols, .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
+    
+    .nav-links {
+        position: fixed;
+        right: -100%;
+        top: 70px;
+        flex-direction: column;
+        background: rgba(11, 17, 33, 0.95);
+        backdrop-filter: blur(15px);
+        width: 100%;
+        text-align: center;
+        padding: 2rem 0;
+        transition: right 0.4s ease;
+        border-bottom: 1px solid var(--glass-border);
+    }
+    
+    .nav-links.active {
+        right: 0;
+    }
+    
+    .countdown {
+        gap: 1rem;
+    }
+    
+    .time-box span.num {
+        font-size: 2rem;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .timeline::before {
+        left: 15px;
+    }
+    
+    .timeline-dot {
+        left: 7px;
+    }
+    
+    .timeline-item {
+        padding-left: 45px;
+    }
+}
