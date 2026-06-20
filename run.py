@@ -1,122 +1,9 @@
-// --------------------------------------------------------------------------
-// 1. 導覽列 Navbar 的滾動變化與手機版選單切換
-// --------------------------------------------------------------------------
-const navbar = document.querySelector('.navbar');
-const hamburger = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links');
-const navItems = document.querySelectorAll('.nav-links a');
+﻿import re
 
-// 監聽滾動事件，為 navbar 加上陰影與背景
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
-    }
-});
+with open("script.js", "r", encoding="utf-8") as f:
+    js_content = f.read()
 
-// 手機版選單開關
-hamburger.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-});
-
-// 點擊選單連結後，自動收合手機版選單
-navItems.forEach(item => {
-    item.addEventListener('click', () => {
-        navLinks.classList.remove('active');
-    });
-});
-
-
-// --------------------------------------------------------------------------
-// 2. 目標日期倒數計時器 (Target: 2027-03-01 00:00:00)
-// --------------------------------------------------------------------------
-const targetDate = new Date('2027-03-01T00:00:00').getTime();
-const countdownElement = document.getElementById('countdown');
-
-function updateCountdown() {
-    const now = new Date().getTime();
-    const distance = targetDate - now;
-
-    // 如果已經超過目標日期
-    if (distance < 0) {
-        countdownElement.innerHTML = "<h3>旅行已經開始或結束囉！</h3>";
-        return;
-    }
-
-    // 計算天、時、分、秒
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    // 渲染到畫面上
-    countdownElement.innerHTML = `
-        <div class="time-box">
-            <span class="num">${days}</span>
-            <span class="label">Days</span>
-        </div>
-        <div class="time-box">
-            <span class="num">${hours.toString().padStart(2, '0')}</span>
-            <span class="label">Hours</span>
-        </div>
-        <div class="time-box">
-            <span class="num">${minutes.toString().padStart(2, '0')}</span>
-            <span class="label">Mins</span>
-        </div>
-        <div class="time-box">
-            <span class="num">${seconds.toString().padStart(2, '0')}</span>
-            <span class="label">Secs</span>
-        </div>
-    `;
-}
-
-// 初次呼叫並設定每秒更新一次
-updateCountdown();
-setInterval(updateCountdown, 1000);
-
-
-// --------------------------------------------------------------------------
-// 3. 動態渲染「影音回憶錄」 (讀取 mediaData.js)
-// --------------------------------------------------------------------------
-// 等待 DOM 載入完成後執行
-document.addEventListener('DOMContentLoaded', () => {
-    const mediaGrid = document.getElementById('media-grid');
-    
-    // 檢查 mediaData 是否存在 (來自 mediaData.js)
-    if (typeof mediaData !== 'undefined' && mediaData.length > 0) {
-        mediaData.forEach(item => {
-            // 建立包裹層
-            const mediaItem = document.createElement('div');
-            mediaItem.classList.add('media-item');
-
-            // 判斷是圖片還是影片
-            if (item.type === 'image') {
-                const img = document.createElement('img');
-                img.src = item.src;
-                img.alt = item.alt || '雪季回憶圖片';
-                img.loading = 'lazy'; // 提升效能
-                mediaItem.appendChild(img);
-            } else if (item.type === 'video') {
-                const video = document.createElement('video');
-                video.src = item.src;
-                video.controls = true; // 顯示控制列
-                mediaItem.appendChild(video);
-            }
-
-            // 將元素加入 grid 容器
-            mediaGrid.appendChild(mediaItem);
-        });
-    } else {
-        // 如果沒有資料時的預設文字
-        mediaGrid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center;">目前還沒有上傳影音，敬請期待！</p>';
-    }
-});
-
-// --------------------------------------------------------------------------
-// 4. 動態渲染房源候選清單 (Slider)
-// --------------------------------------------------------------------------
-const housingData = [
+new_housing_data = """const housingData = [
     {
         id: "house1",
         name: "Genki House (距離斜坡7公尺)",
@@ -299,21 +186,9 @@ const housingData = [
             "assets/house6/edda3f49-ca75-4299-824e-ffe1fc2eb943.jpeg"
         ]
     }
-];
+];"""
 
-document.addEventListener('DOMContentLoaded', () => {
-    const grid = document.getElementById('housing-grid');
-    if (!grid) return;
-
-    housingData.forEach(house => {
-        const card = document.createElement('div');
-        card.className = 'glass-card house-card';
-        
-        let imagesHtml = house.images.map(img => `<img src="${img}" alt="House Image" loading="lazy">`).join('');
-        let dotsHtml = house.images.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}"></div>`).join('');
-        let guideHtml = (house.localGuide || []).map(item => `<li>${item}</li>`).join('');
-        
-        card.innerHTML = `
+new_card_innerhtml = """        card.innerHTML = `
             <div class="slider-container">
                 <div class="slider-images">
                     ${imagesHtml}
@@ -339,46 +214,79 @@ document.addEventListener('DOMContentLoaded', () => {
                     <a href="#" class="btn-vote">投它一票</a>
                 </div>
             </div>
-        `;
-        
-        grid.appendChild(card);
-        setupSlider(card.querySelector('.slider-container'));
-    });
-});
+        `;"""
 
-function setupSlider(container) {
-    const imagesContainer = container.querySelector('.slider-images');
-    const images = container.querySelectorAll('.slider-images img');
-    const prevBtn = container.querySelector('.prev');
-    const nextBtn = container.querySelector('.next');
-    const dots = container.querySelectorAll('.dot');
-    
-    let currentIndex = 0;
-    const total = images.length;
-    if (total === 0) return;
+# Replace housingData
+js_content = re.sub(r'const housingData = \[[\s\S]*?\n\];', new_housing_data, js_content, count=1)
 
-    function updateSlider() {
-        imagesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
-        dots.forEach((dot, idx) => {
-            dot.classList.toggle('active', idx === currentIndex);
-        });
-    }
+# Replace card.innerHTML
+js_content = re.sub(r'card\.innerHTML = `[\s\S]*?        `;', new_card_innerhtml, js_content, count=1)
 
-    prevBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex === 0) ? total - 1 : currentIndex - 1;
-        updateSlider();
-    });
+with open("script.js", "w", encoding="utf-8") as f:
+    f.write(js_content)
 
-    nextBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex === total - 1) ? 0 : currentIndex + 1;
-        updateSlider();
-    });
 
-    dots.forEach((dot, idx) => {
-        dot.addEventListener('click', () => {
-            currentIndex = idx;
-            updateSlider();
-        });
-    });
+with open("style.css", "r", encoding="utf-8") as f:
+    css_content = f.read()
+
+new_house_actions = """.house-actions {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    text-align: center;
 }
 
+.house-actions .btn-vote,
+.house-actions .btn-secondary {
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}"""
+
+css_content = re.sub(r'\.house-actions \{[\s\S]*?\.house-actions \.btn-vote \{[\s\S]*?\}', new_house_actions, css_content, count=1)
+
+new_guide_links = """.local-guide li {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding: 0.35rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    line-height: 1.5;
+}
+
+.local-guide li a {
+    color: #93c5fd;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.local-guide li a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}"""
+
+css_content = re.sub(r'\.local-guide li \{[\s\S]*?line-height: 1\.5;\n\}', new_guide_links, css_content, count=1)
+
+with open("style.css", "w", encoding="utf-8") as f:
+    f.write(css_content)
+
+print("Files updated successfully")

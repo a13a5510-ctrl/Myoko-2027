@@ -92,19 +92,22 @@
     <section id="transport" class="section alt-bg">
         <div class="container">
             <h2 class="section-title">交通與住宿 <span>Transport & Stay</span></h2>
-            <div class="info-grid">
-                <div class="glass-card info-card">
-                    <h3>🚆 機場到赤倉溫泉區</h3>
-                    <p>成田機場搭乘 <strong>Skyliner</strong> 至上野 (Ueno)。</p>
-                    <p>轉乘 <strong>北陸新幹線</strong> (Hokuriku Shinkansen) 至上越妙高站 (Joetsumyoko)。</p>
-                    <p>轉乘當地接駁巴士或計程車直達赤倉溫泉區。</p>
-                </div>
-                <div class="glass-card info-card">
-                    <h3>🏨 住宿資訊</h3>
-                    <p><strong>飯店名稱：</strong> Hotel Akakura (暫定)</p>
-                    <p><strong>入住時間：</strong> 15:00 後</p>
-                    <p><strong>退房時間：</strong> 10:00 前</p>
-                    <a href="https://maps.google.com" target="_blank" class="btn-secondary">查看 Google Map 地圖</a>
+            
+            <!-- 交通資訊 -->
+            <div class="glass-card info-card" style="margin-bottom: 2rem;">
+                <h3>🚆 機場到赤倉溫泉區</h3>
+                <p>成田機場搭乘 <strong>Skyliner</strong> 至上野 (Ueno)。</p>
+                <p>轉乘 <strong>北陸新幹線</strong> (Hokuriku Shinkansen) 至上越妙高站 (Joetsumyoko)。</p>
+                <p>轉乘當地接駁巴士或計程車直達赤倉溫泉區。</p>
+            </div>
+
+            <!-- 住宿候選 -->
+            <div class="housing-section">
+                <h3 style="text-align: center; margin-bottom: 1rem;">🏨 房源候選清單</h3>
+                <p style="color: #F87171; font-weight: bold; margin-bottom: 2rem; text-align: center;">⚠️ 溫馨提醒：8 人團體強烈建議選擇 2 衛浴以上的房源，以免早晚搶廁所排隊。</p>
+                
+                <div id="housing-grid" class="housing-grid">
+                    <!-- 卡片將由 JavaScript 動態生成 -->
                 </div>
             </div>
         </div>
