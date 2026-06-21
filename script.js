@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // 4. 動態渲染房源候選清單 (Slider) + 匯率常數
 // --------------------------------------------------------------------------
 const twdToHkdRate = 0.24; // TWD → HKD 匯率
-const nights = 5; // 行程晚數
+const nights = 4; // 行程晚數
 
 function parsePriceNumber(priceStr) {
     const match = priceStr.match(/[\d,]+/);
@@ -177,7 +177,7 @@ const housingData = [
         name: "可容納最多 12 人的 5 房 2 客廳奢華別墅",
         rating: "5.0 (5則)",
         price: "$93,918 (免費停車)",
-        specs: "12人 / 5房10床 / 2.5衛 / 未明列廚房",
+        specs: "12人 / 5房10床 / 2.5衛 / 有廚房",
         location: "赤倉溫泉區 (Akakura Onsen)",
         coordinates: "36.8905, 138.182",
         localGuide: [
@@ -355,7 +355,15 @@ document.addEventListener('DOMContentLoaded', () => {
         let dotsHtml = house.images.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}"></div>`).join('');
 
         // --- 周邊機能：橫向滑動 Pill ---
-        let guideHtml = (house.localGuide || []).map(item => `<li class="guide-pill">${item}</li>`).join('');
+        let guideHtml = (house.localGuide || []).map(item => {
+            let processedItem = item;
+            if (processedItem.includes('步行')) {
+                processedItem = processedItem.replace('步行', '🚶 步行');
+            } else if (processedItem.includes('— 約')) {
+                processedItem = processedItem.replace('— 約', '— 🚗 開車約');
+            }
+            return `<li class="guide-pill">${processedItem}</li>`;
+        }).join('');
 
         // --- 價格拆分計算 ---
         const totalTWD = parsePriceNumber(house.price);
@@ -380,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="house-content">
                 <h4 class="house-title">${house.name}</h4>
                 <div class="house-info"><span>⭐</span> ${house.rating} <span class="badge-airbnb">via Airbnb</span></div>
-                <div class="house-info price-main"><span>💰</span> 總價 NT$ ${totalTWD.toLocaleString()} <span class="badge-parking">${parkingNote}</span></div>
+                <div class="house-info price-main"><span>💰</span> 總價 NT$ ${totalTWD.toLocaleString()} (2027/03/03~03/07 共4晚) <span class="badge-parking">${parkingNote}</span></div>
                 <div class="price-breakdown">
                     <span class="badge-hkd">≈ HK$ ${totalHKD.toLocaleString()}</span>
                 </div>
@@ -393,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="house-info"><span>🏠</span> ${house.specs}</div>
                 <div class="house-info"><span>📍</span> ${house.location}</div>
                 <div class="guide-section">
-                    <p class="guide-title">🗺️ 周邊機能 Local Guide</p>
+                    <p class="guide-title">🗺️ 周邊機能 Local Guide <span style="font-size: 0.75rem; color: var(--text-secondary); font-weight: normal;">(🚗 預設為駕車預估)</span></p>
                     <ul class="scrollable-guide">
                         ${guideHtml}
                     </ul>
@@ -640,28 +648,217 @@ submitVoteBtn?.addEventListener('click', () => {
     }
 });
 
+// --- 取得專屬頭像與顏色 ---
+function getVoterStyle(name) {
+    const avatars = ['🏂', '⛄', '🐧', '❄️', '🦊', '🎿', '🏔️'];
+    const colors = ['#38BDF8', '#7DD3FC', '#A78BFA', '#6EE7B7', '#FDBA74'];
+    
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash += name.charCodeAt(i);
+    }
+    
+    return {
+        avatar: avatars[hash % avatars.length],
+        color: colors[hash % colors.length]
+    };
+}
+
 // 渲染投票結果至卡片
 function renderAllVotes(votesData) {
     if (!votesData) return;
     
-    // 清空現有所有卡片的投票區塊
-    document.querySelectorAll('.vote-results').forEach(el => el.innerHTML = '');
+    // 清空現有所有卡片的投票區塊與區隔線
+    document.querySelectorAll('.vote-results').forEach(el => {
+        el.innerHTML = '';
+        if (el.previousElementSibling && el.previousElementSibling.classList.contains('vote-separator')) {
+            el.previousElementSibling.remove();
+        }
+    });
     
     Object.keys(votesData).forEach(houseId => {
         const houseVotes = votesData[houseId];
         const resultContainer = document.getElementById(`votes-${houseId}`);
         if (!resultContainer) return;
         
+        const voteIds = Object.keys(houseVotes);
+        const voteCount = voteIds.length;
+        
+        if (voteCount > 0) {
+            resultContainer.insertAdjacentHTML('beforebegin', `<div class="vote-separator"><span>📊 旅伴投票結果 (共 ${voteCount} 票)</span></div>`);
+        }
+        
         let html = '';
-        Object.keys(houseVotes).forEach(voteId => {
+        voteIds.forEach(voteId => {
             const vote = houseVotes[voteId];
+            const style = getVoterStyle(vote.name);
             html += `
                 <div class="vote-tag">
-                    <span class="vote-tag-name">👤 ${vote.name}</span>
+                    <span class="vote-tag-name" style="color: ${style.color};">${style.avatar} ${vote.name}</span>
                     <span class="vote-tag-reason">${vote.reason}</span>
                 </div>
             `;
         });
         resultContainer.innerHTML = html;
+    });
+}
+// --------------------------------------------------------------------------
+// 7. 影音回憶錄專屬密碼鎖
+// --------------------------------------------------------------------------
+const galleryAuthOverlay = document.getElementById('gallery-auth-overlay');
+const galleryContent = document.getElementById('gallery-content');
+const galleryPasswordInput = document.getElementById('gallery-password');
+const btnUnlockGallery = document.getElementById('btn-unlock-gallery');
+const galleryAuthError = document.getElementById('gallery-auth-error');
+
+// 檢查是否已解鎖
+if (sessionStorage.getItem('galleryUnlocked') === 'true') {
+    if (galleryAuthOverlay && galleryContent) {
+        galleryAuthOverlay.style.display = 'none';
+        galleryContent.classList.remove('hidden');
+    }
+}
+
+btnUnlockGallery?.addEventListener('click', () => {
+    if (galleryPasswordInput.value === 'myoko2027') {
+        sessionStorage.setItem('galleryUnlocked', 'true');
+        galleryAuthError.classList.add('hidden');
+        galleryAuthOverlay.style.opacity = '0';
+        setTimeout(() => {
+            galleryAuthOverlay.style.display = 'none';
+            galleryContent.classList.remove('hidden');
+        }, 300);
+    } else {
+        galleryAuthError.classList.remove('hidden');
+    }
+});
+
+galleryPasswordInput?.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        btnUnlockGallery.click();
+    }
+});
+
+// --------------------------------------------------------------------------
+// 8. 影音回憶錄 Firebase 上傳與渲染邏輯
+// --------------------------------------------------------------------------
+if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+    // 初始化 Storage
+    const storage = firebase.storage();
+    const db = firebase.database();
+    
+    const fileInput = document.getElementById('upload-file-input');
+    const categorySelect = document.getElementById('upload-category');
+    const uploaderNameInput = document.getElementById('upload-uploader-name');
+    const btnUploadMedia = document.getElementById('btn-upload-media');
+    const progressContainer = document.getElementById('upload-progress-container');
+    const progressBar = document.getElementById('upload-progress-bar');
+    const progressText = document.getElementById('upload-progress-text');
+    const mediaGridDynamic = document.getElementById('media-grid');
+    
+    // 上傳邏輯
+    btnUploadMedia?.addEventListener('click', async () => {
+        if (!fileInput || !fileInput.files.length) {
+            alert('請選擇至少一個檔案！');
+            return;
+        }
+        
+        const files = fileInput.files;
+        const category = categorySelect.value;
+        const uploaderName = uploaderNameInput.value.trim() || '匿名旅伴';
+        
+        progressContainer.classList.remove('hidden');
+        btnUploadMedia.disabled = true;
+        
+        let successCount = 0;
+        
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const fileName = `${Date.now()}_${file.name}`;
+            const storageRef = storage.ref(`gallery/${fileName}`);
+            const fileType = file.type.startsWith('video') ? 'video' : 'image';
+            
+            try {
+                const uploadTask = storageRef.put(file);
+                
+                await new Promise((resolve, reject) => {
+                    uploadTask.on('state_changed', 
+                        (snapshot) => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            progressBar.style.width = progress + '%';
+                            progressText.textContent = `上傳中... 第 ${i+1}/${files.length} 個 (${Math.round(progress)}%)`;
+                        }, 
+                        (error) => reject(error), 
+                        async () => {
+                            const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                            await db.ref('galleryData').push({
+                                url: downloadURL,
+                                type: fileType,
+                                category: category,
+                                uploader: uploaderName,
+                                timestamp: firebase.database.ServerValue.TIMESTAMP
+                            });
+                            successCount++;
+                            resolve();
+                        }
+                    );
+                });
+            } catch (error) {
+                console.error("Upload error:", error);
+                alert(`檔案 ${file.name} 上傳失敗: ${error.message}`);
+            }
+        }
+        
+        progressText.textContent = `上傳完成！成功上傳 ${successCount} 個檔案。`;
+        progressBar.style.width = '100%';
+        fileInput.value = '';
+        setTimeout(() => {
+            progressContainer.classList.add('hidden');
+            progressBar.style.width = '0%';
+            btnUploadMedia.disabled = false;
+        }, 3000);
+    });
+    
+    // 即時監聽渲染邏輯
+    const galleryDataRef = db.ref('galleryData').orderByChild('timestamp');
+    galleryDataRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+            if (mediaGridDynamic) mediaGridDynamic.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center;">目前還沒有上傳影音，快來分享你的回憶！</p>';
+            return;
+        }
+        
+        const categorizedData = { '滑雪英姿': [], '沿途風景': [], '美食與住宿': [] };
+        
+        Object.keys(data).forEach(key => {
+            const item = data[key];
+            if (categorizedData[item.category]) {
+                categorizedData[item.category].push(item);
+            } else {
+                if (!categorizedData['其他']) categorizedData['其他'] = [];
+                categorizedData['其他'].push(item);
+            }
+        });
+        
+        let html = '';
+        Object.keys(categorizedData).forEach(cat => {
+            const items = categorizedData[cat];
+            if (items.length === 0) return;
+            
+            html += `<h3 class="gallery-category-title" style="grid-column: 1 / -1;">${cat}</h3>`;
+            
+            items.forEach(item => {
+                html += `<div class="media-item" style="position: relative;">`;
+                if (item.type === 'image') {
+                    html += `<img src="${item.url}" alt="${cat}" loading="lazy">`;
+                } else if (item.type === 'video') {
+                    html += `<video src="${item.url}" controls></video>`;
+                }
+                html += `<div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; color: #fff;">📸 ${item.uploader}</div>`;
+                html += `</div>`;
+            });
+        });
+        
+        if (mediaGridDynamic) mediaGridDynamic.innerHTML = html;
     });
 }

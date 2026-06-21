@@ -1005,9 +1005,20 @@ a {
 /* -------------------------------------------------------------------------- */
 .vote-results {
     margin-top: 0.8rem;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: repeat(5, max-content);
+    grid-auto-flow: column;
+    grid-auto-columns: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
     gap: 0.5rem;
+    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+
+.vote-results::-webkit-scrollbar {
+    display: none;             /* Chrome/Safari */
 }
 
 .vote-tag {
@@ -1018,6 +1029,29 @@ a {
     border-radius: 8px;
     padding: 0.5rem 0.8rem;
     font-size: 0.8rem;
+    scroll-snap-align: start;
+}
+
+.vote-separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.5rem;
+}
+
+.vote-separator::before,
+.vote-separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 1px 2px rgba(255, 255, 255, 0.05);
+}
+
+.vote-separator span {
+    margin: 0 0.8rem;
 }
 
 .vote-tag-name {
@@ -1187,6 +1221,129 @@ a {
     margin-bottom: 0.5rem;
 }
 
+
+/* -------------------------------------------------------------------------- */
+/*  影音回憶錄：密碼鎖與上傳控制台                                            */
+/* -------------------------------------------------------------------------- */
+.auth-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 3rem 2rem;
+    text-align: center;
+    border-radius: 15px;
+}
+
+.auth-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.auth-container h3 {
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.auth-container p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.auth-input-group {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.auth-input-group input {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 0.8rem;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    flex: 1;
+}
+
+.auth-error {
+    color: #F87171 !important;
+    font-size: 0.85rem !important;
+    margin-bottom: 0 !important;
+}
+
+.upload-console {
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.upload-console h4 {
+    color: var(--accent);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.upload-controls {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 0.8rem;
+    align-items: center;
+}
+
+.file-input, .select-input, .text-input {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 0.6rem;
+    color: #fff;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.select-input option {
+    background: #1a1a2e;
+    color: #fff;
+}
+
+#upload-progress-container {
+    margin-top: 1rem;
+}
+
+#upload-progress-text {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.3rem;
+}
+
+.progress-bar-bg {
+    background: rgba(255, 255, 255, 0.1);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.3s;
+}
+
+/* 分類標題 */
+.gallery-category-title {
+    width: 100%;
+    font-size: 1.3rem;
+    color: #fff;
+    margin: 2rem 0 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
 /* -------------------------------------------------------------------------- */
 /*  RWD 響應式設計 (平板與手機)                                               */

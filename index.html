@@ -282,8 +282,43 @@
         <div class="container">
             <h2 class="section-title">影音回憶錄 <span>Memories</span></h2>
             <p class="gallery-desc">我們的精彩瞬間將於此呈現。</p>
-            <!-- 這裡將由 mediaData.js 與 script.js 動態生成內容 -->
-            <div id="media-grid" class="media-grid"></div>
+            
+            <!-- 專屬密碼鎖區塊 -->
+            <div id="gallery-auth-overlay" class="glass-card auth-container">
+                <div class="auth-icon">🔒</div>
+                <h3>專屬回憶錄</h3>
+                <p>請輸入通行碼以解鎖相簿與影片</p>
+                <div class="auth-input-group">
+                    <input type="password" id="gallery-password" placeholder="請輸入密碼">
+                    <button id="btn-unlock-gallery" class="btn-primary">解鎖</button>
+                </div>
+                <p id="gallery-auth-error" class="auth-error hidden">密碼錯誤，請再試一次</p>
+            </div>
+
+            <!-- 解鎖後顯示的內容區塊 -->
+            <div id="gallery-content" class="hidden">
+                <!-- 上傳控制台 -->
+                <div class="upload-console glass-card">
+                    <h4>分享你的精彩瞬間 📸</h4>
+                    <div class="upload-controls">
+                        <input type="file" id="upload-file-input" multiple accept="image/*,video/*" class="file-input">
+                        <select id="upload-category" class="select-input">
+                            <option value="滑雪英姿">🏂 滑雪英姿</option>
+                            <option value="沿途風景">🏔️ 沿途風景</option>
+                            <option value="美食與住宿">🍜 美食與住宿</option>
+                        </select>
+                        <input type="text" id="upload-uploader-name" placeholder="你的名字" class="text-input">
+                        <button id="btn-upload-media" class="btn-primary">確認上傳</button>
+                    </div>
+                    <div id="upload-progress-container" class="hidden">
+                        <p id="upload-progress-text">上傳中... 0%</p>
+                        <div class="progress-bar-bg"><div id="upload-progress-bar" class="progress-bar-fill"></div></div>
+                    </div>
+                </div>
+
+                <!-- 這裡將由 Firebase 即時動態生成分類內容 -->
+                <div id="media-grid" class="media-grid"></div>
+            </div>
         </div>
     </section>
 
@@ -295,6 +330,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <!-- Firebase Realtime Database -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <!-- Firebase Storage -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
     <!-- 投票彈出視窗 (Modal) -->
     <div id="vote-modal" class="vote-modal hidden">
