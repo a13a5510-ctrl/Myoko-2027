@@ -536,15 +536,17 @@ function updateLightboxImage() {
 // 6. 投票系統與 Firebase 整合
 // --------------------------------------------------------------------------
 // TODO: 請替換為您的 Firebase 專案設定
-const  firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyCBQ0J-lnpf4dnqMWk0Hy6GwOUGH_VRzvI",
   authDomain: "myoko-snowboard-2027.firebaseapp.com",
+  // 👇 就是這行！請務必把它加進去 👇
+  databaseURL: "https://myoko-snowboard-2027-default-rtdb.asia-southeast1.firebasedatabase.app",
+  // 👆 就是這行！請務必把它加進去 👆
   projectId: "myoko-snowboard-2027",
   storageBucket: "myoko-snowboard-2027.firebasestorage.app",
   messagingSenderId: "174950028588",
   appId: "1:174950028588:web:cd54a1b24b51e46dc9c889"
-};
-// 初始化 Firebase
+};// 初始化 Firebase
 if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
