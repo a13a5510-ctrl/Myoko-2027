@@ -291,6 +291,43 @@
         <p>&copy; 2027 Myoko Akakura Snowboard Trip. All rights reserved.</p>
     </footer>
 
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <!-- Firebase Realtime Database -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <!-- 投票彈出視窗 (Modal) -->
+    <div id="vote-modal" class="vote-modal hidden">
+        <div class="vote-modal-content glass-card">
+            <button class="vote-modal-close" id="close-vote-modal">&times;</button>
+            <h3 id="vote-modal-title">投給房源</h3>
+            
+            <div class="vote-form-group">
+                <label for="voter-name">你的名字</label>
+                <input type="text" id="voter-name" placeholder="輸入姓名 (如: Bonnie)">
+            </div>
+            
+            <div class="vote-form-group">
+                <label>快捷原因</label>
+                <div class="quick-reasons">
+                    <button type="button" class="btn-quick-reason">氛圍不錯</button>
+                    <button type="button" class="btn-quick-reason">價錢合理</button>
+                    <button type="button" class="btn-quick-reason">床看起來很好睡</button>
+                    <button type="button" class="btn-quick-reason">離雪場超近</button>
+                    <button type="button" class="btn-quick-reason">衛浴數量充足</button>
+                </div>
+            </div>
+
+            <div class="vote-form-group">
+                <label for="voter-reason">想投它的原因</label>
+                <textarea id="voter-reason" rows="3" placeholder="點擊上方按鈕，或自己填寫..."></textarea>
+            </div>
+            
+            <input type="hidden" id="vote-house-id">
+            <button id="submit-vote" class="btn-primary" style="width: 100%;">確認送出</button>
+        </div>
+    </div>
+
     <!-- 引入資料檔案與主程式檔案 -->
     <script src="mediaData.js"></script>
     <script src="script.js"></script>

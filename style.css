@@ -137,6 +137,7 @@ a {
     font-weight: 600;
     transition: all var(--transition-speed);
     margin-top: 1rem;
+    text-decoration: none;
 }
 
 .btn-secondary:hover {
@@ -739,7 +740,7 @@ a {
     box-sizing: border-box;
 }
 
-.btn-secondary {
+.house-actions .btn-secondary {
     background: rgba(255, 255, 255, 0.08);
     color: var(--text-primary);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -748,97 +749,443 @@ a {
     font-weight: 600;
     text-decoration: none;
     transition: all 0.3s ease;
+    margin-top: 0;
 }
 
-.btn-secondary:hover {
+.house-actions .btn-secondary:hover {
     background: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
 }
 
 /* -------------------------------------------------------------------------- */
-/*  房源卡片 - 周邊機能手風琴 (Local Guide Accordion)                        */
+/*  房源卡片 - 價格拆分徽章 (Price Breakdown Badges)                         */
 /* -------------------------------------------------------------------------- */
-.local-guide {
-    margin: 1rem 0;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.03);
-    transition: border-color 0.3s;
+.price-main {
+    font-weight: 600;
+    color: var(--text-primary) !important;
+    font-size: 1rem !important;
 }
 
-.local-guide:hover {
-    border-color: rgba(99, 179, 237, 0.25);
+.badge-parking {
+    display: inline-block;
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ADE80;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 20px;
+    margin-left: 0.4rem;
+    vertical-align: middle;
 }
 
-.local-guide summary {
-    padding: 0.65rem 1rem;
-    cursor: pointer;
+.price-breakdown {
+    display: flex;
+    gap: 0.5rem;
+    padding-left: 1.6rem;
+    margin-bottom: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.badge-split {
+    display: inline-block;
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+}
+
+.badge-hkd {
+    display: inline-block;
+    background: rgba(251, 191, 36, 0.12);
+    color: #FBBF24;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+}
+
+.badge-airbnb {
+    display: inline-block;
+    background: rgba(255, 90, 95, 0.1);
+    color: #FF5A5F;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 20px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  房源卡片 - 周邊機能橫向滑動 (Scrollable Guide Pills)                     */
+/* -------------------------------------------------------------------------- */
+.guide-section {
+    margin: 1rem 0 0.5rem;
+}
+
+.guide-title {
     font-size: 0.88rem;
     font-weight: 600;
     color: var(--accent);
+    margin-bottom: 0.5rem;
     letter-spacing: 0.02em;
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    user-select: none;
-    transition: background 0.2s, color 0.2s;
 }
 
-.local-guide summary::-webkit-details-marker {
-    display: none;
-}
-
-.local-guide summary::after {
-    content: '›';
-    margin-left: auto;
-    font-size: 1.1rem;
-    transition: transform 0.3s ease;
-    color: var(--text-secondary);
-}
-
-.local-guide[open] summary::after {
-    transform: rotate(90deg);
-}
-
-.local-guide summary:hover {
-    background: rgba(99, 179, 237, 0.07);
-    color: #93c5fd;
-}
-
-.local-guide ul {
-    list-style: none;
-    padding: 0.5rem 1rem 0.9rem;
+.scrollable-guide {
+    display: grid;
+    grid-template-rows: repeat(10, max-content);
+    grid-auto-flow: column;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 0.6rem;
+    padding: 0.4rem 0 0.8rem;
     margin: 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    list-style: none;
+    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;     /* Firefox */
 }
 
-.local-guide li {
-    font-size: 0.85rem;
+.scrollable-guide::-webkit-scrollbar {
+    display: none;             /* Chrome/Safari */
+}
+
+.guide-pill {
+    flex: 0 0 auto;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.78rem;
     color: var(--text-secondary);
-    padding: 0.35rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    line-height: 1.5;
+    white-space: nowrap;
+    transition: all 0.25s ease;
+    cursor: default;
+    line-height: 1.4;
 }
 
-.local-guide li a {
+.guide-pill:hover {
+    background: rgba(99, 179, 237, 0.1);
+    border-color: rgba(99, 179, 237, 0.3);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.guide-pill a {
     color: #93c5fd;
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.3s ease, text-decoration 0.3s ease;
+    transition: color 0.2s ease;
 }
 
-.local-guide li a:hover {
+.guide-pill a:hover {
     color: #ffffff;
     text-decoration: underline;
 }
 
-.local-guide li:last-child {
-    border-bottom: none;
+/* -------------------------------------------------------------------------- */
+/*  Lightbox 全螢幕圖片檢視                                                  */
+/* -------------------------------------------------------------------------- */
+#lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
+#lightbox-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lb-img {
+    max-width: 90vw;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    transition: transform 0.3s ease;
+}
+
+#lightbox-overlay.active .lb-img {
+    animation: lbZoomIn 0.3s ease forwards;
+}
+
+@keyframes lbZoomIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+}
+
+.lb-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 2rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    z-index: 10001;
+    line-height: 1;
+}
+
+.lb-close:hover {
+    background: rgba(248, 113, 113, 0.4);
+    border-color: rgba(248, 113, 113, 0.6);
+    transform: rotate(90deg);
+}
+
+.lb-prev,
+.lb-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 1.6rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    z-index: 10001;
+}
+
+.lb-prev { left: 1.5rem; }
+.lb-next { right: 1.5rem; }
+
+.lb-prev:hover,
+.lb-next:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.lb-counter {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+}
+
+
+
+/* -------------------------------------------------------------------------- */
+/*  投票 Modal 與結果顯示                                                      */
+/* -------------------------------------------------------------------------- */
+.vote-results {
+    margin-top: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.vote-tag {
+    display: flex;
+    align-items: flex-start;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+.vote-tag-name {
+    font-weight: bold;
+    color: var(--accent);
+    margin-right: 0.5rem;
+    white-space: nowrap;
+}
+
+.vote-tag-reason {
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Modal 背景 */
+.vote-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.vote-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.vote-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 450px;
+    padding: 2rem;
+    border-radius: 15px;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.vote-modal.active .vote-modal-content {
+    transform: translateY(0);
+}
+
+.vote-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.vote-modal-close:hover {
+    color: #fff;
+}
+
+#vote-modal-title {
+    margin-bottom: 1.5rem;
+    color: var(--accent);
+    font-size: 1.3rem;
+}
+
+.vote-form-group {
+    margin-bottom: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.vote-form-group label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.vote-form-group input,
+.vote-form-group textarea {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 0.8rem;
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.vote-form-group input:focus,
+.vote-form-group textarea:focus {
+    border-color: var(--accent);
+}
+
+.quick-reasons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.btn-quick-reason {
+    background: rgba(99, 179, 237, 0.1);
+    border: 1px solid rgba(99, 179, 237, 0.3);
+    color: #93c5fd;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-quick-reason:hover {
+    background: rgba(99, 179, 237, 0.25);
+    color: #fff;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*  環境防呆警告遮罩                                                          */
+/* -------------------------------------------------------------------------- */
+.env-error-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(20, 5, 5, 0.9);
+    backdrop-filter: blur(10px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+}
+
+.env-error-content {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 50, 50, 0.3);
+    padding: 3rem 2rem;
+    border-radius: 15px;
+    max-width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.env-error-content h2 {
+    color: #F87171;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    letter-spacing: 2px;
+}
+
+.env-error-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #fca5a5;
+    margin-bottom: 0.5rem;
+}
 
 
 /* -------------------------------------------------------------------------- */
@@ -848,9 +1195,13 @@ a {
     .cards-grid, .cards-grid.three-cols, .info-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .hero-title {
         font-size: 3rem;
+    }
+
+    .housing-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     }
 }
 
@@ -858,7 +1209,7 @@ a {
     .hamburger {
         display: flex;
     }
-    
+
     .nav-links {
         position: fixed;
         right: -100%;
@@ -872,40 +1223,74 @@ a {
         transition: right 0.4s ease;
         border-bottom: 1px solid var(--glass-border);
     }
-    
+
     .nav-links.active {
         right: 0;
     }
-    
+
     .countdown {
         gap: 1rem;
     }
-    
+
     .time-box span.num {
         font-size: 2rem;
     }
-    
+
     .hero-title {
         font-size: 2.5rem;
     }
-    
+
     .hero-subtitle {
         font-size: 1rem;
     }
-    
+
     .section-title {
         font-size: 2rem;
     }
-    
+
     .timeline::before {
         left: 15px;
     }
-    
+
     .timeline-dot {
         left: 7px;
     }
-    
+
     .timeline-item {
         padding-left: 45px;
+    }
+
+    /* Lightbox mobile adjustments */
+    .lb-prev,
+    .lb-next {
+        width: 36px;
+        height: 36px;
+        font-size: 1.2rem;
+    }
+
+    .lb-prev { left: 0.5rem; }
+    .lb-next { right: 0.5rem; }
+
+    .lb-close {
+        top: 0.8rem;
+        right: 0.8rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1.6rem;
+    }
+
+    .lb-img {
+        max-width: 95vw;
+        max-height: 80vh;
+    }
+
+    /* Price breakdown compact on mobile */
+    .price-breakdown {
+        padding-left: 1.2rem;
+    }
+
+    .guide-pill {
+        font-size: 0.72rem;
+        padding: 0.45rem 0.75rem;
     }
 }

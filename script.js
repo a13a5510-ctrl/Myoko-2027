@@ -1,4 +1,25 @@
 // --------------------------------------------------------------------------
+// 0. 環境防呆偵測機制
+// --------------------------------------------------------------------------
+const isLocalFile = window.location.protocol === 'file:';
+
+if (isLocalFile) {
+    document.addEventListener('DOMContentLoaded', () => {
+        const overlay = document.createElement('div');
+        overlay.className = 'env-error-overlay';
+        overlay.innerHTML = `
+            <div class="env-error-content">
+                <h2>⚠️ 環境錯誤</h2>
+                <p>請勿直接點擊 HTML 檔案 (file://) 開啟。</p>
+                <p>為了讓 Firebase 投票系統正常運作，<br>請使用 Live Server 或 Localhost 啟動網頁。</p>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        document.body.style.overflow = 'hidden';
+    });
+}
+
+// --------------------------------------------------------------------------
 // 1. 導覽列 Navbar 的滾動變化與手機版選單切換
 // --------------------------------------------------------------------------
 const navbar = document.querySelector('.navbar');
@@ -114,8 +135,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --------------------------------------------------------------------------
-// 4. 動態渲染房源候選清單 (Slider)
+// 4. 動態渲染房源候選清單 (Slider) + 匯率常數
 // --------------------------------------------------------------------------
+const twdToHkdRate = 0.24; // TWD → HKD 匯率
+const nights = 5; // 行程晚數
+
+function parsePriceNumber(priceStr) {
+    const match = priceStr.match(/[\d,]+/);
+    return match ? parseInt(match[0].replace(/,/g, ''), 10) : 0;
+}
+
 const housingData = [
     {
         id: "house1",
@@ -126,12 +155,14 @@ const housingData = [
         location: "池之平 (Ikenotaira)",
         coordinates: "36.861228, 138.196546",
         localGuide: [
-            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=LIME+KITCHEN+%E5%A6%99%E9%AB%98' target='_blank'>LIME KITCHEN (池之平特色西餐)</a> — 步行 4 分",
-            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%83%B3%E3%83%89%E3%83%9E%E3%83%BC%E3%82%AF%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F' target='_blank'>Landmark Myokokogen 美食街</a> — 5 分",
-            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%82%A4%E3%83%A0%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E5%A6%99%E9%AB%98' target='_blank'>池之平溫泉 (LIME RESORT)</a> — 5 分",
-            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E6%B1%A0%E3%81%AE%E5%B9%B3%E6%B8%A9%E6%B3%89%E3%82%A2%E3%83%AB%E3%83%9A%E3%83%B3%E3%83%96%E3%83%AA%E3%83%83%E3%82%AF%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4+%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>Alpen Blick 專屬租借站</a> — 5 分",
-            "🚉 交通：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 4 分",
-            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E3%82%A2%E3%83%AB%E3%83%9A%E3%83%B3%E3%83%96%E3%83%AA%E3%83%83%E3%82%AF%E3%83%93%E3%83%BC%E3%83%AB' target='_blank'>妙高高原啤酒廠</a> — 5 分"
+            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=LIME+KITCHEN+%E5%A6%99%E9%AB%98' target='_blank'>LIME KITCHEN (池之平特色西餐)</a> — 約 4 分 (2.5 公里)",
+            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%83%B3%E3%83%89%E3%83%9E%E3%83%BC%E3%82%AF%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F' target='_blank'>Landmark Myokokogen 美食街</a> — 約 5 分 (3 公里)",
+            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%82%A4%E3%83%A0%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E5%A6%99%E9%AB%98' target='_blank'>池之平溫泉 (LIME RESORT 黑泥溫泉)</a> — 約 5 分 (3 公里)",
+            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E6%B1%A0%E3%81%AE%E5%B9%B3%E6%B8%A9%E6%B3%89%E3%82%A2%E3%83%AB%E3%83%9A%E3%83%B3%E3%83%96%E3%83%AA%E3%83%83%E3%82%AF%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>池之平溫泉滑雪場 (Alpen Blick)</a> — 約 5 分 (3 公里)",
+            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E6%B1%A0%E3%81%AE%E5%B9%B3%E6%B8%A9%E6%B3%89%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4+%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>Alpen Blick 專屬租借站</a> — 約 5 分 (3 公里)",
+            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 4 分 (1.8 公里)",
+            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 4 分 (1.8 公里)",
+            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E3%82%A2%E3%83%AB%E3%83%9A%E3%83%B3%E3%83%96%E3%83%AA%E3%83%83%E3%82%AF%E3%83%93%E3%83%BC%E3%83%AB' target='_blank'>妙高高原啤酒廠 (Alpen Blick 內)</a> — 約 5 分 (3 公里)"
         ],
         images: [
             "assets/house1/0b4b309b-f0e5-4a6d-9e04-810683e541fc.jpeg",
@@ -150,12 +181,14 @@ const housingData = [
         location: "赤倉溫泉區 (Akakura Onsen)",
         coordinates: "36.8905, 138.182",
         localGuide: [
-            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%AC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%B3%E6%9F%B4%E7%94%B0+%E8%B5%A4%E5%80%89' target='_blank'>Restaurant Shibata</a> — 步行 2 分",
-            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E8%A1%97+%E9%A3%9F%E4%BA%8B' target='_blank'>赤倉溫泉街美食</a> — 3 分",
-            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89' target='_blank'>赤倉溫泉</a> — 2 分",
-            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=Myoko+Snowsports' target='_blank'>Myoko Snowsports</a> — 3 分",
-            "🚉 交通：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 10 分",
-            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E8%A1%97' target='_blank'>赤倉溫泉街中心</a> — 2 分"
+            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%AC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%B3%E6%9F%B4%E7%94%B0+%E8%B5%A4%E5%80%89' target='_blank'>Restaurant Shibata (高人氣洋食定食)</a> — 約 2 分 (600 公尺)",
+            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E8%A1%97+%E9%A3%9F%E4%BA%8B' target='_blank'>赤倉溫泉街美食</a> — 約 3 分 (800 公尺)",
+            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89' target='_blank'>赤倉溫泉 (Akakura Onsen)</a> — 約 2 分 (500 公尺)",
+            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>赤倉溫泉滑雪場</a> — 約 2 分 (500 公尺)",
+            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=Myoko+Snowsports' target='_blank'>Myoko Snowsports</a> — 約 3 分 (800 公尺)",
+            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 10 分 (5 公里)",
+            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%82%AA%E3%83%AA%E3%83%83%E3%82%AF%E3%82%B9%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E4%B8%8A%E8%B6%8A%E5%A6%99%E9%AB%98%E9%A7%85%E5%89%8D%E5%BA%97' target='_blank'>Orix Rent-A-Car (上越妙高大站)</a> — 約 35 分 (30 公里，適合大型休旅)",
+            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E8%A1%97' target='_blank'>赤倉溫泉街中心</a> — 約 2 分 (500 公尺)"
         ],
         images: [
             "assets/house2/28160ea0-cb4f-4fc1-aa0b-4957b8af5de8.png",
@@ -179,12 +212,14 @@ const housingData = [
         location: "鄰近滑雪勝地",
         coordinates: "36.8753, 138.21",
         localGuide: [
-            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=%E3%82%84%E3%81%B6%E3%81%9D%E3%81%B0+%E5%A6%99%E9%AB%98' target='_blank'>やぶそば Yabu Soba</a> — 步行 2 分",
-            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%81%8A%E5%9C%9F%E7%94%A3' target='_blank'>車站前土產小吃街</a> — 1 分",
-            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%B8%A9%E6%B3%89' target='_blank'>妙高溫泉區</a> — 4 分",
-            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%82%B9%E3%82%AD%E3%83%BC%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>車站周邊雪具店</a> — 2 分",
-            "🚉 交通：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 2 分",
-            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%8E%9F%E4%BF%A1+%E5%A6%99%E9%AB%98%E5%BA%97' target='_blank'>原信超市 Harashin 妙高店</a> — 20 分"
+            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=%E3%82%84%E3%81%B6%E3%81%9D%E3%81%B0+%E5%A6%99%E9%AB%98' target='_blank'>やぶそば Yabu Soba (老字號蕎麥麵)</a> — 約 2 分 (1 公里)",
+            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%81%8A%E5%9C%9F%E7%94%A3' target='_blank'>車站前土產小吃街</a> — 約 1 分 (500 公尺)",
+            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%B8%A9%E6%B3%89' target='_blank'>妙高溫泉區</a> — 約 4 分 (2 公里)",
+            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E8%A6%B3%E5%85%89%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>赤倉觀光度假滑雪場 (Akakan)</a> — 約 8 分 (4.5 公里)",
+            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%82%B9%E3%82%AD%E3%83%BC%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>車站周邊雪具店</a> — 約 2 分 (1 公里以內)",
+            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 2 分 (500 公尺)",
+            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 2 分 (500 公尺)",
+            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%8E%9F%E4%BF%A1+%E5%A6%99%E9%AB%98%E5%BA%97' target='_blank'>原信超市 Harashin 妙高店 (採買首選)</a> — 約 20 分 (18 公里)"
         ],
         images: [
             "assets/house3/0083f4f9-56ff-4b36-a136-37329ae846af.jpeg",
@@ -223,12 +258,14 @@ const housingData = [
         location: "赤倉、杉之原、斑尾、樂天新井",
         coordinates: "36.8726, 138.2114",
         localGuide: [
-            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=%E9%87%9C%E5%8F%B3%E8%A1%9B%E9%96%80+%E5%A6%99%E9%AB%98' target='_blank'>釜右衛門 Kamaemon</a> — 步行 1 分",
-            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E5%B1%85%E9%85%92%E5%B1%8B+%E5%85%AB+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F' target='_blank'>居酒屋 八 Eight</a> — 2 分",
-            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%B8%A9%E6%B3%89' target='_blank'>妙高溫泉區</a> — 3 分",
-            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%82%B9%E3%82%AD%E3%83%BC%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>車站周邊雪具店</a> — 1-10 分",
-            "🚉 交通：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 步行 1 分",
-            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E3%83%93%E3%82%B8%E3%82%BF%E3%83%BC%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC' target='_blank'>妙高高原遊客中心</a> — 6 分"
+            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=%E9%87%9C%E5%8F%B3%E8%A1%9B%E9%96%80+%E5%A6%99%E9%AB%98' target='_blank'>釜右衛門 Kamaemon (在地餐廳)</a> — 約 1 分 (200 公尺)",
+            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E5%B1%85%E9%85%92%E5%B1%8B+%E5%85%AB+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F' target='_blank'>居酒屋 八 Eight</a> — 約 2 分 (500 公尺)",
+            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%B8%A9%E6%B3%89' target='_blank'>妙高溫泉區</a> — 約 3 分 (1.5 公里)",
+            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>赤倉溫泉滑雪場</a> — 約 10 分 (5 公里)",
+            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%82%B9%E3%82%AD%E3%83%BC%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>車站周邊雪具店</a> — 約 1-10 分",
+            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 1 分 (50 公尺，步行即達)",
+            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 1 分 (50 公尺)",
+            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E3%83%93%E3%82%B8%E3%82%BF%E3%83%BC%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC' target='_blank'>妙高高原遊客中心</a> — 約 6 分 (4 公里)"
         ],
         images: [
             "assets/house4/1ff321b1-9fc0-4422-8a20-812409637874.jpeg",
@@ -247,12 +284,14 @@ const housingData = [
         location: "赤倉、杉之原、長尾",
         coordinates: "36.88091, 138.18479",
         localGuide: [
-            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=Panorama+Cafe+%E5%A6%99%E9%AB%98' target='_blank'>Panorama Café & Dining</a> — 步行 4 分",
-            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E8%A6%B3%E5%85%89%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88+%E3%83%AC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%B3' target='_blank'>赤倉觀光區周邊餐飲</a> — 5 分",
-            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89' target='_blank'>新赤倉溫泉</a> — 3 分",
-            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=Japan+Snowsports+Myoko' target='_blank'>Japan Snowsports</a> — 4 分",
-            "🚉 交通：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 8 分",
-            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E5%B1%B1%E7%99%BB%E5%B1%B1%E5%8F%A3' target='_blank'>妙高山登山口</a> — 10 分"
+            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=Panorama+Cafe+%E5%A6%99%E9%AB%98' target='_blank'>Panorama Café & Dining</a> — 約 4 分 (2 公里)",
+            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E8%A6%B3%E5%85%89%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88+%E3%83%AC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%B3' target='_blank'>赤倉觀光區周邊餐飲</a> — 約 5 分 (2.5 公里)",
+            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89' target='_blank'>新赤倉溫泉</a> — 約 3 分 (1.5 公里)",
+            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E8%A6%B3%E5%85%89%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>赤倉觀光度假滑雪場 (Akakan)</a> — 約 4 分 (2 公里)",
+            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=Japan+Snowsports+Myoko' target='_blank'>Japan Snowsports</a> — 約 4 分 (2 公里)",
+            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 8 分 (4.5 公里)",
+            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 8 分 (4.5 公里)",
+            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E5%B1%B1%E7%99%BB%E5%B1%B1%E5%8F%A3' target='_blank'>妙高山登山口</a> — 約 10 分 (5 公里)"
         ],
         images: [
             "assets/house5/1a8180ee-990d-4cf3-b526-40fcbfcd60d6.jpeg",
@@ -274,12 +313,14 @@ const housingData = [
         location: "杉之原、Alpen Blick",
         coordinates: "36.86063, 138.16632",
         localGuide: [
-            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=Two+Pines+Myoko' target='_blank'>Two Pines (知名石窯披薩)</a> — 步行 3 分",
-            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E6%9D%89%E9%87%8E%E6%B2%A2+%E9%A3%9F%E5%A0%82' target='_blank'>杉之澤村在地食堂</a> — 4 分",
-            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E6%9D%89%E9%87%8E%E6%B2%A2%E6%B8%A9%E6%B3%89+%E8%8B%97%E5%90%8D%E3%81%AE%E6%B9%AF' target='_blank'>杉野澤溫泉 苗名之湯</a> — 4 分",
-            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%9D%89%E3%83%8E%E5%8E%9F%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4+%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>杉之原雪場直營租借站</a> — 3 分",
-            "🚉 交通：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 12 分",
-            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E8%8B%97%E5%90%8D%E6%BB%9D' target='_blank'>苗名瀑布 (Naena Falls)</a>"
+            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=Two+Pines+Myoko' target='_blank'>Two Pines (知名石窯披薩)</a> — 約 3 分 (1 公里)",
+            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E6%9D%89%E9%87%8E%E6%B2%A2+%E9%A3%9F%E5%A0%82' target='_blank'>杉之澤村在地食堂</a> — 約 4 分 (1.5 公里)",
+            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E6%9D%89%E9%87%8E%E6%B2%A2%E6%B8%A9%E6%B3%89+%E8%8B%97%E5%90%8D%E3%81%AE%E6%B9%AF' target='_blank'>杉野澤溫泉 苗名之湯</a> — 約 4 分 (1.5 公里)",
+            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%9D%89%E3%83%8E%E5%8E%9F%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>妙高杉之原滑雪場</a> — 約 3 分 (1.2 公里)",
+            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%9D%89%E3%83%8E%E5%8E%9F%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4+%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>杉之原雪場直營租借站</a> — 約 3 分 (1.2 公里)",
+            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 12 分 (6 公里)",
+            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 12 分 (6 公里)",
+            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E8%8B%97%E5%90%8D%E6%BB%9D' target='_blank'>苗名瀑布 (Naena Falls)</a> — 約 8 分 (4 公里)"
         ],
         images: [
             "assets/house6/01acdbda-8506-4f3b-a739-f1a2d359b746 (1).jpeg",
@@ -308,11 +349,23 @@ document.addEventListener('DOMContentLoaded', () => {
     housingData.forEach(house => {
         const card = document.createElement('div');
         card.className = 'glass-card house-card';
-        
-        let imagesHtml = house.images.map(img => `<img src="${img}" alt="House Image" loading="lazy">`).join('');
+
+        // --- 圖片輪播 ---
+        let imagesHtml = house.images.map(img => `<img src="${img}" alt="${house.name}" loading="lazy">`).join('');
         let dotsHtml = house.images.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}"></div>`).join('');
-        let guideHtml = (house.localGuide || []).map(item => `<li>${item}</li>`).join('');
-        
+
+        // --- 周邊機能：橫向滑動 Pill ---
+        let guideHtml = (house.localGuide || []).map(item => `<li class="guide-pill">${item}</li>`).join('');
+
+        // --- 價格拆分計算 ---
+        const totalTWD = parsePriceNumber(house.price);
+        const parkingNote = house.price.includes('免費停車') ? '免費停車' : '';
+        const per6TWD = Math.round((totalTWD / 6) / nights);
+        const per8TWD = Math.round((totalTWD / 8) / nights);
+        const per6HKD = Math.round(per6TWD * twdToHkdRate);
+        const per8HKD = Math.round(per8TWD * twdToHkdRate);
+        const totalHKD = Math.round(totalTWD * twdToHkdRate);
+
         card.innerHTML = `
             <div class="slider-container">
                 <div class="slider-images">
@@ -326,23 +379,48 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="house-content">
                 <h4 class="house-title">${house.name}</h4>
-                <div class="house-info"><span>⭐</span> ${house.rating}</div>
-                <div class="house-info"><span>💰</span> ${house.price}</div>
+                <div class="house-info"><span>⭐</span> ${house.rating} <span class="badge-airbnb">via Airbnb</span></div>
+                <div class="house-info price-main"><span>💰</span> 總價 NT$ ${totalTWD.toLocaleString()} <span class="badge-parking">${parkingNote}</span></div>
+                <div class="price-breakdown">
+                    <span class="badge-hkd">≈ HK$ ${totalHKD.toLocaleString()}</span>
+                </div>
+                <div class="price-breakdown">
+                    <span class="badge-split">6人均攤：NT$ ${per6TWD.toLocaleString()} / HK$ ${per6HKD.toLocaleString()} (每人/晚)</span>
+                </div>
+                <div class="price-breakdown">
+                    <span class="badge-split">8人均攤：NT$ ${per8TWD.toLocaleString()} / HK$ ${per8HKD.toLocaleString()} (每人/晚)</span>
+                </div>
                 <div class="house-info"><span>🏠</span> ${house.specs}</div>
                 <div class="house-info"><span>📍</span> ${house.location}</div>
-                <details class="local-guide">
-                    <summary>🗺️ 周邊機能 Local Guide</summary>
-                    <ul>${guideHtml}</ul>
-                </details>
+                <div class="guide-section">
+                    <p class="guide-title">🗺️ 周邊機能 Local Guide</p>
+                    <ul class="scrollable-guide">
+                        ${guideHtml}
+                    </ul>
+                </div>
+                <div class="vote-results" id="votes-${house.id}"></div>
                 <div class="house-actions">
                     <a href="https://www.google.com/maps/search/?api=1&query=${house.coordinates}" target="_blank" class="btn-secondary">🗺️ 點我導航至房源</a>
-                    <a href="#" class="btn-vote">投它一票</a>
+                    <a href="#" class="btn-vote" data-id="${house.id}" data-name="${house.name}">投它一票</a>
                 </div>
             </div>
         `;
-        
+
         grid.appendChild(card);
         setupSlider(card.querySelector('.slider-container'));
+    });
+
+    // --- 為所有 slider 圖片綁定 Lightbox 事件 ---
+    document.querySelectorAll('.slider-images img').forEach(img => {
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const container = img.closest('.slider-container');
+            const allImgs = Array.from(container.querySelectorAll('.slider-images img'));
+            const srcs = allImgs.map(i => i.src);
+            const idx = allImgs.indexOf(img);
+            openLightbox(srcs, idx);
+        });
     });
 });
 
@@ -352,7 +430,7 @@ function setupSlider(container) {
     const prevBtn = container.querySelector('.prev');
     const nextBtn = container.querySelector('.next');
     const dots = container.querySelectorAll('.dot');
-    
+
     let currentIndex = 0;
     const total = images.length;
     if (total === 0) return;
@@ -382,3 +460,206 @@ function setupSlider(container) {
     });
 }
 
+
+// --------------------------------------------------------------------------
+// 5. Lightbox 圖片放大檢視
+// --------------------------------------------------------------------------
+let lightboxImages = [];
+let lightboxIndex = 0;
+
+function createLightbox() {
+    if (document.getElementById('lightbox-overlay')) return;
+    const overlay = document.createElement('div');
+    overlay.id = 'lightbox-overlay';
+    overlay.innerHTML = `
+        <button class="lb-close" aria-label="關閉">&times;</button>
+        <button class="lb-prev" aria-label="上一張">&#10094;</button>
+        <img class="lb-img" src="" alt="Lightbox">
+        <button class="lb-next" aria-label="下一張">&#10095;</button>
+        <div class="lb-counter"></div>
+    `;
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('.lb-close').addEventListener('click', closeLightbox);
+    overlay.querySelector('.lb-prev').addEventListener('click', () => navigateLightbox(-1));
+    overlay.querySelector('.lb-next').addEventListener('click', () => navigateLightbox(1));
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeLightbox();
+    });
+
+    document.addEventListener('keydown', handleLightboxKey);
+}
+
+function handleLightboxKey(e) {
+    const overlay = document.getElementById('lightbox-overlay');
+    if (!overlay || !overlay.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') navigateLightbox(-1);
+    if (e.key === 'ArrowRight') navigateLightbox(1);
+}
+
+function openLightbox(images, startIndex) {
+    createLightbox();
+    lightboxImages = images;
+    lightboxIndex = startIndex;
+    const overlay = document.getElementById('lightbox-overlay');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    updateLightboxImage();
+}
+
+function closeLightbox() {
+    const overlay = document.getElementById('lightbox-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+function navigateLightbox(direction) {
+    lightboxIndex += direction;
+    if (lightboxIndex < 0) lightboxIndex = lightboxImages.length - 1;
+    if (lightboxIndex >= lightboxImages.length) lightboxIndex = 0;
+    updateLightboxImage();
+}
+
+function updateLightboxImage() {
+    const overlay = document.getElementById('lightbox-overlay');
+    if (!overlay) return;
+    const img = overlay.querySelector('.lb-img');
+    const counter = overlay.querySelector('.lb-counter');
+    img.src = lightboxImages[lightboxIndex];
+    counter.textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
+}
+
+// --------------------------------------------------------------------------
+// 6. 投票系統與 Firebase 整合
+// --------------------------------------------------------------------------
+// TODO: 請替換為您的 Firebase 專案設定
+const  firebaseConfig = {
+  apiKey: "AIzaSyCBQ0J-lnpf4dnqMWk0Hy6GwOUGH_VRzvI",
+  authDomain: "myoko-snowboard-2027.firebaseapp.com",
+  projectId: "myoko-snowboard-2027",
+  storageBucket: "myoko-snowboard-2027.firebasestorage.app",
+  messagingSenderId: "174950028588",
+  appId: "1:174950028588:web:cd54a1b24b51e46dc9c889"
+};
+// 初始化 Firebase
+if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    
+    // 即時監聽所有投票資料
+    const votesRef = database.ref('votes');
+    votesRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        renderAllVotes(data);
+    });
+}
+
+// 綁定 Modal 相關 DOM
+const voteModal = document.getElementById('vote-modal');
+const closeVoteModal = document.getElementById('close-vote-modal');
+const voteModalTitle = document.getElementById('vote-modal-title');
+const voterNameInput = document.getElementById('voter-name');
+const voterReasonInput = document.getElementById('voter-reason');
+const voteHouseIdInput = document.getElementById('vote-house-id');
+const submitVoteBtn = document.getElementById('submit-vote');
+const quickReasonBtns = document.querySelectorAll('.btn-quick-reason');
+
+// 開啟 Modal 事件 (使用事件委派)
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('btn-vote')) {
+        e.preventDefault();
+        const houseId = e.target.getAttribute('data-id');
+        const houseName = e.target.getAttribute('data-name');
+        
+        voteHouseIdInput.value = houseId;
+        voteModalTitle.textContent = `投給: ${houseName}`;
+        voterNameInput.value = '';
+        voterReasonInput.value = '';
+        
+        voteModal.classList.remove('hidden');
+        voteModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+});
+
+// 關閉 Modal
+function hideVoteModal() {
+    voteModal.classList.remove('active');
+    setTimeout(() => voteModal.classList.add('hidden'), 300);
+    document.body.style.overflow = '';
+}
+closeVoteModal?.addEventListener('click', hideVoteModal);
+voteModal?.addEventListener('click', (e) => {
+    if (e.target === voteModal) hideVoteModal();
+});
+
+// 快捷原因按鈕邏輯
+quickReasonBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const reason = btn.textContent;
+        const currentText = voterReasonInput.value.trim();
+        if (currentText) {
+            voterReasonInput.value = currentText + '，' + reason;
+        } else {
+            voterReasonInput.value = reason;
+        }
+    });
+});
+
+// 送出投票
+submitVoteBtn?.addEventListener('click', () => {
+    const houseId = voteHouseIdInput.value;
+    const name = voterNameInput.value.trim();
+    const reason = voterReasonInput.value.trim();
+    
+    if (!name || !reason) {
+        alert('請填寫姓名與原因！');
+        return;
+    }
+    
+    // 如果 Firebase 已初始化，寫入資料庫；否則僅顯示警示
+    if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+        const newVoteRef = firebase.database().ref('votes/' + houseId).push();
+        newVoteRef.set({
+            name: name,
+            reason: reason,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        }).then(() => {
+            hideVoteModal();
+        }).catch((error) => {
+            alert('投票失敗: ' + error.message);
+        });
+    } else {
+        alert(`(模擬投票成功)\n姓名: ${name}\n原因: ${reason}\n\n注意：請至 script.js 替換 firebaseConfig 以啟用真實資料庫！`);
+        hideVoteModal();
+    }
+});
+
+// 渲染投票結果至卡片
+function renderAllVotes(votesData) {
+    if (!votesData) return;
+    
+    // 清空現有所有卡片的投票區塊
+    document.querySelectorAll('.vote-results').forEach(el => el.innerHTML = '');
+    
+    Object.keys(votesData).forEach(houseId => {
+        const houseVotes = votesData[houseId];
+        const resultContainer = document.getElementById(`votes-${houseId}`);
+        if (!resultContainer) return;
+        
+        let html = '';
+        Object.keys(houseVotes).forEach(voteId => {
+            const vote = houseVotes[voteId];
+            html += `
+                <div class="vote-tag">
+                    <span class="vote-tag-name">👤 ${vote.name}</span>
+                    <span class="vote-tag-reason">${vote.reason}</span>
+                </div>
+            `;
+        });
+        resultContainer.innerHTML = html;
+    });
+}
