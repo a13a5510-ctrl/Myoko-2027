@@ -862,3 +862,21 @@ if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !==
         if (mediaGridDynamic) mediaGridDynamic.innerHTML = html;
     });
 }
+
+// --------------------------------------------------------------------------
+// 9. 航班頁籤切換 (Tab Switching)
+// --------------------------------------------------------------------------
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-tab');
+
+        // 移除所有按鈕與內容的 active 狀態
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+        // 啟用當前頁籤
+        btn.classList.add('active');
+        const targetContent = document.getElementById(targetId);
+        if (targetContent) targetContent.classList.add('active');
+    });
+});

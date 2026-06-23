@@ -26,6 +26,7 @@
 
 html {
     scroll-behavior: smooth; /* 支援平滑滾動 */
+    scroll-padding-top: 80px; /* 避免錨點被固定導覽列遮擋 */
 }
 
 body {
@@ -1343,6 +1344,154 @@ a {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  航班區塊：集結橫幅、頁簽、故事框                                           */
+/* -------------------------------------------------------------------------- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 集結橫幅 */
+.rendezvous-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1.2rem 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.15), 0 0 60px rgba(56, 189, 248, 0.06);
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.rendezvous-icon {
+    font-size: 2rem;
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8));
+}
+
+.rendezvous-text,
+.rendezvous-time {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.rendezvous-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.rendezvous-main {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+}
+
+.rendezvous-divider {
+    width: 1px;
+    height: 3rem;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.25), transparent);
+}
+
+/* 頁簽導覽 */
+.flight-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+    position: relative;
+    overflow: hidden;
+}
+
+.tab-btn small {
+    font-size: 0.75rem;
+    opacity: 0.8;
+    margin-left: 0.3rem;
+}
+
+.tab-btn:hover {
+    background: rgba(56, 189, 248, 0.1);
+    color: #fff;
+    border-color: rgba(56, 189, 248, 0.3);
+}
+
+.tab-btn.active {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: rgba(56, 189, 248, 0.6);
+    color: var(--accent);
+    font-weight: 600;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+/* 頁簽內容 */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+/* 故事框 */
+.story-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1.5rem;
+    background: rgba(167, 139, 250, 0.07);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    border-left: 3px solid #A78BFA;
+    border-radius: 10px;
+}
+
+.story-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.story-box h4 {
+    color: #C4B5FD;
+    font-size: 1rem;
+    margin-bottom: 0.4rem;
+}
+
+.story-box p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
 }
 
 /* -------------------------------------------------------------------------- */
