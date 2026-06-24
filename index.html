@@ -46,7 +46,7 @@
     </section>
 
     <!-- 航班資訊 Section -->
-    <section id="flights" class="section">
+    <section id="flights" class="section tab-group">
         <div class="container">
             <h2 class="section-title">航班資訊 <span>Flights</span></h2>
 
@@ -65,98 +65,112 @@
             </div>
 
             <!-- 頁簽導覽列 -->
-            <div class="flight-tabs">
-                <button class="tab-btn active" data-tab="tab-vanguard">👑 總召哩程特攻 <small>(香港快閃)</small></button>
-                <button class="tab-btn" data-tab="tab-taiwan">🇹🇼 台灣直飛部隊</button>
-                <button class="tab-btn" data-tab="tab-hk">🇭🇰 香港出發大隊</button>
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab-target="tab-vanguard">👑 總召哩程特攻 <small>(雙國遊)</small></button>
+                <button class="tab-btn" data-tab-target="tab-taiwan">🇹🇼 台灣直飛部隊</button>
+                <button class="tab-btn" data-tab-target="tab-hk">🇭🇰 香港出發大隊</button>
             </div>
 
             <!-- Tab 1：總召哩程特攻 -->
-            <div class="tab-content active" id="tab-vanguard">
+            <div class="tab-panel active" id="tab-vanguard">
                 <div class="story-box">
                     <span class="story-icon">✨</span>
                     <div>
                         <h4>前傳故事：用 13,000 哩程換出雙國遊！</h4>
-                        <p>3/1 先飛香港吃爆燒鵝，與香港分部會合後，隔日再一起殺去日本滑雪！想跟上的朋友快去查票！</p>
+                        <p>3/1 先飛香港吃爆燒鵝，與香港分部會合後，隔日再一起殺去日本滑雪！回程直飛台北！</p>
                     </div>
                 </div>
+                <div class="direction-label">✈️ 去程 (TPE → HKG → NRT)</div>
                 <div class="cards-grid">
-                    <!-- 第一段：TPE → HKG -->
                     <div class="glass-card flight-card">
                         <div class="flight-type">第一段 (前進香港) · 3/1 TPE→HKG</div>
                         <h3 class="flight-number">CX 489</h3>
                         <div class="flight-details">
-                            <div class="time-loc">
-                                <span class="time">10:45</span>
-                                <span class="loc">TPE (桃園)</span>
-                            </div>
+                            <div class="time-loc"><span class="time">10:45</span><span class="loc">TPE</span></div>
                             <div class="arrow">✈️</div>
-                            <div class="time-loc">
-                                <span class="time">13:00</span>
-                                <span class="loc">HKG (香港)</span>
-                            </div>
+                            <div class="time-loc"><span class="time">13:00</span><span class="loc">HKG</span></div>
                         </div>
                         <p class="flight-date">2027-03-01 (一) · 國泰 Cathay Pacific</p>
                     </div>
-                    <!-- 第二段：HKG → NRT -->
                     <div class="glass-card flight-card">
                         <div class="flight-type">第二段 (會合出發) · 3/2 HKG→NRT</div>
                         <h3 class="flight-number">CX 520</h3>
                         <div class="flight-details">
-                            <div class="time-loc">
-                                <span class="time">10:30</span>
-                                <span class="loc">HKG (香港)</span>
-                            </div>
+                            <div class="time-loc"><span class="time">10:30</span><span class="loc">HKG</span></div>
                             <div class="arrow">✈️</div>
-                            <div class="time-loc">
-                                <span class="time">15:35</span>
-                                <span class="loc">NRT (成田)</span>
-                            </div>
+                            <div class="time-loc"><span class="time">15:35</span><span class="loc">NRT</span></div>
                         </div>
                         <p class="flight-date">2027-03-02 (二) · 國泰 Cathay Pacific</p>
+                    </div>
+                </div>
+                <div class="direction-label" style="margin-top: 2rem;">🛬 回程 (NRT → TPE)</div>
+                <div class="cards-grid">
+                    <div class="glass-card flight-card">
+                        <div class="flight-type">回程直飛 · 3/7 NRT→TPE</div>
+                        <h3 class="flight-number">JX 801</h3>
+                        <div class="flight-details">
+                            <div class="time-loc"><span class="time">14:10</span><span class="loc">NRT</span></div>
+                            <div class="arrow">✈️</div>
+                            <div class="time-loc"><span class="time">17:30</span><span class="loc">TPE</span></div>
+                        </div>
+                        <p class="flight-date">2027-03-07 (日) · 星宇航空 STARLUX</p>
                     </div>
                 </div>
             </div>
 
             <!-- Tab 2：台灣直飛 -->
-            <div class="tab-content" id="tab-taiwan">
+            <div class="tab-panel" id="tab-taiwan">
                 <div class="story-box">
-                    <span class="story-icon">🛌</span>
+                    <span class="story-icon">🧳</span>
                     <div>
-                        <h4>睡飽直飛，完美接軌！</h4>
-                        <p>早上機，下午抵達成田，完美接軌下午的赤倉接駁車。不用成天趕路，輕鬆出發最理想！</p>
+                        <h4>依據休假彈性，選擇最適合的方案！</h4>
+                        <p>想提前去東京血拼，還是當天直奔雪場？幫你規劃好了兩條完美路線！</p>
                     </div>
                 </div>
-                <div class="cards-grid">
-                    <div class="glass-card flight-card">
-                        <div class="flight-type">推薦去程 · 3/2 TPE→NRT</div>
-                        <h3 class="flight-number">JX 800</h3>
-                        <div class="flight-details">
-                            <div class="time-loc">
-                                <span class="time">08:30</span>
-                                <span class="loc">TPE (桃園)</span>
+                
+                <div class="plan-section">
+                    <div class="plan-label plan-a">A計畫：3/2 提前到東京吃喝一晚</div>
+                    <div class="direction-label">✈️ 去程 (TPE → NRT)</div>
+                    <div class="cards-grid">
+                        <div class="glass-card flight-card">
+                            <div class="flight-type">推薦早班機 · 3/2 TPE→NRT</div>
+                            <h3 class="flight-number">JX 800</h3>
+                            <div class="flight-details">
+                                <div class="time-loc"><span class="time">08:30</span><span class="loc">TPE</span></div>
+                                <div class="arrow">✈️</div>
+                                <div class="time-loc"><span class="time">12:45</span><span class="loc">NRT</span></div>
                             </div>
-                            <div class="arrow">✈️</div>
-                            <div class="time-loc">
-                                <span class="time">12:45</span>
-                                <span class="loc">NRT (成田)</span>
-                            </div>
+                            <p class="flight-date">2027-03-02 (二) · 星宇航空 STARLUX</p>
                         </div>
-                        <p class="flight-date">2027-03-02 (二) · 星宇航空 STARLUX</p>
                     </div>
+                </div>
+
+                <div class="plan-section">
+                    <div class="plan-label plan-b">B計畫：3/3 台灣起飛直奔妙高</div>
+                    <div class="direction-label">✈️ 去程 (TPE → NRT)</div>
+                    <div class="cards-grid">
+                        <div class="glass-card flight-card">
+                            <div class="flight-type">推薦早班機 · 3/3 TPE→NRT</div>
+                            <h3 class="flight-number">BR 198</h3>
+                            <div class="flight-details">
+                                <div class="time-loc"><span class="time">08:50</span><span class="loc">TPE</span></div>
+                                <div class="arrow">✈️</div>
+                                <div class="time-loc"><span class="time">12:55</span><span class="loc">NRT</span></div>
+                            </div>
+                            <p class="flight-date">2027-03-03 (三) · 長榮 EVA Air</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="direction-label" style="margin-top: 2rem;">🛬 回程 (共同) (NRT → TPE)</div>
+                <div class="cards-grid">
                     <div class="glass-card flight-card">
                         <div class="flight-type">回程 · 3/7 NRT→TPE</div>
                         <h3 class="flight-number">JX 801</h3>
                         <div class="flight-details">
-                            <div class="time-loc">
-                                <span class="time">14:10</span>
-                                <span class="loc">NRT (成田)</span>
-                            </div>
+                            <div class="time-loc"><span class="time">14:10</span><span class="loc">NRT</span></div>
                             <div class="arrow">✈️</div>
-                            <div class="time-loc">
-                                <span class="time">17:30</span>
-                                <span class="loc">TPE (桃園)</span>
-                            </div>
+                            <div class="time-loc"><span class="time">17:30</span><span class="loc">TPE</span></div>
                         </div>
                         <p class="flight-date">2027-03-07 (日) · 星宇航空 STARLUX</p>
                     </div>
@@ -164,50 +178,41 @@
             </div>
 
             <!-- Tab 3：香港大隊 -->
-            <div class="tab-content" id="tab-hk">
+            <div class="tab-panel" id="tab-hk">
                 <div class="story-box">
                     <span class="story-icon">🇳🇱</span>
                     <div>
-                        <h4>香港分部出發！</h4>
-                        <p>直飛成田，輕鬆入境日本。建議選擇 14:05 抵達就能從容跟上集結點的接駁車！</p>
+                        <h4>香港分部，完美接軌！</h4>
+                        <p>跟總召小隊搭乘同一班飛機抵達！落地立刻換特快車，殺進東京市區會合吃晚餐！</p>
                     </div>
                 </div>
+                <div class="direction-label">✈️ 去程 (HKG → NRT)</div>
                 <div class="cards-grid">
                     <div class="glass-card flight-card">
                         <div class="flight-type">推薦去程 · 3/2 HKG→NRT</div>
-                        <h3 class="flight-number">CX 504</h3>
+                        <h3 class="flight-number">CX 520</h3>
                         <div class="flight-details">
-                            <div class="time-loc">
-                                <span class="time">09:05</span>
-                                <span class="loc">HKG (香港)</span>
-                            </div>
+                            <div class="time-loc"><span class="time">10:30</span><span class="loc">HKG</span></div>
                             <div class="arrow">✈️</div>
-                            <div class="time-loc">
-                                <span class="time">14:05</span>
-                                <span class="loc">NRT (成田)</span>
-                            </div>
+                            <div class="time-loc"><span class="time">15:35</span><span class="loc">NRT</span></div>
                         </div>
                         <p class="flight-date">2027-03-02 (二) · 國泰 Cathay Pacific</p>
                     </div>
+                </div>
+                <div class="direction-label" style="margin-top: 2rem;">🛬 回程 (NRT → HKG)</div>
+                <div class="cards-grid">
                     <div class="glass-card flight-card">
                         <div class="flight-type">回程 · 3/7 NRT→HKG</div>
                         <h3 class="flight-number">CX 503</h3>
                         <div class="flight-details">
-                            <div class="time-loc">
-                                <span class="time">15:35</span>
-                                <span class="loc">NRT (成田)</span>
-                            </div>
+                            <div class="time-loc"><span class="time">15:35</span><span class="loc">NRT</span></div>
                             <div class="arrow">✈️</div>
-                            <div class="time-loc">
-                                <span class="time">19:45</span>
-                                <span class="loc">HKG (香港)</span>
-                            </div>
+                            <div class="time-loc"><span class="time">19:45</span><span class="loc">HKG</span></div>
                         </div>
                         <p class="flight-date">2027-03-07 (日) · 國泰 Cathay Pacific</p>
                     </div>
                 </div>
             </div>
-
         </div>
     </section>
 
@@ -216,12 +221,40 @@
         <div class="container">
             <h2 class="section-title">交通與住宿 <span>Transport & Stay</span></h2>
             
-            <!-- 交通資訊 -->
-            <div class="glass-card info-card" style="margin-bottom: 2rem;">
-                <h3>🚆 機場到赤倉溫泉區</h3>
-                <p>成田機場搭乘 <strong>Skyliner</strong> 至上野 (Ueno)。</p>
-                <p>轉乘 <strong>北陸新幹線</strong> (Hokuriku Shinkansen) 至上越妙高站 (Joetsumyoko)。</p>
-                <p>轉乘當地接駁巴士或計程車直達赤倉溫泉區。</p>
+            <!-- 熱血闖關路線圖 -->
+            <div class="glass-card route-path">
+                <h3>🔥 東京大脫逃：滑雪狂人進擊路線！</h3>
+                <div class="route-steps">
+                    <div class="route-step">
+                        <div class="route-node glow">🚄</div>
+                        <div class="route-step-label">Step 1</div>
+                        <div class="route-info">
+                            <p><small>Skyliner</small></p>
+                            <p>殺出成田機場</p>
+                            <p>直奔上野！</p>
+                        </div>
+                    </div>
+                    <div class="route-arrow">➔</div>
+                    <div class="route-step">
+                        <div class="route-node glow">🍱</div>
+                        <div class="route-step-label">Step 2</div>
+                        <div class="route-info">
+                            <p><small>北陸新幹線</small></p>
+                            <p>上野轉乘新幹線</p>
+                            <p>狂嗑鐵路便當！</p>
+                        </div>
+                    </div>
+                    <div class="route-arrow">➔</div>
+                    <div class="route-step">
+                        <div class="route-node glow">🏂</div>
+                        <div class="route-step-label">Step 3</div>
+                        <div class="route-info">
+                            <p><small>上越妙高站</small></p>
+                            <p>換乘當地接駁巴士</p>
+                            <p>雪國，我們來了！</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- 住宿候選 -->
@@ -237,51 +270,130 @@
     </section>
 
     <!-- 每日行程表 Section (Timeline) -->
-    <section id="itinerary" class="section">
+    <section id="itinerary" class="section tab-group">
         <div class="container">
             <h2 class="section-title">每日行程 <span>Itinerary</span></h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content glass-card">
-                        <h3>Day 1 - 3/1 (一)</h3>
-                        <p>抵達日本，搭乘新幹線前往妙高赤倉。辦理入住，雪具店租借裝備，晚上享受溫泉與迎賓晚餐。</p>
-                    </div>
+            
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab-target="iti-vanguard">👑 總召特攻</button>
+                <button class="tab-btn" data-tab-target="iti-taiwan-a">🇹🇼 台灣 (A計畫)</button>
+                <button class="tab-btn" data-tab-target="iti-taiwan-b">🇹🇼 台灣 (B計畫)</button>
+                <button class="tab-btn" data-tab-target="iti-hk">🇭🇰 香港大隊</button>
+            </div>
+
+            <!-- 行程 Tab：總召特攻 -->
+            <div class="tab-panel active" id="iti-vanguard">
+                <div class="timeline">
+                    <div class="timeline-item"><div class="timeline-dot hk"></div><div class="timeline-content glass-card">
+                        <h3>3/1 (一)｜香港快閃吃爆行動</h3>
+                        <p>早上抵達香港，與香港分部會合！維多利亞港打卡、燒鵝吃到撐、晚上去蘭桂坊喝一杯，暖身啟動！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot travel"></div><div class="timeline-content glass-card">
+                        <h3>3/2 (二)｜前進東京，大軍集結</h3>
+                        <p>與香港大隊搭同一班機殺往東京成田。抵達後直奔市區，晚上在居酒屋與「台灣直飛 A計畫」成員大會師！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot snow"></div><div class="timeline-content glass-card">
+                        <h3>3/3 (三)｜新幹線進擊！全員到齊</h3>
+                        <p>早上搭北陸新幹線前往妙高。抵達 Airbnb，與「台灣直飛 B計畫」成員最終會合！下午馬上衝去租雪具，傍晚直接泡個溫泉開局！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot snow"></div><div class="timeline-content glass-card">
+                        <h3>3/4 (四) ~ 3/5 (五)｜妙高連滑！粉雪地獄</h3>
+                        <p>連兩天在赤倉溫泉 / 赤倉觀光滑雪場激戰。初學者推坡摔到飽，老手樹林找樂子。晚上回民宿自己煮火鍋或在溫泉街覓食。</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot party"></div><div class="timeline-content glass-card">
+                        <h3>3/6 (六)｜最終戰與雪地趴踢</h3>
+                        <p>滑雪最終日！把所有力氣用光，下午歸還裝備。晚上全軍舉辦極限慶功宴，乾杯慶祝大家都活著！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot depart"></div><div class="timeline-content glass-card">
+                        <h3>3/7 (日)｜NEX 狂奔，含淚返鄉</h3>
+                        <p>一早告別雪國，搭新幹線回東京轉乘 NEX 成田特快直奔機場。免稅店最後衝刺，帶著滿滿肌肉痠痛搭機回台灣。</p>
+                    </div></div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content glass-card">
-                        <h3>Day 2 - 3/2 (二)</h3>
-                        <p>全日滑雪：赤倉溫泉滑雪場 (Akakura Onsen)。熟悉雪況，初級至中級雪道巡禮。</p>
-                    </div>
+            </div>
+
+            <!-- 行程 Tab：台灣 A計畫 -->
+            <div class="tab-panel" id="iti-taiwan-a">
+                <div class="timeline">
+                    <div class="timeline-item"><div class="timeline-dot prep"></div><div class="timeline-content glass-card">
+                        <h3>3/1 (一)｜行前準備</h3>
+                        <p>最後檢查護照、雪衣褲、護具，準備明天起飛！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot travel"></div><div class="timeline-content glass-card">
+                        <h3>3/2 (二)｜東京我來了！居酒屋會師</h3>
+                        <p>早班機抵達東京，先去市區 check-in。下午瘋狂血拼逛街，晚上跟從香港飛來的總召、香港大隊在新宿居酒屋喝到掛！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot snow"></div><div class="timeline-content glass-card">
+                        <h3>3/3 (三)｜踏上雪國，滿員集結</h3>
+                        <p>搭新幹線前往妙高，抵達 Airbnb！幫「台灣直飛 B計畫」的人開門，裝備租借完畢後，開啟泡湯模式！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot snow"></div><div class="timeline-content glass-card">
+                        <h3>3/4 (四) ~ 3/5 (五)｜熱血滑雪瘋狂訓練</h3>
+                        <p>兩天瘋狂滑雪行程！一起在雪地上打滾跌倒，感受妙高無敵雪質。晚上回民宿耍廢打牌！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot party"></div><div class="timeline-content glass-card">
+                        <h3>3/6 (六)｜最後衝刺，不留遺憾</h3>
+                        <p>滑雪最後半天，下午還雪具。晚上全員熱血慶功宴，拍照留念！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot depart"></div><div class="timeline-content glass-card">
+                        <h3>3/7 (日)｜伴手禮掃貨與歸途</h3>
+                        <p>早起搭車回東京，成田機場買爆伴手禮。與所有人擁抱道別，帶著美好回憶飛回台灣。</p>
+                    </div></div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content glass-card">
-                        <h3>Day 3 - 3/3 (三)</h3>
-                        <p>全日滑雪：赤倉觀光度假滑雪場 (Akakura Kanko)。體驗粉雪與長距離樹林雪道。</p>
-                    </div>
+            </div>
+
+            <!-- 行程 Tab：台灣 B計畫 -->
+            <div class="tab-panel" id="iti-taiwan-b">
+                <div class="timeline">
+                    <div class="timeline-item"><div class="timeline-dot prep"></div><div class="timeline-content glass-card">
+                        <h3>3/1 (一) ~ 3/2 (二)｜留守台灣，瘋狂打包</h3>
+                        <p>大家都在日本爽了，我在台灣努力上班到最後一刻！下班回家瘋狂打包雪具，準備明天起飛！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot travel"></div><div class="timeline-content glass-card">
+                        <h3>3/3 (三)｜極速狂飆，直奔妙高</h3>
+                        <p>一早直飛成田，降落後立刻執行「大脫逃」路線！Skyliner 轉新幹線，下午殺到妙高 Airbnb，推開門對大家喊：「我來啦！」</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot snow"></div><div class="timeline-content glass-card">
+                        <h3>3/4 (四) ~ 3/5 (五)｜跟上節奏，滑雪特訓</h3>
+                        <p>馬上加入滑雪大隊！雖然晚一天到，但體力滿點！在雪道上盡情奔馳，晚上跟著大家吃吃喝喝泡溫泉。</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot party"></div><div class="timeline-content glass-card">
+                        <h3>3/6 (六)｜燃燒小宇宙</h3>
+                        <p>滑雪最後一日，發揮 100% 實力挑戰中級道。晚上參加大慶功宴，慶祝這趟熱血旅程！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot depart"></div><div class="timeline-content glass-card">
+                        <h3>3/7 (日)｜依依不捨，原路折返</h3>
+                        <p>打包行李，搭乘新幹線轉 NEX 衝成田機場。與大部隊同一天回台，結束難忘的滑雪之旅。</p>
+                    </div></div>
                 </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content glass-card">
-                        <h3>Day 4 - 3/4 (四)</h3>
-                        <p>全日滑雪：可選擇前往周邊雪場 (如池之平或杉之原)，或在赤倉溫泉街隨意逛逛、喝咖啡。</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content glass-card">
-                        <h3>Day 5 - 3/5 (五)</h3>
-                        <p>最後衝刺滑雪半日。下午歸還雪具，採買伴手禮。晚上舉行慶功宴！</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content glass-card">
-                        <h3>Day 6 - 3/6 (六)</h3>
-                        <p>早晨啟程返回東京成田機場，搭機返台。結束美好的雪國之旅。</p>
-                    </div>
+            </div>
+
+            <!-- 行程 Tab：香港大隊 -->
+            <div class="tab-panel" id="iti-hk">
+                <div class="timeline">
+                    <div class="timeline-item"><div class="timeline-dot prep"></div><div class="timeline-content glass-card">
+                        <h3>3/1 (一)｜總召接駕，吃喝香港</h3>
+                        <p>歡迎總召來到香港！帶總召吃爆地道美食，準備明天一起飛日本！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot travel"></div><div class="timeline-content glass-card">
+                        <h3>3/2 (二)｜東京空降，居酒屋聚首</h3>
+                        <p>抵達東京成田，進市區安頓好後，晚上跟台灣 A計畫的夥伴在新宿居酒屋碰面，台港大交流！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot snow"></div><div class="timeline-content glass-card">
+                        <h3>3/3 (三)｜雪國特急，妙高參上</h3>
+                        <p>搭乘新幹線抵達妙高。下午租借雪具，換上最帥的裝備，晚上享受溫泉洗滌旅途疲憊。</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot snow"></div><div class="timeline-content glass-card">
+                        <h3>3/4 (四) ~ 3/5 (五)｜赤倉激戰，滑雪中毒</h3>
+                        <p>連兩天在雪場奮戰！跌倒不怕，最怕沒拍到帥照！晚上大家一起聚在客廳吃零食聊天。</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot party"></div><div class="timeline-content glass-card">
+                        <h3>3/6 (六)｜雪地絕景與大慶功</h3>
+                        <p>把握最後的雪地時光，欣賞妙高絕景。晚上迎來大慶功宴，瘋狂一整晚！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot depart"></div><div class="timeline-content glass-card">
+                        <h3>3/7 (日)｜各自安好，期待再聚</h3>
+                        <p>退房回東京成田機場，與台灣部隊分道揚鑣，搭機返回香港。旅程結束，開始存錢準備下一趟！</p>
+                    </div></div>
                 </div>
             </div>
         </div>

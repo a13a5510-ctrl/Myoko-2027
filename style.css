@@ -1347,9 +1347,9 @@ a {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  航班區塊：集結橫幅、頁簽、故事框                                           */
+/*  通用頁簽系統 (Tab System) + 集結橫幅 + 故事框                              */
 /* -------------------------------------------------------------------------- */
-@keyframes fadeIn {
+@keyframes fadeInTab {
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
 }
@@ -1400,12 +1400,21 @@ a {
     background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.25), transparent);
 }
 
-/* 頁簽導覽 */
-.flight-tabs {
+/* 頁簽導覽列 */
+.tab-nav {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
+}
+
+.tab-nav.plan-tabs {
+    margin-bottom: 1rem;
+}
+
+.tab-nav.plan-tabs .tab-btn {
+    font-size: 0.82rem;
+    padding: 0.45rem 1rem;
 }
 
 .tab-btn {
@@ -1452,14 +1461,49 @@ a {
     background: linear-gradient(90deg, transparent, var(--accent), transparent);
 }
 
-/* 頁簽內容 */
-.tab-content {
+/* 頁簽面板 */
+.tab-panel {
     display: none;
 }
 
-.tab-content.active {
+.tab-panel.active {
     display: block;
-    animation: fadeIn 0.4s ease;
+    animation: fadeInTab 0.4s ease;
+}
+
+/* 去/回程標籤 */
+.direction-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin: 1.5rem 0 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* A/B 計畫區塊 */
+.plan-section {
+    margin-bottom: 1.5rem;
+}
+
+.plan-label {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+}
+
+.plan-label.plan-a {
+    color: #6EE7B7;
+    background: rgba(110, 231, 183, 0.08);
+    border-left: 3px solid #6EE7B7;
+}
+
+.plan-label.plan-b {
+    color: #FDBA74;
+    background: rgba(253, 186, 116, 0.08);
+    border-left: 3px solid #FDBA74;
 }
 
 /* 故事框 */
@@ -1492,6 +1536,121 @@ a {
     font-size: 0.9rem;
     line-height: 1.6;
     margin: 0;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  熱血闖關路線圖 (Route Path)                                               */
+/* -------------------------------------------------------------------------- */
+.route-path {
+    margin-bottom: 2rem;
+    padding: 2rem;
+}
+
+.route-path h3 {
+    text-align: center;
+    margin-bottom: 1.8rem;
+    font-size: 1.2rem;
+    color: var(--accent);
+}
+
+.route-steps {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+}
+
+.route-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+    max-width: 180px;
+}
+
+.route-node {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    background: rgba(56, 189, 248, 0.1);
+    border: 2px solid rgba(56, 189, 248, 0.3);
+    border-radius: 50%;
+    margin-bottom: 0.8rem;
+    transition: all 0.3s;
+}
+
+.route-node.glow {
+    border-color: var(--accent);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.5), 0 0 40px rgba(56, 189, 248, 0.15);
+    background: rgba(56, 189, 248, 0.2);
+}
+
+.route-step-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+}
+
+.route-info p {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.route-info p small {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.route-arrow {
+    font-size: 1.5rem;
+    color: var(--accent);
+    padding-top: 1rem;
+    opacity: 0.6;
+    filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.4));
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Timeline 節點色系                                                         */
+/* -------------------------------------------------------------------------- */
+.timeline-dot.travel {
+    background-color: #38BDF8;
+    box-shadow: 0 0 10px #38BDF8;
+}
+
+.timeline-dot.snow {
+    background-color: #E2E8F0;
+    box-shadow: 0 0 10px rgba(226, 232, 240, 0.7);
+}
+
+.timeline-dot.party {
+    background-color: #FBBF24;
+    box-shadow: 0 0 10px rgba(251, 191, 36, 0.7);
+}
+
+.timeline-dot.depart {
+    background-color: #F87171;
+    box-shadow: 0 0 10px rgba(248, 113, 113, 0.7);
+}
+
+.timeline-dot.prep {
+    background-color: #A78BFA;
+    box-shadow: 0 0 10px rgba(167, 139, 250, 0.7);
+}
+
+.timeline-dot.hk {
+    background-color: #FB923C;
+    box-shadow: 0 0 10px rgba(251, 146, 60, 0.7);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -1598,5 +1757,30 @@ a {
     .guide-pill {
         font-size: 0.72rem;
         padding: 0.45rem 0.75rem;
+    }
+
+    /* Route path mobile */
+    .route-steps {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .route-arrow {
+        transform: rotate(90deg);
+        padding: 0.3rem 0;
+    }
+
+    .route-step {
+        max-width: 100%;
+    }
+
+    /* Tab nav mobile */
+    .tab-nav {
+        gap: 0.4rem;
+    }
+
+    .tab-btn {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.8rem;
     }
 }

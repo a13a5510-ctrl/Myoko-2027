@@ -864,19 +864,32 @@ if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !==
 }
 
 // --------------------------------------------------------------------------
-// 9. 航班頁籤切換 (Tab Switching)
+// 9. 通用模組化頁籤切換 (Universal Tab Switching)
+//    支援多組獨立頁籤 (data-tab-group) 與巢狀頁籤
 // --------------------------------------------------------------------------
-document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const targetId = btn.getAttribute('data-tab');
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.tab-btn');
+    if (!btn) return;
 
-        // 移除所有按鈕與內容的 active 狀態
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    const group = btn.closest('.tab-group');
+    if (!group) return;
 
-        // 啟用當前頁籤
-        btn.classList.add('active');
-        const targetContent = document.getElementById(targetId);
-        if (targetContent) targetContent.classList.add('active');
+    const targetId = btn.getAttribute('data-tab-target');
+    if (!targetId) return;
+
+    const nav = btn.closest('.tab-nav');
+    if (nav) {
+        nav.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    }
+
+    // 只影響同一 tab-group 層級的 panel，不干擾巢狀 group
+    group.querySelectorAll('.tab-panel').forEach(p => {
+        if (p.closest('.tab-group') === group) {
+            p.classList.remove('active');
+        }
     });
+
+    btn.classList.add('active');
+    const targetPanel = document.getElementById(targetId);
+    if (targetPanel) targetPanel.classList.add('active');
 });
