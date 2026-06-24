@@ -66,17 +66,17 @@
 
             <!-- 頁簽導覽列 -->
             <div class="tab-nav">
-                <button class="tab-btn active" data-tab-target="tab-vanguard">👑 總召哩程特攻 <small>(雙國遊)</small></button>
+                <button class="tab-btn active" data-tab-target="tab-vanguard">👑 總召神祕特攻 <small>(雙國遊)</small></button>
                 <button class="tab-btn" data-tab-target="tab-taiwan">🇹🇼 台灣直飛部隊</button>
                 <button class="tab-btn" data-tab-target="tab-hk">🇭🇰 香港出發大隊</button>
             </div>
 
-            <!-- Tab 1：總召哩程特攻 -->
+            <!-- Tab 1：總召神祕特攻 -->
             <div class="tab-panel active" id="tab-vanguard">
                 <div class="story-box">
                     <span class="story-icon">✨</span>
                     <div>
-                        <h4>前傳故事：用 13,000 哩程換出雙國遊！</h4>
+                        <h4>👑 總召神祕特攻：VIP隱藏版點數開票 Route (兩段航程皆已鎖定艙位)</h4>
                         <p>3/1 先飛香港吃爆燒鵝，與香港分部會合後，隔日再一起殺去日本滑雪！回程直飛台北！</p>
                     </div>
                 </div>
@@ -478,25 +478,40 @@
         <div class="container">
             <h2 class="section-title">雪場與周邊 <span>Resort & Info</span></h2>
             <div class="cards-grid three-cols">
-                <div class="glass-card">
-                    <h3>🏂 妙高赤倉雪場</h3>
-                    <p>降雪量驚人，擁有全日本首屈一指的頂級粉雪 (Japow)。寬闊的雪道適合各程度的玩家。</p>
+                <!-- 夢幻雪場特搜 -->
+                <div class="glass-card resort-card" data-resort-target="resort-snow">
+                    <h3 class="neon-title">🎿 夢幻雪場特搜</h3>
+                    <p class="resort-hint">點擊揭密粉雪天堂</p>
+                    <div class="resort-expand-panel" id="resort-snow">
+                        <ul class="custom-list">
+                            <li><strong>⛷️ 赤倉溫泉滑雪場：</strong>全日本唯一可直接夜滑到溫泉街的粉雪天堂，雪道超寬適合熱身！</li>
+                            <li><strong>🏔️ 赤倉觀光滑雪場 (Akakan)：</strong>擁有高空無邊際雲海飯店，直下型高爽度雪道，高手極致最愛！</li>
+                            <li><strong>🏂 池之平溫泉滑雪場：</strong>擁有全日本最寬、最平緩的超長巡航雪道，還有極具挑戰性的 Terrain Park！</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="glass-card">
-                    <h3>🍜 推薦餐廳</h3>
-                    <ul class="custom-list" style="margin-left: 1.5rem; margin-top: 1rem;">
-                        <li>赤倉居酒屋 - 必點烤肉串</li>
-                        <li>雪山拉麵亭 - 暖胃首選</li>
-                        <li>日式可麗餅小頭 - 下午茶必備</li>
-                    </ul>
+                <!-- 赤倉美食地圖 -->
+                <div class="glass-card resort-card" data-resort-target="resort-food">
+                    <h3 class="neon-title">🍽️ 赤倉美食地圖</h3>
+                    <p class="resort-hint">點擊挖掘隱藏美味</p>
+                    <div class="resort-expand-panel" id="resort-food">
+                        <ul class="custom-list">
+                            <li><strong>🥩 Restaurant Shibata：</strong>傳奇爆量炸豬排飯、招牌漢堡排，滑雪後補足熱量的終極大魔王！</li>
+                            <li><strong>🍜 やぶそば (Yabu Soba)：</strong>高原車站前老字號手工蕎麥麵與酥脆天婦羅，在地地酒絕配！</li>
+                            <li><strong>🍕 石窯披薩 Two Pines：</strong>現點現烤柴燒拿坡里披薩，拉絲起司搭配「妙高高原精釀啤酒」簡直天堂！</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="glass-card">
-                    <h3>♨️ 必泡溫泉</h3>
-                    <ul class="custom-list" style="margin-left: 1.5rem; margin-top: 1rem;">
-                        <li>露天野溪溫泉 (需預約)</li>
-                        <li>飯店內大浴場</li>
-                        <li>赤倉足湯 (免費)</li>
-                    </ul>
+                <!-- 祕境溫泉鄉 -->
+                <div class="glass-card resort-card" data-resort-target="resort-onsen">
+                    <h3 class="neon-title">♨️ 祕境溫泉鄉</h3>
+                    <p class="resort-hint">點擊解鎖美人湯</p>
+                    <div class="resort-expand-panel" id="resort-onsen">
+                        <ul class="custom-list">
+                            <li><strong>🧼 赤倉溫泉 (江戶開湯)：</strong>妙高山直引的天然硫酸鹽「美人湯」，專治全身滑雪酸痛！</li>
+                            <li><strong>🌋 池之平黑泥溫泉：</strong>罕見的天然微泥沙泥湯，深度消除關節疲勞，去角質神效！</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

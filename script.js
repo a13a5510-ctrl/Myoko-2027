@@ -893,3 +893,22 @@ document.addEventListener('click', (e) => {
     const targetPanel = document.getElementById(targetId);
     if (targetPanel) targetPanel.classList.add('active');
 });
+
+// --------------------------------------------------------------------------
+// 10. 雪場與周邊卡片互動特效 (Resort Cards Expand)
+// --------------------------------------------------------------------------
+document.querySelectorAll('.resort-card').forEach(card => {
+    // 點擊展開/收合
+    card.addEventListener('click', (e) => {
+        const isActive = card.classList.contains('active');
+        document.querySelectorAll('.resort-card').forEach(c => c.classList.remove('active'));
+        if (!isActive) {
+            card.classList.add('active');
+        }
+    });
+
+    // 滑鼠離開大區塊自動收合
+    card.addEventListener('mouseleave', () => {
+        card.classList.remove('active');
+    });
+});

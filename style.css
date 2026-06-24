@@ -1661,12 +1661,27 @@ a {
     flex-direction: row;
     gap: 1.5rem;
     justify-content: space-between;
+    align-items: stretch;
 }
 
 .flight-col {
     flex: 1;
+    width: calc(50% - 0.75rem);
     display: flex;
     flex-direction: column;
+}
+
+.flight-col .cards-grid {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.flight-col .flight-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .flight-col .direction-label {
@@ -1709,6 +1724,68 @@ a {
 .badge.taiwan-b { background: rgba(253, 186, 116, 0.2); color: #FDBA74; border: 1px solid rgba(253, 186, 116, 0.4); }
 .badge.hk { background: rgba(251, 146, 60, 0.2); color: #FDBA74; border: 1px solid rgba(251, 146, 60, 0.4); }
 .badge.all { background: rgba(56, 189, 248, 0.2); color: #38BDF8; border: 1px solid rgba(56, 189, 248, 0.4); }
+
+/* -------------------------------------------------------------------------- */
+/*  雪場與周邊互動特效 (Resort Expand Panels)                                   */
+/* -------------------------------------------------------------------------- */
+.resort-card {
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.resort-card:hover {
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+}
+
+.neon-title {
+    font-size: 1.25rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+.resort-hint {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+    transition: opacity 0.3s ease, height 0.3s ease;
+}
+
+.resort-expand-panel {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, margin-top 0.3s ease;
+}
+
+.resort-card.active .resort-expand-panel {
+    max-height: 600px;
+    opacity: 1;
+    margin-top: 1.5rem;
+}
+
+.resort-card.active .resort-hint {
+    opacity: 0;
+    height: 0;
+    margin: 0;
+    pointer-events: none;
+}
+
+.resort-expand-panel .custom-list li {
+    margin-bottom: 1.2rem;
+    line-height: 1.6;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.resort-expand-panel .custom-list li strong {
+    color: #FDBA74;
+    display: inline-block;
+    margin-bottom: 0.2rem;
+}
 
 /* -------------------------------------------------------------------------- */
 /*  RWD 響應式設計 (平板與手機)                                               */
@@ -1845,5 +1922,9 @@ a {
     .flight-row-container {
         flex-direction: column;
         gap: 1rem;
+    }
+    
+    .flight-col {
+        width: 100%;
     }
 }
