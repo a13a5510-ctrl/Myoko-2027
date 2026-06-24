@@ -912,3 +912,251 @@ document.querySelectorAll('.resort-card').forEach(card => {
         card.classList.remove('active');
     });
 });
+
+// --------------------------------------------------------------------------
+// 11. 動態記帳與終極清算系統 (Firebase Expenses & AA Split)
+// --------------------------------------------------------------------------
+const expensesRef = firebase.database().ref('expenses');
+
+// UI Elements
+const fabAddExpense = document.getElementById('fab-add-expense');
+const ledgerModal = document.getElementById('ledger-modal');
+const closeLedgerModal = document.getElementById('close-ledger-modal');
+const payerSelector = document.getElementById('payer-selector');
+const expensePayerInput = document.getElementById('expense-payer');
+const submitExpenseBtn = document.getElementById('submit-expense');
+const transactionList = document.getElementById('transaction-list');
+const settlementList = document.getElementById('settlement-list');
+const waterLevelBar = document.getElementById('water-level-bar');
+const publicFundBalance = document.getElementById('public-fund-balance');
+
+const INITIAL_PUBLIC_FUND = 150000;
+
+// Modal Toggles
+if (fabAddExpense && ledgerModal) {
+    fabAddExpense.addEventListener('click', () => {
+        ledgerModal.classList.remove('hidden');
+        // Reset form
+        document.getElementById('expense-amount').value = '';
+        document.getElementById('expense-item').value = '';
+        document.getElementById('expense-is-public').checked = false;
+        
+        // Reset payer selection
+        expensePayerInput.value = '';
+        if (payerSelector) {
+            payerSelector.querySelectorAll('.avatar-btn').forEach(b => b.classList.remove('selected'));
+        }
+    });
+
+    closeLedgerModal.addEventListener('click', () => {
+        ledgerModal.classList.add('hidden');
+    });
+}
+
+// Payer Selection
+if (payerSelector) {
+    payerSelector.addEventListener('click', (e) => {
+        const btn = e.target.closest('.avatar-btn');
+        if (!btn) return;
+        payerSelector.querySelectorAll('.avatar-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        expensePayerInput.value = btn.dataset.name;
+    });
+}
+
+// Submit Expense
+if (submitExpenseBtn) {
+    submitExpenseBtn.addEventListener('click', async () => {
+        const payer = expensePayerInput.value;
+        const amount = parseInt(document.getElementById('expense-amount').value) || 0;
+        const item = document.getElementById('expense-item').value.trim();
+        const isPublic = document.getElementById('expense-is-public').checked;
+        
+        const checkboxes = document.querySelectorAll('#participant-selector input[type="checkbox"]:checked');
+        const participants = Array.from(checkboxes).map(cb => cb.value);
+
+        if (!payer && !isPublic) {
+            // 如果不是公費支出，就一定要有付款人
+            return alert('請選擇付款人！');
+        }
+        if (amount <= 0) return alert('金額必須大於 0！');
+        if (!item) return alert('請填寫品項名稱！');
+        if (!isPublic && participants.length === 0) return alert('至少需要一名參與均攤的成員！');
+
+        const newExpense = {
+            payer: isPublic ? '公費水庫' : payer,
+            amount,
+            item,
+            isPublic,
+            participants: isPublic ? [] : participants,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        };
+
+        try {
+            await expensesRef.push(newExpense);
+            ledgerModal.classList.add('hidden');
+        } catch (err) {
+            console.error('Error saving expense:', err);
+            alert('記帳失敗，請檢查網路連線。');
+        }
+    });
+}
+
+// Listen to Expenses Data
+expensesRef.on('value', (snapshot) => {
+    const data = snapshot.val() || {};
+    const expenses = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+    
+    // 排序：最新的在最上面
+    expenses.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    
+    if (transactionList && settlementList) {
+        renderTransactions(expenses);
+        calculateAndRenderSettlements(expenses);
+    }
+});
+
+function renderTransactions(expenses) {
+    if (expenses.length === 0) {
+        transactionList.innerHTML = '<div class="empty-state">尚未有任何花費紀錄</div>';
+        return;
+    }
+
+    transactionList.innerHTML = expenses.map(exp => {
+        const date = exp.timestamp ? new Date(exp.timestamp).toLocaleDateString('zh-TW', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+        const pType = exp.isPublic ? '💧 公費' : '👤 個人代墊';
+        return `
+            <div class="transaction-item">
+                <div>
+                    <div style="font-size: 0.95rem; font-weight: bold; color: var(--accent);">${exp.item}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.3rem;">
+                        ${date} · 由 ${exp.payer} 付款 · ${pType}
+                    </div>
+                </div>
+                <div style="font-size: 1.1rem; font-weight: 800; color: #fff;">
+                    ${exp.amount.toLocaleString()}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function calculateAndRenderSettlements(expenses) {
+    const balances = {
+        'Bonnie': 0,
+        'Leo': 0,
+        'Yuk': 0,
+        'Dino': 0,
+        'Ian': 0
+    };
+    
+    let publicFundSpent = 0;
+
+    expenses.forEach(exp => {
+        if (exp.isPublic) {
+            publicFundSpent += exp.amount;
+        } else {
+            // 私人代墊：付款人餘額增加 (別人欠他)
+            if (balances[exp.payer] !== undefined) {
+                balances[exp.payer] += exp.amount;
+            }
+            
+            // 應攤金額：參與者餘額減少 (他欠別人)
+            if (exp.participants && exp.participants.length > 0) {
+                const splitAmount = exp.amount / exp.participants.length;
+                exp.participants.forEach(p => {
+                    if (balances[p] !== undefined) {
+                        balances[p] -= splitAmount;
+                    }
+                });
+            }
+        }
+    });
+
+    // 水庫邏輯
+    let currentFund = INITIAL_PUBLIC_FUND - publicFundSpent;
+    if (publicFundBalance) publicFundBalance.innerText = currentFund.toLocaleString();
+    
+    let percent = Math.max(0, Math.min(100, (currentFund / INITIAL_PUBLIC_FUND) * 100));
+    if (waterLevelBar) {
+        waterLevelBar.style.width = percent + '%';
+        if (percent < 20) {
+            waterLevelBar.classList.add('low-level-glow');
+        } else {
+            waterLevelBar.classList.remove('low-level-glow');
+        }
+    }
+
+    // AA 清算演算法 (Greedy)
+    let creditors = [];
+    let debtors = [];
+    for (let person in balances) {
+        if (balances[person] > 0.01) creditors.push({ name: person, amount: balances[person] });
+        else if (balances[person] < -0.01) debtors.push({ name: person, amount: -balances[person] });
+    }
+
+    creditors.sort((a,b) => b.amount - a.amount);
+    debtors.sort((a,b) => b.amount - a.amount);
+
+    let settlements = [];
+    let i = 0; let j = 0;
+
+    while (i < debtors.length && j < creditors.length) {
+        let debtor = debtors[i];
+        let creditor = creditors[j];
+        
+        let amount = Math.min(debtor.amount, creditor.amount);
+        
+        settlements.push({
+            from: debtor.name,
+            to: creditor.name,
+            amount: Math.round(amount)
+        });
+
+        debtor.amount -= amount;
+        creditor.amount -= amount;
+
+        if (debtor.amount < 0.01) i++;
+        if (creditor.amount < 0.01) j++;
+    }
+
+    if (settlements.length === 0) {
+        settlementList.innerHTML = '<div class="empty-state">目前無任何欠款 🎉</div>';
+    } else {
+        settlementList.innerHTML = settlements.map(s => `
+            <div class="settlement-item">
+                <div>
+                    <strong>${s.from}</strong> 應給 <strong>${s.to}</strong>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem;">
+                        點擊右側結清確認已還款
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span style="font-size: 1.1rem; font-weight: bold; color: #fff;">${s.amount.toLocaleString()}</span>
+                    <button class="btn-settle" onclick="window.settleDebt('${s.from}', '${s.to}', ${s.amount})">確認結清</button>
+                </div>
+            </div>
+        `).join('');
+    }
+}
+
+// 結清欠款 (自動寫入一筆還款交易)
+window.settleDebt = async function(from, to, amount) {
+    if (!confirm(`確定 ${from} 已經給了 ${to} ${amount} 元嗎？\n這將會自動新增一筆結清紀錄。`)) return;
+    
+    const newExpense = {
+        payer: from,
+        amount: amount,
+        item: `結清欠款 (給 ${to})`,
+        isPublic: false,
+        participants: [to],
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    };
+
+    try {
+        await expensesRef.push(newExpense);
+    } catch (err) {
+        console.error('Error settling debt:', err);
+        alert('結清失敗，請檢查網路連線。');
+    }
+};

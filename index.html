@@ -520,27 +520,43 @@
     <!-- 公費與分帳表 Section -->
     <section id="expenses" class="section">
         <div class="container">
-            <h2 class="section-title">公費與分帳表 <span>Expenses</span></h2>
-            <div class="table-responsive glass-card">
-                <table class="expense-table">
-                    <thead>
-                        <tr>
-                            <th>姓名 (Name)</th>
-                            <th>機票費用</th>
-                            <th>住宿費用</th>
-                            <th>雪票/裝備</th>
-                            <th>公費代墊</th>
-                            <th>應補/應退</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Bonnie</td><td>TWD 15,000</td><td>TWD 10,000</td><td>JPY 20,000</td><td>TWD 5,000</td><td class="positive">退 TWD 2,000</td></tr>
-                        <tr><td>Leo</td><td>TWD 15,000</td><td>TWD 10,000</td><td>JPY 20,000</td><td>0</td><td class="negative">補 TWD 3,000</td></tr>
-                        <tr><td>Yuk</td><td>TWD 15,000</td><td>TWD 10,000</td><td>JPY 20,000</td><td>0</td><td class="negative">補 TWD 3,000</td></tr>
-                        <tr><td>Dino</td><td>TWD 15,000</td><td>TWD 10,000</td><td>JPY 20,000</td><td>TWD 10,000</td><td class="positive">退 TWD 7,000</td></tr>
-                        <tr><td>Ian</td><td>TWD 15,000</td><td>TWD 10,000</td><td>JPY 15,000</td><td>0</td><td class="negative">補 TWD 3,000</td></tr>
-                    </tbody>
-                </table>
+            <h2 class="section-title">公費與分帳表 <span>Expenses & AA Settlement</span></h2>
+            
+            <div class="expense-dashboard">
+                <!-- 卡片1：水庫餘額 -->
+                <div class="glass-card expense-panel" id="reservoir-card">
+                    <h3>📊 當前公費水庫</h3>
+                    <div class="reservoir-status">
+                        <div class="balance-display">
+                            <span class="currency">JPY</span>
+                            <span class="amount" id="public-fund-balance">150,000</span>
+                        </div>
+                        <p class="subtitle">初始水位：150,000</p>
+                    </div>
+                    <div class="water-level-container">
+                        <div class="water-level-bar" id="water-level-bar" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <!-- 卡片2：終極清算帳本 -->
+                <div class="glass-card expense-panel" id="settlement-card">
+                    <h3>💸 終極清算帳本</h3>
+                    <p class="subtitle">即時 AI 結算 (AA 防呆機制)</p>
+                    <div class="settlement-list" id="settlement-list">
+                        <!-- 動態結算指令將注入此處 -->
+                        <div class="empty-state">目前無任何欠款 🎉</div>
+                    </div>
+                </div>
+
+                <!-- 卡片3：即時流水帳 -->
+                <div class="glass-card expense-panel" id="history-card">
+                    <h3>📜 即時流水帳</h3>
+                    <p class="subtitle">最近花費紀錄</p>
+                    <div class="transaction-list" id="transaction-list">
+                        <!-- 動態交易紀錄將注入此處 -->
+                        <div class="empty-state">尚未有任何花費紀錄</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -688,7 +704,70 @@
             <button id="submit-vote" class="btn-primary" style="width: 100%;">確認送出</button>
         </div>
     </div>
+    <!-- 快速記帳 FAB -->
+    <button id="fab-add-expense" class="fab-btn glow-effect">
+        <span class="fab-icon">➕</span>
+    </button>
 
+    <!-- 記帳 Modal -->
+    <div id="ledger-modal" class="modal-overlay hidden">
+        <div class="ledger-modal-content glass-card">
+            <div class="modal-header">
+                <h3>新增花費</h3>
+                <button class="btn-close" id="close-ledger-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 付款人 -->
+                <div class="form-group">
+                    <label>付款人 (Who paid?)</label>
+                    <div class="payer-selector" id="payer-selector">
+                        <button type="button" class="avatar-btn" data-name="Bonnie">🐰</button>
+                        <button type="button" class="avatar-btn" data-name="Leo">🦁</button>
+                        <button type="button" class="avatar-btn" data-name="Yuk">🐻</button>
+                        <button type="button" class="avatar-btn" data-name="Dino">🦖</button>
+                        <button type="button" class="avatar-btn" data-name="Ian">🐺</button>
+                    </div>
+                    <input type="hidden" id="expense-payer">
+                </div>
+
+                <!-- 金額與品項 -->
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="expense-amount">金額 (JPY)</label>
+                        <input type="number" id="expense-amount" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group half">
+                        <label for="expense-item">品項名稱</label>
+                        <input type="text" id="expense-item" placeholder="例如: 晚餐燒肉">
+                    </div>
+                </div>
+
+                <!-- 公費開關 -->
+                <div class="form-group switch-group">
+                    <label for="expense-is-public">由公費水庫支出？</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="expense-is-public">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <!-- 參與均攤名單 -->
+                <div class="form-group">
+                    <label>參與均攤成員 (預設全選)</label>
+                    <div class="participant-selector" id="participant-selector">
+                        <label class="checkbox-item"><input type="checkbox" value="Bonnie" checked><span class="checkmark"></span>🐰 Bonnie</label>
+                        <label class="checkbox-item"><input type="checkbox" value="Leo" checked><span class="checkmark"></span>🦁 Leo</label>
+                        <label class="checkbox-item"><input type="checkbox" value="Yuk" checked><span class="checkmark"></span>🐻 Yuk</label>
+                        <label class="checkbox-item"><input type="checkbox" value="Dino" checked><span class="checkmark"></span>🦖 Dino</label>
+                        <label class="checkbox-item"><input type="checkbox" value="Ian" checked><span class="checkmark"></span>🐺 Ian</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="submit-expense" class="btn-primary" style="width: 100%;">送出記帳</button>
+            </div>
+        </div>
+    </div>
     <!-- 引入資料檔案與主程式檔案 -->
     <script src="mediaData.js"></script>
     <script src="script.js"></script>

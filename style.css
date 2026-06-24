@@ -1788,6 +1788,298 @@ a {
 }
 
 /* -------------------------------------------------------------------------- */
+/*  動態記帳與終極清算 UI (Expense Dashboard)                                  */
+/* -------------------------------------------------------------------------- */
+.expense-dashboard {
+    display: flex;
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+.expense-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.expense-panel h3 {
+    font-size: 1.2rem;
+    color: var(--accent);
+    margin-bottom: 0.2rem;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    padding-bottom: 0.5rem;
+}
+
+.expense-panel .subtitle {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.2rem;
+}
+
+/* 水庫專屬 */
+.reservoir-status {
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.balance-display {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.balance-display .currency {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+}
+
+.balance-display .amount {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+}
+
+.water-level-container {
+    height: 12px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: auto;
+}
+
+.water-level-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #38BDF8, #818CF8);
+    transition: width 0.5s ease-out, background 0.5s;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+.water-level-bar.low-level-glow {
+    background: linear-gradient(90deg, #F87171, #EF4444);
+    box-shadow: 0 0 15px #EF4444;
+}
+
+/* 清單專屬 */
+.settlement-list, .transaction-list {
+    flex: 1;
+    overflow-y: auto;
+    max-height: 250px;
+}
+
+.settlement-item, .transaction-item {
+    padding: 0.8rem;
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    margin-bottom: 0.8rem;
+    border-left: 3px solid var(--accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.settlement-item {
+    border-left-color: #FDBA74;
+}
+
+.settlement-item button.btn-settle {
+    background: rgba(110, 231, 183, 0.2);
+    border: 1px solid rgba(110, 231, 183, 0.5);
+    color: #6EE7B7;
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+
+.settlement-item button.btn-settle:hover {
+    background: #6EE7B7;
+    color: #000;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  快速記帳 FAB & Modal                                                      */
+/* -------------------------------------------------------------------------- */
+.fab-btn {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(11, 17, 33, 0.7);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(56, 189, 248, 0.5);
+    color: #fff;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 999;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fab-btn:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
+}
+
+/* Ledger Modal */
+.ledger-modal-content {
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 1rem;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: var(--accent);
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-row .half {
+    flex: 1;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    color: #fff;
+    font-family: inherit;
+}
+
+/* 付款人橫向滾動 */
+.payer-selector {
+    display: flex;
+    gap: 0.8rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.avatar-btn {
+    flex: 0 0 auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid transparent;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.avatar-btn.selected {
+    border-color: var(--accent);
+    background: rgba(56, 189, 248, 0.2);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    transform: scale(1.1);
+}
+
+/* 參與者多選 */
+.participant-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* 開關 Toggle Switch */
+.switch-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(255,255,255,0.2);
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.toggle-switch .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked + .slider {
+    background-color: var(--accent);
+}
+
+.toggle-switch input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* -------------------------------------------------------------------------- */
 /*  RWD 響應式設計 (平板與手機)                                               */
 /* -------------------------------------------------------------------------- */
 @media screen and (max-width: 992px) {
@@ -1926,5 +2218,10 @@ a {
     
     .flight-col {
         width: 100%;
+    }
+
+    /* Expense Dashboard Mobile */
+    .expense-dashboard {
+        flex-direction: column;
     }
 }
