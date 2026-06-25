@@ -1888,19 +1888,22 @@ a {
 
 .modal-overlay {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(5px);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 99999;
-    opacity: 1;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .modal-overlay.hidden {
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
 }
 
@@ -2152,4 +2155,109 @@ a {
     .expense-dashboard {
         flex-direction: column;
     }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  裝備清單 圖文網格 (Gear Grid)                                             */
+/* -------------------------------------------------------------------------- */
+.gear-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+}
+
+.gear-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.gear-card:hover {
+    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.gear-card input[type="checkbox"] {
+    display: none;
+}
+
+.gear-img {
+    width: 100%;
+    height: 140px;
+    position: relative;
+    overflow: hidden;
+}
+
+.gear-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+.checked-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(56, 189, 248, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tick-icon {
+    font-size: 3rem;
+    color: #fff;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
+    transform: scale(0.5);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.gear-info {
+    padding: 1rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.gear-info .item-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    transition: color 0.3s ease;
+}
+
+/* 勾選後的狀態 */
+.gear-card:has(input:checked) {
+    border-color: rgba(56, 189, 248, 0.6);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+    background: rgba(56, 189, 248, 0.05);
+}
+
+.gear-card:has(input:checked) .gear-img img {
+    transform: scale(1.05);
+    filter: brightness(0.6);
+}
+
+.gear-card:has(input:checked) .checked-overlay {
+    opacity: 1;
+}
+
+.gear-card:has(input:checked) .tick-icon {
+    transform: scale(1);
+}
+
+.gear-card:has(input:checked) .gear-info .item-text {
+    color: #fff;
+    font-weight: bold;
 }
