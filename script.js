@@ -927,10 +927,6 @@ const expensePayerInput = document.getElementById('expense-payer');
 const submitExpenseBtn = document.getElementById('submit-expense');
 const transactionList = document.getElementById('transaction-list');
 const settlementList = document.getElementById('settlement-list');
-const waterLevelBar = document.getElementById('water-level-bar');
-const publicFundBalance = document.getElementById('public-fund-balance');
-
-const INITIAL_PUBLIC_FUND = 150000;
 
 // Modal Toggles
 if (fabAddExpense && ledgerModal) {
@@ -939,8 +935,12 @@ if (fabAddExpense && ledgerModal) {
         // Reset form
         document.getElementById('expense-amount').value = '';
         document.getElementById('expense-item').value = '';
-        document.getElementById('expense-is-public').checked = false;
         
+        // Reset checkboxes (default checked)
+        document.querySelectorAll('#participant-selector input[type="checkbox"]').forEach(cb => {
+            cb.checked = true;
+        });
+
         // Reset payer selection
         expensePayerInput.value = '';
         if (payerSelector) {
@@ -950,6 +950,13 @@ if (fabAddExpense && ledgerModal) {
 
     closeLedgerModal.addEventListener('click', () => {
         ledgerModal.classList.add('hidden');
+    });
+
+    // 點擊 Modal 黑色半透明背景關閉
+    ledgerModal.addEventListener('click', (e) => {
+        if (e.target === ledgerModal) {
+            ledgerModal.classList.add('hidden');
+        }
     });
 }
 
@@ -970,31 +977,30 @@ if (submitExpenseBtn) {
         const payer = expensePayerInput.value;
         const amount = parseInt(document.getElementById('expense-amount').value) || 0;
         const item = document.getElementById('expense-item').value.trim();
-        const isPublic = document.getElementById('expense-is-public').checked;
         
         const checkboxes = document.querySelectorAll('#participant-selector input[type="checkbox"]:checked');
         const participants = Array.from(checkboxes).map(cb => cb.value);
 
-        if (!payer && !isPublic) {
-            // 如果不是公費支出，就一定要有付款人
-            return alert('請選擇付款人！');
-        }
+        if (!payer) return alert('請選擇付款人！');
         if (amount <= 0) return alert('金額必須大於 0！');
         if (!item) return alert('請填寫品項名稱！');
-        if (!isPublic && participants.length === 0) return alert('至少需要一名參與均攤的成員！');
+        if (participants.length === 0) return alert('至少需要一名參與均攤的成員！');
 
         const newExpense = {
-            payer: isPublic ? '公費水庫' : payer,
+            payer,
             amount,
             item,
-            isPublic,
-            participants: isPublic ? [] : participants,
+            participants,
             timestamp: firebase.database.ServerValue.TIMESTAMP
         };
 
         try {
             await expensesRef.push(newExpense);
+            // 記帳成功後關閉
             ledgerModal.classList.add('hidden');
+            setTimeout(() => {
+                alert('記帳成功！');
+            }, 300); // 稍微延遲讓動畫跑完
         } catch (err) {
             console.error('Error saving expense:', err);
             alert('記帳失敗，請檢查網路連線。');
@@ -1024,13 +1030,12 @@ function renderTransactions(expenses) {
 
     transactionList.innerHTML = expenses.map(exp => {
         const date = exp.timestamp ? new Date(exp.timestamp).toLocaleDateString('zh-TW', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
-        const pType = exp.isPublic ? '💧 公費' : '👤 個人代墊';
         return `
             <div class="transaction-item">
                 <div>
                     <div style="font-size: 0.95rem; font-weight: bold; color: var(--accent);">${exp.item}</div>
                     <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.3rem;">
-                        ${date} · 由 ${exp.payer} 付款 · ${pType}
+                        ${date} · 由 ${exp.payer} 付款
                     </div>
                 </div>
                 <div style="font-size: 1.1rem; font-weight: 800; color: #fff;">
@@ -1050,42 +1055,22 @@ function calculateAndRenderSettlements(expenses) {
         'Ian': 0
     };
     
-    let publicFundSpent = 0;
-
     expenses.forEach(exp => {
-        if (exp.isPublic) {
-            publicFundSpent += exp.amount;
-        } else {
-            // 私人代墊：付款人餘額增加 (別人欠他)
-            if (balances[exp.payer] !== undefined) {
-                balances[exp.payer] += exp.amount;
-            }
-            
-            // 應攤金額：參與者餘額減少 (他欠別人)
-            if (exp.participants && exp.participants.length > 0) {
-                const splitAmount = exp.amount / exp.participants.length;
-                exp.participants.forEach(p => {
-                    if (balances[p] !== undefined) {
-                        balances[p] -= splitAmount;
-                    }
-                });
-            }
+        // 付款人餘額增加 (別人欠他)
+        if (balances[exp.payer] !== undefined) {
+            balances[exp.payer] += exp.amount;
+        }
+        
+        // 應攤金額：參與者餘額減少 (他欠別人)
+        if (exp.participants && exp.participants.length > 0) {
+            const splitAmount = exp.amount / exp.participants.length;
+            exp.participants.forEach(p => {
+                if (balances[p] !== undefined) {
+                    balances[p] -= splitAmount;
+                }
+            });
         }
     });
-
-    // 水庫邏輯
-    let currentFund = INITIAL_PUBLIC_FUND - publicFundSpent;
-    if (publicFundBalance) publicFundBalance.innerText = currentFund.toLocaleString();
-    
-    let percent = Math.max(0, Math.min(100, (currentFund / INITIAL_PUBLIC_FUND) * 100));
-    if (waterLevelBar) {
-        waterLevelBar.style.width = percent + '%';
-        if (percent < 20) {
-            waterLevelBar.classList.add('low-level-glow');
-        } else {
-            waterLevelBar.classList.remove('low-level-glow');
-        }
-    }
 
     // AA 清算演算法 (Greedy)
     let creditors = [];
@@ -1148,7 +1133,6 @@ window.settleDebt = async function(from, to, amount) {
         payer: from,
         amount: amount,
         item: `結清欠款 (給 ${to})`,
-        isPublic: false,
         participants: [to],
         timestamp: firebase.database.ServerValue.TIMESTAMP
     };
