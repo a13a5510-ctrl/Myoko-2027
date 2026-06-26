@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <title>2027 妙高赤倉滑雪旅行 | Myoko Akakura</title>
     <!-- 引入 Google Fonts，使用具現代感的 Inter 字體 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
@@ -713,7 +713,7 @@
     </section>
 
     <!-- 影音回憶錄 Section -->
-    <section id="gallery" class="section">
+    <section id="gallery" class="section is-locked">
         <div class="container">
             <h2 class="section-title">影音回憶錄 <span>Memories</span></h2>
             <p class="gallery-desc">我們的精彩瞬間將於此呈現。</p>
@@ -724,7 +724,7 @@
                 <h3>專屬回憶錄</h3>
                 <p>請輸入通行碼以解鎖相簿與影片</p>
                 <div class="auth-input-group">
-                    <input type="password" id="gallery-password" placeholder="請輸入密碼">
+                    <input type="password" id="gallery-password" placeholder="請輸入密碼" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                     <button id="btn-unlock-gallery" class="btn-primary">解鎖</button>
                 </div>
                 <p id="gallery-auth-error" class="auth-error hidden">密碼錯誤，請再試一次</p>

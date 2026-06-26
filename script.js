@@ -474,33 +474,40 @@ function setupSlider(container) {
 // --------------------------------------------------------------------------
 let lightboxImages = [];
 let lightboxIndex = 0;
+// Lightbox DOM \u7de9\u5b58\u2014\u9867\u540d\u601d\u7fa9\uff0c\u907f\u514d\u6bcf\u6b21\u4ea4\u4e92\u90fd getElementById
+let _lbOverlay = null;
+let _lbImg = null;
+let _lbCounter = null;
 
 function createLightbox() {
-    if (document.getElementById('lightbox-overlay')) return;
-    const overlay = document.createElement('div');
-    overlay.id = 'lightbox-overlay';
-    overlay.innerHTML = `
-        <button class="lb-close" aria-label="關閉">&times;</button>
-        <button class="lb-prev" aria-label="上一張">&#10094;</button>
+    if (_lbOverlay) return; // \u5df2\u5efa\u7acb\u5247\u8df3\u904e
+    _lbOverlay = document.createElement('div');
+    _lbOverlay.id = 'lightbox-overlay';
+    _lbOverlay.innerHTML = `
+        <button class="lb-close" aria-label="\u95dc\u9589">&times;</button>
+        <button class="lb-prev" aria-label="\u4e0a\u4e00\u5f35">&#10094;</button>
         <img class="lb-img" src="" alt="Lightbox">
-        <button class="lb-next" aria-label="下一張">&#10095;</button>
+        <button class="lb-next" aria-label="\u4e0b\u4e00\u5f35">&#10095;</button>
         <div class="lb-counter"></div>
     `;
-    document.body.appendChild(overlay);
+    document.body.appendChild(_lbOverlay);
 
-    overlay.querySelector('.lb-close').addEventListener('click', closeLightbox);
-    overlay.querySelector('.lb-prev').addEventListener('click', () => navigateLightbox(-1));
-    overlay.querySelector('.lb-next').addEventListener('click', () => navigateLightbox(1));
-    overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) closeLightbox();
+    // \u5b50\u5143\u7d20\u7de9\u5b58
+    _lbImg = _lbOverlay.querySelector('.lb-img');
+    _lbCounter = _lbOverlay.querySelector('.lb-counter');
+
+    _lbOverlay.querySelector('.lb-close').addEventListener('click', closeLightbox);
+    _lbOverlay.querySelector('.lb-prev').addEventListener('click', () => navigateLightbox(-1));
+    _lbOverlay.querySelector('.lb-next').addEventListener('click', () => navigateLightbox(1));
+    _lbOverlay.addEventListener('click', (e) => {
+        if (e.target === _lbOverlay) closeLightbox();
     });
 
     document.addEventListener('keydown', handleLightboxKey);
 }
 
 function handleLightboxKey(e) {
-    const overlay = document.getElementById('lightbox-overlay');
-    if (!overlay || !overlay.classList.contains('active')) return;
+    if (!_lbOverlay || !_lbOverlay.classList.contains('active')) return;
     if (e.key === 'Escape') closeLightbox();
     if (e.key === 'ArrowLeft') navigateLightbox(-1);
     if (e.key === 'ArrowRight') navigateLightbox(1);
@@ -510,16 +517,14 @@ function openLightbox(images, startIndex) {
     createLightbox();
     lightboxImages = images;
     lightboxIndex = startIndex;
-    const overlay = document.getElementById('lightbox-overlay');
-    overlay.classList.add('active');
+    _lbOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
     updateLightboxImage();
 }
 
 function closeLightbox() {
-    const overlay = document.getElementById('lightbox-overlay');
-    if (overlay) {
-        overlay.classList.remove('active');
+    if (_lbOverlay) {
+        _lbOverlay.classList.remove('active');
         document.body.style.overflow = '';
     }
 }
@@ -532,12 +537,9 @@ function navigateLightbox(direction) {
 }
 
 function updateLightboxImage() {
-    const overlay = document.getElementById('lightbox-overlay');
-    if (!overlay) return;
-    const img = overlay.querySelector('.lb-img');
-    const counter = overlay.querySelector('.lb-counter');
-    img.src = lightboxImages[lightboxIndex];
-    counter.textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
+    if (!_lbImg || !_lbCounter) return;
+    _lbImg.src = lightboxImages[lightboxIndex];
+    _lbCounter.textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
 }
 
 // --------------------------------------------------------------------------
@@ -703,36 +705,65 @@ function renderAllVotes(votesData) {
     });
 }
 // --------------------------------------------------------------------------
-// 7. 影音回憶錄專屬密碼鎖
+// 7. 影音回憶錄專屬密碼鎖 (is-locked 物理斷絕機制)
 // --------------------------------------------------------------------------
+const gallerySection = document.getElementById('gallery');
 const galleryAuthOverlay = document.getElementById('gallery-auth-overlay');
 const galleryContent = document.getElementById('gallery-content');
 const galleryPasswordInput = document.getElementById('gallery-password');
 const btnUnlockGallery = document.getElementById('btn-unlock-gallery');
 const galleryAuthError = document.getElementById('gallery-auth-error');
 
-// 檢查是否已解鎖
-if (sessionStorage.getItem('galleryUnlocked') === 'true') {
-    if (galleryAuthOverlay && galleryContent) {
+/**
+ * 解鎖 Gallery 的共用函式：
+ * 1. 移除 #gallery 的 .is-locked（CSS 物理斷絕解除）
+ * 2. 隱藏密碼鎖遮罩
+ * 3. 顯示相簿內容
+ */
+function unlockGallery(animate) {
+    if (animate) {
+        galleryAuthOverlay.style.opacity = '0';
+        galleryAuthOverlay.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => {
+            galleryAuthOverlay.style.display = 'none';
+            galleryContent.classList.remove('hidden');
+            gallerySection.classList.remove('is-locked');
+        }, 300);
+    } else {
         galleryAuthOverlay.style.display = 'none';
         galleryContent.classList.remove('hidden');
+        gallerySection.classList.remove('is-locked');
     }
 }
 
+// 檢查是否已解鎖（Session 記憶）
+if (sessionStorage.getItem('galleryUnlocked') === 'true') {
+    if (galleryAuthOverlay && galleryContent && gallerySection) {
+        unlockGallery(false);
+    }
+} else {
+    // 確保未解鎖時物理斷絕生效
+    if (gallerySection) {
+        gallerySection.classList.add('is-locked');
+    }
+}
+
+// 點擊解鎖按鈕
 btnUnlockGallery?.addEventListener('click', () => {
     if (galleryPasswordInput.value === 'myoko2027') {
         sessionStorage.setItem('galleryUnlocked', 'true');
         galleryAuthError.classList.add('hidden');
-        galleryAuthOverlay.style.opacity = '0';
-        setTimeout(() => {
-            galleryAuthOverlay.style.display = 'none';
-            galleryContent.classList.remove('hidden');
-        }, 300);
+        unlockGallery(true);
     } else {
         galleryAuthError.classList.remove('hidden');
+        // 輸入框震動動畫
+        galleryPasswordInput.style.animation = 'none';
+        galleryPasswordInput.offsetHeight; // trigger reflow
+        galleryPasswordInput.style.animation = 'shake 0.4s ease';
     }
 });
 
+// Enter 鍵觸發解鎖
 galleryPasswordInput?.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         btnUnlockGallery.click();
@@ -845,16 +876,19 @@ if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !==
             const items = categorizedData[cat];
             if (items.length === 0) return;
             
-            html += `<h3 class="gallery-category-title" style="grid-column: 1 / -1;">${cat}</h3>`;
+            // gallery-category-title 的 grid-column:1/-1 已由 CSS 處理，移除 style 屬性
+            html += `<h3 class="gallery-category-title">${cat}</h3>`;
             
             items.forEach(item => {
-                html += `<div class="media-item" style="position: relative;">`;
+                // media-item 的 position:relative 已由 CSS 處理
+                html += `<div class="media-item">`;
                 if (item.type === 'image') {
                     html += `<img src="${item.url}" alt="${cat}" loading="lazy">`;
                 } else if (item.type === 'video') {
                     html += `<video src="${item.url}" controls></video>`;
                 }
-                html += `<div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 12px; font-size: 0.75rem; color: #fff;">📸 ${item.uploader}</div>`;
+                // 上傳者標籤改用 CSS class
+                html += `<div class="media-uploader-badge">📸 ${item.uploader}</div>`;
                 html += `</div>`;
             });
         });
@@ -895,30 +929,35 @@ document.addEventListener('click', (e) => {
 });
 
 // --------------------------------------------------------------------------
-// 10. 雪場與周邊卡片互動特效 (Resort Cards Expand)
+// 10. 雪場與周邊卡片互動特效 — 事件委派版 (Event Delegation)
+//     改為在父容器監聽，不在每張卡片上綁定 N 個 listener
 // --------------------------------------------------------------------------
-document.querySelectorAll('.resort-card').forEach(card => {
-    // 點擊展開/收合
-    card.addEventListener('click', (e) => {
+(function initResortCards() {
+    const resortSection = document.getElementById('resort');
+    if (!resortSection) return;
+
+    // 點擊展開/收合（委派至 section 層）
+    resortSection.addEventListener('click', (e) => {
+        const card = e.target.closest('.resort-card');
+        if (!card) return;
         const isActive = card.classList.contains('active');
-        document.querySelectorAll('.resort-card').forEach(c => c.classList.remove('active'));
-        if (!isActive) {
-            card.classList.add('active');
-        }
+        // 先收合全部
+        resortSection.querySelectorAll('.resort-card').forEach(c => c.classList.remove('active'));
+        // 若原本未展開，則展開此卡
+        if (!isActive) card.classList.add('active');
     });
 
-    // 滑鼠離開大區塊自動收合
-    card.addEventListener('mouseleave', () => {
-        card.classList.remove('active');
+    // 滑鼠離開整個 resort section 才全部收合（避免移到展開面板時誤觸）
+    resortSection.addEventListener('mouseleave', () => {
+        resortSection.querySelectorAll('.resort-card').forEach(c => c.classList.remove('active'));
     });
-});
+})();
 
 // --------------------------------------------------------------------------
 // 11. 動態記帳與終極清算系統 (Firebase Expenses & AA Split)
 // --------------------------------------------------------------------------
-const expensesRef = firebase.database().ref('expenses');
 
-// UI Elements
+// UI Elements (全局快取 DOM—防止重複 querySelector)
 const fabAddExpense = document.getElementById('fab-add-expense');
 const ledgerModal = document.getElementById('ledger-modal');
 const closeLedgerModal = document.getElementById('close-ledger-modal');
@@ -927,6 +966,24 @@ const expensePayerInput = document.getElementById('expense-payer');
 const submitExpenseBtn = document.getElementById('submit-expense');
 const transactionList = document.getElementById('transaction-list');
 const settlementList = document.getElementById('settlement-list');
+
+// expensesRef 只在 Firebase 已就緒時初始化，否則屬於 null
+let expensesRef = null;
+
+if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+    expensesRef = firebase.database().ref('expenses');
+
+    // 即時監聽花費資料
+    expensesRef.on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        const expenses = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+        expenses.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        if (transactionList && settlementList) {
+            renderTransactions(expenses);
+            calculateAndRenderSettlements(expenses);
+        }
+    });
+}
 
 // Modal Toggles
 if (fabAddExpense && ledgerModal) {
@@ -971,7 +1028,7 @@ if (payerSelector) {
     });
 }
 
-// Submit Expense
+    // Submit Expense
 if (submitExpenseBtn) {
     submitExpenseBtn.addEventListener('click', async () => {
         const payer = expensePayerInput.value;
@@ -986,6 +1043,11 @@ if (submitExpenseBtn) {
         if (!item) return alert('請填寫品項名稱！');
         if (participants.length === 0) return alert('至少需要一名參與均攤的成員！');
 
+        if (!expensesRef) {
+            alert('記帳功能需要連線 Firebase！請使用 Live Server 不要直接開檔。');
+            return;
+        }
+
         const newExpense = {
             payer,
             amount,
@@ -996,11 +1058,10 @@ if (submitExpenseBtn) {
 
         try {
             await expensesRef.push(newExpense);
-            // 記帳成功後關閉
             ledgerModal.classList.add('hidden');
             setTimeout(() => {
                 alert('記帳成功！');
-            }, 300); // 稍微延遲讓動畫跑完
+            }, 300);
         } catch (err) {
             console.error('Error saving expense:', err);
             alert('記帳失敗，請檢查網路連線。');
@@ -1008,19 +1069,7 @@ if (submitExpenseBtn) {
     });
 }
 
-// Listen to Expenses Data
-expensesRef.on('value', (snapshot) => {
-    const data = snapshot.val() || {};
-    const expenses = Object.keys(data).map(key => ({ id: key, ...data[key] }));
-    
-    // 排序：最新的在最上面
-    expenses.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-    
-    if (transactionList && settlementList) {
-        renderTransactions(expenses);
-        calculateAndRenderSettlements(expenses);
-    }
-});
+// Listen to Expenses Data — 此監聽已移至上方 Firebase 初始化區塊
 
 function renderTransactions(expenses) {
     if (expenses.length === 0) {
@@ -1029,18 +1078,16 @@ function renderTransactions(expenses) {
     }
 
     transactionList.innerHTML = expenses.map(exp => {
-        const date = exp.timestamp ? new Date(exp.timestamp).toLocaleDateString('zh-TW', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+        const date = exp.timestamp
+            ? new Date(exp.timestamp).toLocaleDateString('zh-TW', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+            : '';
         return `
             <div class="transaction-item">
                 <div>
-                    <div style="font-size: 0.95rem; font-weight: bold; color: var(--accent);">${exp.item}</div>
-                    <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.3rem;">
-                        ${date} · 由 ${exp.payer} 付款
-                    </div>
+                    <div class="tx-title">${exp.item}</div>
+                    <div class="tx-meta">${date} · 由 ${exp.payer} 付款</div>
                 </div>
-                <div style="font-size: 1.1rem; font-weight: 800; color: #fff;">
-                    ${exp.amount.toLocaleString()}
-                </div>
+                <div class="tx-amount">${exp.amount.toLocaleString()}</div>
             </div>
         `;
     }).join('');
@@ -1112,12 +1159,10 @@ function calculateAndRenderSettlements(expenses) {
             <div class="settlement-item">
                 <div>
                     <strong>${s.from}</strong> 應給 <strong>${s.to}</strong>
-                    <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem;">
-                        點擊右側結清確認已還款
-                    </div>
+                    <div class="tx-meta">點擊右側結清確認已還款</div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <span style="font-size: 1.1rem; font-weight: bold; color: #fff;">${s.amount.toLocaleString()}</span>
+                <div class="settle-row">
+                    <span class="settle-amount">${s.amount.toLocaleString()}</span>
                     <button class="btn-settle" onclick="window.settleDebt('${s.from}', '${s.to}', ${s.amount})">確認結清</button>
                 </div>
             </div>
@@ -1129,6 +1174,11 @@ function calculateAndRenderSettlements(expenses) {
 window.settleDebt = async function(from, to, amount) {
     if (!confirm(`確定 ${from} 已經給了 ${to} ${amount} 元嗎？\n這將會自動新增一筆結清紀錄。`)) return;
     
+    if (!expensesRef) {
+        alert('連線 Firebase 後才能結清。');
+        return;
+    }
+
     const newExpense = {
         payer: from,
         amount: amount,

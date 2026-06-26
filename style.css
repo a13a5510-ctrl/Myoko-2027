@@ -13,6 +13,17 @@
     --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     --font-main: 'Inter', 'Noto Sans TC', sans-serif;
     --transition-speed: 0.3s;
+    /* 語意色彩 Token */
+    --color-success: #4ADE80;
+    --color-danger: #F87171;
+    --color-warning: #FDBA74;
+    --color-purple: #A78BFA;
+    --color-orange: #FB923C;
+    /* 常用毛玻璃覆蓋層 */
+    --overlay-dark: rgba(0, 0, 0, 0.85);
+    --overlay-blur-bg: rgba(11, 17, 33, 0.8);
+    /* 媒體標籤遮罩 */
+    --uploader-badge-bg: rgba(0, 0, 0, 0.6);
 }
 
 /* -------------------------------------------------------------------------- */
@@ -22,6 +33,13 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    min-width: 0;
+}
+
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    -webkit-text-size-adjust: 100%;
 }
 
 html {
@@ -34,7 +52,13 @@ body {
     background-color: var(--bg-main);
     color: var(--text-primary);
     line-height: 1.6;
-    overflow-x: hidden;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  通用隱藏工具類                                                            */
+/* -------------------------------------------------------------------------- */
+.hidden {
+    display: none !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -103,6 +127,10 @@ a {
     padding: 2rem;
     box-shadow: var(--glass-shadow);
     transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    /* GPU 硬體加速：防止手機滾動時毛玻璃卡頓 */
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 .glass-card:hover {
@@ -158,10 +186,15 @@ a {
     align-items: center;
     padding: 1.5rem 5%;
     z-index: 1000;
-    background: rgba(11, 17, 33, 0.8);
+    background: var(--overlay-blur-bg);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     transition: padding 0.3s;
+    /* GPU 加速，防止固定 nav 在 iOS 上閃爍 */
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 .navbar.scrolled {
@@ -302,6 +335,14 @@ a {
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -558,6 +599,74 @@ a {
 /* -------------------------------------------------------------------------- */
 /*  影音回憶錄 Gallery (動態渲染)                                             */
 /* -------------------------------------------------------------------------- */
+
+/* Gallery 區塊防漏鎖 — 物理斷絕機制 */
+#gallery {
+    position: relative;
+    overflow: hidden;
+    min-height: 350px;
+}
+
+/* 媒體上傳者標籤 (取代 JS 內聯 style) */
+.media-uploader-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: var(--uploader-badge-bg);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    color: #fff;
+    pointer-events: none;
+}
+
+/* 交易紀錄 (取代 JS 內聯 style) */
+.tx-title {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.tx-meta {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 0.3rem;
+}
+
+.tx-amount {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+/* 清算項目金額 (取代 JS 內聯 style) */
+.settle-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.settle-amount {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+#gallery.is-locked #gallery-content {
+    display: none !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+#gallery-password {
+    -webkit-appearance: none;
+    font-size: 16px;
+}
+
 .gallery-desc {
     text-align: center;
     color: var(--text-secondary);
@@ -1232,30 +1341,36 @@ a {
     padding: 3rem 2rem;
     text-align: center;
     border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .auth-icon {
     font-size: 3rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .auth-container h3 {
     font-size: 1.5rem;
     color: var(--accent);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
 .auth-container p {
     color: var(--text-secondary);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     font-size: 0.9rem;
 }
 
 .auth-input-group {
     display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-    margin-bottom: 1rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 320px;
 }
 
 .auth-input-group input {
@@ -1264,9 +1379,27 @@ a {
     border-radius: 8px;
     padding: 0.8rem;
     color: #fff;
-    font-size: 1rem;
+    /* iOS 防放大：字體必須 >= 16px */
+    font-size: 16px;
     outline: none;
-    flex: 1;
+    width: 100%;
+    /* 剝離 iOS 預設外觀 */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.auth-input-group input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+.auth-input-group .btn-primary {
+    width: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 8px;
 }
 
 .auth-error {
@@ -1335,9 +1468,11 @@ a {
 
 /* 分類標題 */
 .gallery-category-title {
+    /* 跨越整個 grid 寬度，取代 style="grid-column: 1 / -1" 內聯寫法 */
+    grid-column: 1 / -1;
     width: 100%;
     font-size: 1.3rem;
-    color: #fff;
+    color: var(--text-primary);
     margin: 2rem 0 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding-bottom: 0.5rem;
@@ -1662,11 +1797,13 @@ a {
     gap: 1.5rem;
     justify-content: space-between;
     align-items: stretch;
+    min-width: 0;
 }
 
 .flight-col {
     flex: 1;
     width: calc(50% - 0.75rem);
+    min-width: 0;
     display: flex;
     flex-direction: column;
 }
@@ -2129,6 +2266,7 @@ a {
 
     .route-step {
         max-width: 100%;
+        min-width: 0;
     }
 
     /* Tab nav mobile */
@@ -2139,6 +2277,7 @@ a {
     .tab-btn {
         font-size: 0.8rem;
         padding: 0.5rem 0.8rem;
+        min-width: 0;
     }
 
     /* 航班區塊並排放置自動變垂直 */
@@ -2151,9 +2290,115 @@ a {
         width: 100%;
     }
 
+    /* 航班卡片文字防溢出 */
+    .flight-card {
+        min-width: 0;
+        word-break: break-word;
+    }
+
+    .flight-number {
+        font-size: 2rem;
+    }
+
+    .flight-details {
+        gap: 1rem;
+    }
+
+    .time-loc .time {
+        font-size: 1.4rem;
+    }
+
     /* Expense Dashboard Mobile */
     .expense-dashboard {
         flex-direction: column;
+    }
+
+    /* 容器防溢出 */
+    .container {
+        padding: 0 1rem;
+        max-width: 100vw;
+    }
+
+    /* 上傳控制台行動版堆疊排列 */
+    .upload-controls {
+        grid-template-columns: 1fr;
+    }
+
+    /* Media grid 手機版單欄 */
+    .media-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* 集結橫幅手機版 */
+    .rendezvous-banner {
+        flex-direction: column;
+        gap: 0.8rem;
+        padding: 1rem;
+    }
+
+    .rendezvous-divider {
+        width: 60%;
+        height: 1px;
+    }
+
+    /* FAB 手機版縮小 */
+    .fab-btn .fab-text {
+        display: none;
+    }
+
+    .fab-btn {
+        width: 50px;
+        padding: 0;
+        justify-content: center;
+    }
+
+    /* 所有 iOS 輸入框防放大修正 */
+    input[type="text"],
+    input[type="password"],
+    input[type="number"],
+    input[type="email"],
+    input[type="tel"],
+    textarea,
+    select {
+        font-size: 16px !important;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    /* 房源卡片手機版 */
+    .housing-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* iOS Safari 不支援 background-attachment: fixed，會導致背景消失 */
+    .hero-section {
+        background-attachment: scroll;
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+    }
+
+    /* 手機版取消 hover 位移，避免觸控時版面跳動 */
+    .glass-card:hover {
+        transform: none;
+    }
+
+    /* gear grid 手機雙欄 */
+    .gear-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .gear-img {
+        height: 100px;
+    }
+
+    .gear-info {
+        padding: 0.6rem;
+    }
+
+    .gear-info .item-text {
+        font-size: 0.8rem;
     }
 }
 
@@ -2164,6 +2409,7 @@ a {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 1.5rem;
+    min-width: 0;
 }
 
 .gear-card {
@@ -2176,6 +2422,7 @@ a {
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
+    min-width: 0;
 }
 
 .gear-card:hover {
@@ -2228,6 +2475,7 @@ a {
     align-items: center;
     justify-content: center;
     flex: 1;
+    min-width: 0;
 }
 
 .gear-info .item-text {
@@ -2235,6 +2483,7 @@ a {
     color: var(--text-secondary);
     line-height: 1.4;
     transition: color 0.3s ease;
+    word-break: break-word;
 }
 
 /* 勾選後的狀態 */
@@ -2260,7 +2509,6 @@ a {
 .gear-card:has(input:checked) .gear-info .item-text {
     color: #fff;
     font-weight: bold;
-}
 }
 
 /* -------------------------------------------------------------------------- */
