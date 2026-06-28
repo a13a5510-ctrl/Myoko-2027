@@ -551,9 +551,20 @@
     <section id="gear" class="section alt-bg">
         <div class="container">
             <h2 class="section-title">裝備清單 <span>Gear Checklist</span></h2>
+            
+            <!-- 旅伴切換器 -->
+            <div class="gear-user-selector">
+                <button class="gear-user-btn active" data-user="Bonnie">🐰 Bonnie</button>
+                <button class="gear-user-btn" data-user="Leo">🦁 Leo</button>
+                <button class="gear-user-btn" data-user="Yuk">🐻 Yuk</button>
+                <button class="gear-user-btn" data-user="Dino">🦖 Dino</button>
+                <button class="gear-user-btn" data-user="Ian">🐺 Ian</button>
+                <button class="gear-user-btn" data-user="TaiwanBL">🇹🇼 台灣BL</button>
+            </div>
+
             <div class="gear-grid">
-                <label class="gear-card">
-                    <input type="checkbox">
+                <label class="gear-card" data-gear-id="snowboard">
+                    <input type="checkbox" class="gear-checkbox">
                     <div class="gear-img">
                         <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_snowboard.png" alt="Snowboard">
                         <div class="checked-overlay">
@@ -563,9 +574,14 @@
                     <div class="gear-info">
                         <span class="item-text">雪板 (Snowboard)</span>
                     </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
                 </label>
-                <label class="gear-card">
-                    <input type="checkbox">
+                <label class="gear-card" data-gear-id="boots">
+                    <input type="checkbox" class="gear-checkbox">
                     <div class="gear-img">
                         <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_boots.png" alt="Boots">
                         <div class="checked-overlay">
@@ -575,9 +591,14 @@
                     <div class="gear-info">
                         <span class="item-text">雪鞋 (Boots)</span>
                     </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
                 </label>
-                <label class="gear-card">
-                    <input type="checkbox">
+                <label class="gear-card" data-gear-id="bindings">
+                    <input type="checkbox" class="gear-checkbox">
                     <div class="gear-img">
                         <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_bindings.png" alt="Bindings">
                         <div class="checked-overlay">
@@ -587,9 +608,14 @@
                     <div class="gear-info">
                         <span class="item-text">固定器 (Bindings)</span>
                     </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
                 </label>
-                <label class="gear-card">
-                    <input type="checkbox">
+                <label class="gear-card" data-gear-id="jacket_pants">
+                    <input type="checkbox" class="gear-checkbox">
                     <div class="gear-img">
                         <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_jacket_pants.png" alt="Jacket and Pants" class="crop-left-person">
                         <div class="checked-overlay">
@@ -599,9 +625,14 @@
                     <div class="gear-info">
                         <span class="item-text">防水雪衣 & 雪褲</span>
                     </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
                 </label>
-                <label class="gear-card">
-                    <input type="checkbox">
+                <label class="gear-card" data-gear-id="baselayer">
+                    <input type="checkbox" class="gear-checkbox">
                     <div class="gear-img">
                         <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_baselayer.png" alt="Base Layers" class="crop-no-logo">
                         <div class="checked-overlay">
@@ -611,9 +642,14 @@
                     <div class="gear-info">
                         <span class="item-text">保暖排汗內衣褲</span>
                     </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
                 </label>
-                <label class="gear-card">
-                    <input type="checkbox">
+                <label class="gear-card" data-gear-id="helmet">
+                    <input type="checkbox" class="gear-checkbox">
                     <div class="gear-img">
                         <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_helmet.png" alt="Helmet">
                         <div class="checked-overlay">
@@ -623,9 +659,14 @@
                     <div class="gear-info">
                         <span class="item-text">滑雪安全帽 (Helmet)</span>
                     </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
                 </label>
-                <label class="gear-card">
-                    <input type="checkbox">
+                <label class="gear-card" data-gear-id="goggles">
+                    <input type="checkbox" class="gear-checkbox">
                     <div class="gear-img">
                         <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_goggles.png" alt="Goggles">
                         <div class="checked-overlay">
@@ -635,9 +676,14 @@
                     <div class="gear-info">
                         <span class="item-text">雪鏡 (Goggles)</span>
                     </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
                 </label>
-                <label class="gear-card">
-                    <input type="checkbox">
+                <label class="gear-card" data-gear-id="protection">
+                    <input type="checkbox" class="gear-checkbox">
                     <div class="gear-img">
                         <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_protection.png" alt="Protectors">
                         <div class="checked-overlay">
@@ -647,9 +693,14 @@
                     <div class="gear-info">
                         <span class="item-text">防摔護具 (Protectors)</span>
                     </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
                 </label>
-                <label class="gear-card">
-                    <input type="checkbox">
+                <label class="gear-card" data-gear-id="gloves">
+                    <input type="checkbox" class="gear-checkbox">
                     <div class="gear-img">
                         <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_gloves.png" alt="Gloves">
                         <div class="checked-overlay">
@@ -659,9 +710,14 @@
                     <div class="gear-info">
                         <span class="item-text">滑雪手套 (Gloves)</span>
                     </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
                 </label>
-                <label class="gear-card">
-                    <input type="checkbox">
+                <label class="gear-card" data-gear-id="socks">
+                    <input type="checkbox" class="gear-checkbox">
                     <div class="gear-img">
                         <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_socks.png" alt="Socks">
                         <div class="checked-overlay">
@@ -671,9 +727,14 @@
                     <div class="gear-info">
                         <span class="item-text">滑雪長襪 (Socks)</span>
                     </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
                 </label>
-                <label class="gear-card">
-                    <input type="checkbox">
+                <label class="gear-card" data-gear-id="balaclava">
+                    <input type="checkbox" class="gear-checkbox">
                     <div class="gear-img">
                         <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_balaclava.png" alt="Neck Warmer">
                         <div class="checked-overlay">
@@ -683,9 +744,14 @@
                     <div class="gear-info">
                         <span class="item-text">高機能脖圍 (Neck Warmer)</span>
                     </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
                 </label>
-                <label class="gear-card">
-                    <input type="checkbox" checked>
+                <label class="gear-card" data-gear-id="camera">
+                    <input type="checkbox" class="gear-checkbox" checked>
                     <div class="gear-img">
                         <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_camera.png" alt="Action Camera">
                         <div class="checked-overlay">
@@ -695,9 +761,14 @@
                     <div class="gear-info">
                         <span class="item-text">Insta360 運動相機</span>
                     </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
                 </label>
-                <label class="gear-card">
-                    <input type="checkbox">
+                <label class="gear-card" data-gear-id="passport">
+                    <input type="checkbox" class="gear-checkbox">
                     <div class="gear-img">
                         <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_passport.png" alt="Passport">
                         <div class="checked-overlay">
@@ -707,6 +778,11 @@
                     <div class="gear-info">
                         <span class="item-text">個人護照與機票</span>
                     </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
                 </label>
             </div>
         </div>

@@ -1194,3 +1194,132 @@ window.settleDebt = async function(from, to, amount) {
         alert('結清失敗，請檢查網路連線。');
     }
 };
+
+// 12. 多旅伴裝備清單實時同步 (Firebase Gear Sync)
+document.addEventListener('DOMContentLoaded', () => {
+    const gearUserBtns = document.querySelectorAll('.gear-user-btn');
+    const gearCards = document.querySelectorAll('.gear-card');
+    if(gearUserBtns.length === 0 || gearCards.length === 0) return;
+    
+    let currentGearUser = 'Bonnie'; // 預設使用者
+    
+    // 初始化 Firebase Reference
+    let gearRef = null;
+    if (!isLocalFile && typeof firebase !== 'undefined' && typeof firebaseConfig !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+        gearRef = firebase.database().ref('gearData');
+    }
+
+    // 更新卡片發光效果與打勾
+    const updateCardState = (card, checked, status) => {
+        // 先移除所有狀態 class
+        card.classList.remove('status-self', 'status-reserved', 'status-rental');
+        
+        card.classList.add(`status-${status}`);
+        
+        const checkbox = card.querySelector('.gear-checkbox');
+        if (checkbox && checkbox.checked !== checked) {
+            checkbox.checked = checked;
+        }
+        
+        const select = card.querySelector('.gear-status-select');
+        if (select && select.value !== status) {
+            select.value = status;
+        }
+    };
+
+    // 讀取特定使用者的裝備狀態
+    const loadUserGear = (userName) => {
+        if (!gearRef) return;
+        
+        gearRef.child(userName).once('value').then((snapshot) => {
+            const data = snapshot.val() || {};
+            
+            gearCards.forEach(card => {
+                const gearId = card.getAttribute('data-gear-id');
+                let checked = false;
+                let status = 'self';
+                
+                if (data[gearId]) {
+                    checked = data[gearId].checked || false;
+                    status = data[gearId].status || 'self';
+                }
+                
+                updateCardState(card, checked, status);
+            });
+        }).catch(err => console.error("Error loading gear data:", err));
+        
+        // 即時監聽
+        gearRef.child(userName).on('value', (snapshot) => {
+            if(currentGearUser !== userName) return; // 確保只更新當前選中使用者
+            const data = snapshot.val() || {};
+            gearCards.forEach(card => {
+                const gearId = card.getAttribute('data-gear-id');
+                let checked = false;
+                let status = 'self';
+                
+                if (data[gearId]) {
+                    checked = data[gearId].checked || false;
+                    status = data[gearId].status || 'self';
+                }
+                
+                updateCardState(card, checked, status);
+            });
+        });
+    };
+
+    // 寫入特定裝備狀態到 Firebase
+    const updateGearState = (gearId, checked, status) => {
+        if (!gearRef) {
+            console.warn("Firebase not connected. Gear state not saved.");
+            return;
+        }
+        gearRef.child(currentGearUser).child(gearId).set({
+            checked: checked,
+            status: status,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        });
+    };
+
+    // 綁定使用者切換按鈕事件
+    gearUserBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            gearUserBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // 移除舊使用者的監聽器
+            if(gearRef) gearRef.child(currentGearUser).off('value');
+            
+            currentGearUser = btn.getAttribute('data-user');
+            loadUserGear(currentGearUser);
+        });
+    });
+
+    // 綁定 Checkbox 與 Select 變更事件
+    gearCards.forEach(card => {
+        const gearId = card.getAttribute('data-gear-id');
+        const checkbox = card.querySelector('.gear-checkbox');
+        const select = card.querySelector('.gear-status-select');
+        
+        if (checkbox) {
+            checkbox.addEventListener('change', () => {
+                updateGearState(gearId, checkbox.checked, select.value);
+                updateCardState(card, checkbox.checked, select.value);
+            });
+        }
+        
+        if (select) {
+            select.addEventListener('change', () => {
+                updateGearState(gearId, checkbox.checked, select.value);
+                updateCardState(card, checkbox.checked, select.value);
+            });
+            
+            // 阻止冒泡，避免點擊 select 時觸發 label 的 checkbox
+            select.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+    });
+
+    // 初次載入
+    loadUserGear(currentGearUser);
+});
