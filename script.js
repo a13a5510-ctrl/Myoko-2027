@@ -990,9 +990,23 @@ if (fabAddExpense && ledgerModal) {
     fabAddExpense.addEventListener('click', () => {
         ledgerModal.classList.remove('hidden');
         // Reset form
+        document.getElementById('edit-expense-id').value = '';
         document.getElementById('expense-amount').value = '';
         document.getElementById('expense-item').value = '';
         
+        // 預設為當前時間
+        const tzoffset = (new Date()).getTimezoneOffset() * 60000;
+        const localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, 16);
+        document.getElementById('expense-time').value = localISOTime;
+
+        // 重設幣別為 JPY
+        const currencyBtn = document.getElementById('currency-toggle');
+        if (currencyBtn) {
+            currencyBtn.setAttribute('data-currency', 'JPY');
+            currencyBtn.textContent = '🇯🇵 JPY';
+            currencyBtn.classList.remove('twd');
+        }
+
         // Reset checkboxes (default checked)
         document.querySelectorAll('#participant-selector input[type="checkbox"]').forEach(cb => {
             cb.checked = true;
@@ -1004,6 +1018,40 @@ if (fabAddExpense && ledgerModal) {
             payerSelector.querySelectorAll('.avatar-btn').forEach(b => b.classList.remove('selected'));
         }
     });
+
+    // --- Quick Buttons Logic ---
+    document.querySelectorAll('.time-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const offset = parseInt(btn.getAttribute('data-offset')) || 0;
+            const targetTime = Date.now() + (offset * 60000);
+            const tzoffset = (new Date()).getTimezoneOffset() * 60000;
+            const localISOTime = (new Date(targetTime - tzoffset)).toISOString().slice(0, 16);
+            document.getElementById('expense-time').value = localISOTime;
+        });
+    });
+
+    document.querySelectorAll('.quick-category-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            // 提取 Emoji 後的文字
+            const text = btn.textContent.split(' ')[1] || btn.textContent;
+            document.getElementById('expense-item').value = text;
+        });
+    });
+
+    const currencyToggle = document.getElementById('currency-toggle');
+    if (currencyToggle) {
+        currencyToggle.addEventListener('click', () => {
+            if (currencyToggle.getAttribute('data-currency') === 'JPY') {
+                currencyToggle.setAttribute('data-currency', 'TWD');
+                currencyToggle.textContent = '🇹🇼 TWD';
+                currencyToggle.classList.add('twd');
+            } else {
+                currencyToggle.setAttribute('data-currency', 'JPY');
+                currencyToggle.textContent = '🇯🇵 JPY';
+                currencyToggle.classList.remove('twd');
+            }
+        });
+    }
 
     closeLedgerModal.addEventListener('click', () => {
         ledgerModal.classList.add('hidden');
@@ -1031,16 +1079,30 @@ if (payerSelector) {
     // Submit Expense
 if (submitExpenseBtn) {
     submitExpenseBtn.addEventListener('click', async () => {
+        const creator = document.getElementById('expense-creator').value;
         const payer = expensePayerInput.value;
-        const amount = parseInt(document.getElementById('expense-amount').value) || 0;
-        const item = document.getElementById('expense-item').value.trim();
         
+        let amountInput = parseFloat(document.getElementById('expense-amount').value) || 0;
+        const item = document.getElementById('expense-item').value.trim();
+        const timeInput = document.getElementById('expense-time').value;
+        const currencyBtn = document.getElementById('currency-toggle');
+        const currency = currencyBtn ? currencyBtn.getAttribute('data-currency') : 'JPY';
+        const editId = document.getElementById('edit-expense-id').value;
+        
+        let finalAmount = amountInput;
+        let originalJPY = null;
+        if (currency === 'JPY') {
+            originalJPY = amountInput;
+            finalAmount = Math.round(amountInput * 0.22);
+        }
+
         const checkboxes = document.querySelectorAll('#participant-selector input[type="checkbox"]:checked');
         const participants = Array.from(checkboxes).map(cb => cb.value);
 
         if (!payer) return alert('請選擇付款人！');
-        if (amount <= 0) return alert('金額必須大於 0！');
+        if (finalAmount <= 0) return alert('金額必須大於 0！');
         if (!item) return alert('請填寫品項名稱！');
+        if (!timeInput) return alert('請填寫時間！');
         if (participants.length === 0) return alert('至少需要一名參與均攤的成員！');
 
         if (!expensesRef) {
@@ -1048,28 +1110,98 @@ if (submitExpenseBtn) {
             return;
         }
 
+        const timestamp = new Date(timeInput).getTime();
+
         const newExpense = {
+            createdBy: creator,
             payer,
-            amount,
+            amount: finalAmount,
             item,
             participants,
-            timestamp: firebase.database.ServerValue.TIMESTAMP
+            timestamp: timestamp
         };
+        if (originalJPY !== null) {
+            newExpense.originalJPY = originalJPY;
+        }
 
         try {
-            await expensesRef.push(newExpense);
+            if (editId) {
+                await expensesRef.child(editId).update(newExpense);
+            } else {
+                await expensesRef.push(newExpense);
+            }
             ledgerModal.classList.add('hidden');
             setTimeout(() => {
-                alert('記帳成功！');
+                alert(editId ? '修改成功！' : '記帳成功！');
             }, 300);
         } catch (err) {
             console.error('Error saving expense:', err);
-            alert('記帳失敗，請檢查網路連線。');
+            alert('操作失敗，請檢查網路連線。');
         }
     });
 }
 
 // Listen to Expenses Data — 此監聽已移至上方 Firebase 初始化區塊
+
+window.editTransaction = function(id) {
+    if (!expensesRef) return;
+    expensesRef.child(id).once('value').then(snapshot => {
+        const exp = snapshot.val();
+        if (!exp) return;
+        
+        ledgerModal.classList.remove('hidden');
+        document.getElementById('edit-expense-id').value = id;
+        document.getElementById('expense-creator').value = exp.createdBy || 'Bonnie';
+        
+        // Payer
+        expensePayerInput.value = exp.payer;
+        if (payerSelector) {
+            payerSelector.querySelectorAll('.avatar-btn').forEach(b => {
+                b.classList.toggle('selected', b.dataset.name === exp.payer);
+            });
+        }
+
+        // Amount & Currency
+        const currencyBtn = document.getElementById('currency-toggle');
+        if (exp.originalJPY) {
+            if (currencyBtn) {
+                currencyBtn.setAttribute('data-currency', 'JPY');
+                currencyBtn.textContent = '🇯🇵 JPY';
+                currencyBtn.classList.remove('twd');
+            }
+            document.getElementById('expense-amount').value = exp.originalJPY;
+        } else {
+            if (currencyBtn) {
+                currencyBtn.setAttribute('data-currency', 'TWD');
+                currencyBtn.textContent = '🇹🇼 TWD';
+                currencyBtn.classList.add('twd');
+            }
+            document.getElementById('expense-amount').value = exp.amount;
+        }
+
+        document.getElementById('expense-item').value = exp.item;
+
+        // Time
+        if (exp.timestamp) {
+            const tzoffset = (new Date()).getTimezoneOffset() * 60000;
+            const localISOTime = (new Date(exp.timestamp - tzoffset)).toISOString().slice(0, 16);
+            document.getElementById('expense-time').value = localISOTime;
+        }
+
+        // Participants
+        const participants = exp.participants || [];
+        document.querySelectorAll('#participant-selector input[type="checkbox"]').forEach(cb => {
+            cb.checked = participants.includes(cb.value);
+        });
+    });
+};
+
+window.deleteTransaction = function(id) {
+    if (!confirm('確定要刪除這筆花費紀錄嗎？\n刪除後清算帳本將會自動重新結算。')) return;
+    if (expensesRef) {
+        expensesRef.child(id).remove().catch(err => alert('刪除失敗: ' + err.message));
+    }
+};
 
 function renderTransactions(expenses) {
     if (expenses.length === 0) {
@@ -1081,25 +1213,82 @@ function renderTransactions(expenses) {
         const date = exp.timestamp
             ? new Date(exp.timestamp).toLocaleDateString('zh-TW', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
             : '';
+        const jpyDisplay = exp.originalJPY ? `<div class="tx-amount-jpy">(¥${exp.originalJPY.toLocaleString()})</div>` : '';
+        const creatorDisplay = exp.createdBy ? ` · 建立者: ${exp.createdBy}` : '';
+
         return `
             <div class="transaction-item">
-                <div>
+                <div class="tx-content">
                     <div class="tx-title">${exp.item}</div>
-                    <div class="tx-meta">${date} · 由 ${exp.payer} 付款</div>
+                    <div class="tx-meta">${date} · 由 ${exp.payer} 付款${creatorDisplay}</div>
                 </div>
-                <div class="tx-amount">${exp.amount.toLocaleString()}</div>
+                <div class="tx-amount-group">
+                    <div class="tx-amount">NT$ ${exp.amount.toLocaleString()}</div>
+                    ${jpyDisplay}
+                </div>
+                <div class="tx-actions">
+                    <button class="btn-edit-tx" onclick="window.editTransaction('${exp.id}')">✏️</button>
+                    <button class="btn-delete-tx" onclick="window.deleteTransaction('${exp.id}')">🗑️</button>
+                </div>
             </div>
         `;
     }).join('');
 }
 
+const avatarMap = {
+    'Bonnie': '🐰',
+    'Leo': '🦁',
+    'Yuk': '🐻',
+    'Dino': '🦖',
+    'Ian': '🐺',
+    'TaiwanBL': '👑'
+};
+let currentAvatarFilter = null;
+
+// 在 global scope 加上過濾函數
+window.toggleAvatarFilter = function(name) {
+    if (currentAvatarFilter === name) {
+        currentAvatarFilter = null; // 取消過濾
+    } else {
+        currentAvatarFilter = name;
+    }
+    // 重新渲染清算清單
+    if (expensesRef) {
+        expensesRef.once('value').then(snapshot => {
+            const data = snapshot.val() || {};
+            const expenses = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+            expenses.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            calculateAndRenderSettlements(expenses);
+        });
+    }
+};
+
+function renderAvatarFilters() {
+    const container = document.getElementById('avatar-filter-container');
+    if (!container) return;
+    container.innerHTML = Object.keys(avatarMap).map(name => `
+        <div class="filter-avatar-btn ${currentAvatarFilter === name ? 'active' : ''}" onclick="window.toggleAvatarFilter('${name}')" title="${name}">
+            ${avatarMap[name]}
+        </div>
+    `).join('');
+}
+
+window.toggleDebtDetails = function(index) {
+    const detailsDiv = document.getElementById(`debt-details-${index}`);
+    if (detailsDiv) {
+        detailsDiv.classList.toggle('open');
+    }
+};
+
 function calculateAndRenderSettlements(expenses) {
+    renderAvatarFilters();
     const balances = {
         'Bonnie': 0,
         'Leo': 0,
         'Yuk': 0,
         'Dino': 0,
-        'Ian': 0
+        'Ian': 0,
+        'TaiwanBL': 0
     };
     
     expenses.forEach(exp => {
@@ -1155,18 +1344,57 @@ function calculateAndRenderSettlements(expenses) {
     if (settlements.length === 0) {
         settlementList.innerHTML = '<div class="empty-state">目前無任何欠款 🎉</div>';
     } else {
-        settlementList.innerHTML = settlements.map(s => `
-            <div class="settlement-item">
-                <div>
-                    <strong>${s.from}</strong> 應給 <strong>${s.to}</strong>
-                    <div class="tx-meta">點擊右側結清確認已還款</div>
+        // 如果有 Filter，則過濾
+        if (currentAvatarFilter) {
+            settlements = settlements.filter(s => s.from === currentAvatarFilter || s.to === currentAvatarFilter);
+        }
+
+        if (settlements.length === 0) {
+            settlementList.innerHTML = `<div class="empty-state">目前與 ${currentAvatarFilter} 無任何相關欠款 🎉</div>`;
+            return;
+        }
+
+        settlementList.innerHTML = settlements.map((s, index) => {
+            // 找出相關交易：A替B付 或 B替A付
+            const relatedExpenses = expenses.filter(e => 
+                (e.payer === s.to && e.participants && e.participants.includes(s.from)) ||
+                (e.payer === s.from && e.participants && e.participants.includes(s.to))
+            );
+            
+            let detailsHtml = '';
+            if (relatedExpenses.length > 0) {
+                detailsHtml = relatedExpenses.map(e => {
+                    const date = e.timestamp ? new Date(e.timestamp).toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric' }) : '';
+                    const share = Math.round(e.amount / e.participants.length);
+                    return `
+                        <div class="debt-history-item">
+                            <span>${date} ${e.item} (${e.payer}付)</span>
+                            <span>均攤 NT$ ${share}</span>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                detailsHtml = `<div class="debt-history-item">無直接交易紀錄 (可能經由演算法合併)</div>`;
+            }
+
+            return `
+            <div class="settlement-item" onclick="window.toggleDebtDetails(${index})">
+                <div class="settlement-header">
+                    <div>
+                        <strong>${avatarMap[s.from] || ''} ${s.from}</strong> 應給 <strong>${avatarMap[s.to] || ''} ${s.to}</strong>
+                        <div class="tx-meta">點擊展開溯源明細 · 點右側可結清還款</div>
+                    </div>
+                    <div class="settle-row" onclick="event.stopPropagation()">
+                        <span class="settle-amount">NT$ ${s.amount.toLocaleString()}</span>
+                        <button class="btn-settle" onclick="window.settleDebt('${s.from}', '${s.to}', ${s.amount})">確認結清</button>
+                    </div>
                 </div>
-                <div class="settle-row">
-                    <span class="settle-amount">${s.amount.toLocaleString()}</span>
-                    <button class="btn-settle" onclick="window.settleDebt('${s.from}', '${s.to}', ${s.amount})">確認結清</button>
+                <div class="debt-details" id="debt-details-${index}" onclick="event.stopPropagation()">
+                    ${detailsHtml}
                 </div>
             </div>
-        `).join('');
+            `;
+        }).join('');
     }
 }
 
