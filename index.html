@@ -847,6 +847,50 @@
     <!-- Firebase Storage -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
+        <!-- 💬 聊天室 Modal -->
+        <div id="chat-modal" class="modal hidden chat-modal-wrapper">
+            <div class="modal-content chat-modal-content">
+                <div class="modal-header">
+                    <h3>💬 雪地對講機</h3>
+                    <button class="btn-close" id="close-chat-modal">&times;</button>
+                </div>
+                
+                <!-- 首次身分選擇 -->
+                <div id="chat-identity-setup" class="chat-identity-setup">
+                    <h4>請先選擇你的身分</h4>
+                    <select id="chat-identity-select" class="creator-select">
+                        <option value="Bonnie">🐰 Bonnie</option>
+                        <option value="Leo">🦁 Leo</option>
+                        <option value="Yuk">🐻 Yuk</option>
+                        <option value="Dino">🦖 Dino</option>
+                        <option value="Ian">🐺 Ian</option>
+                        <option value="TaiwanBL">👑 台灣BL</option>
+                    </select>
+                    <button id="btn-save-identity" class="btn-settle" style="width:100%">進入對講機</button>
+                </div>
+
+                <!-- 聊天內容區塊 -->
+                <div id="chat-messages" class="chat-messages hidden">
+                    <!-- 訊息動態渲染於此 -->
+                </div>
+
+                <!-- 貼圖面板 -->
+                <div id="sticker-panel" class="sticker-panel hidden">
+                    <img src="./assets/stickers/sticker_go.png" alt="衝啊" class="sticker-option" data-sticker="sticker_go">
+                    <img src="./assets/stickers/sticker_cold.png" alt="凍僵了" class="sticker-option" data-sticker="sticker_cold">
+                    <img src="./assets/stickers/sticker_beer.png" alt="居酒屋" class="sticker-option" data-sticker="sticker_beer">
+                    <img src="./assets/stickers/sticker_help.png" alt="求救" class="sticker-option" data-sticker="sticker_help">
+                </div>
+
+                <!-- 底部輸入區塊 -->
+                <div id="chat-input-area" class="chat-input-area hidden">
+                    <button id="btn-toggle-sticker" class="btn-toggle-sticker">😊</button>
+                    <input type="text" id="chat-input" placeholder="說點什麼..." autocomplete="off">
+                    <button id="btn-send-chat" class="btn-send-chat">送出</button>
+                </div>
+            </div>
+        </div>
+
     <!-- 投票彈出視窗 (Modal) -->
     <div id="vote-modal" class="vote-modal hidden">
         <div class="vote-modal-content glass-card">
@@ -879,9 +923,12 @@
         </div>
     </div>
     <!-- 快速記帳 FAB -->
-    <button id="fab-add-expense" class="fab-btn glow-effect">
-        <span class="fab-icon">➕</span> <span class="fab-text">快速記帳</span>
-    </button>
+    <div class="fab-container">
+        <button id="fab-chat" class="fab-btn chat-fab">💬 對講機</button>
+        <button id="fab-add-expense" class="fab-btn glow-effect">
+            <span class="fab-icon">➕</span> <span class="fab-text">快速記帳</span>
+        </button>
+    </div>
 
     <!-- 記帳 Modal -->
     <div id="ledger-modal" class="modal-overlay hidden">

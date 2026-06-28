@@ -1398,6 +1398,180 @@ function calculateAndRenderSettlements(expenses) {
     }
 }
 
+/* -------------------------------------------------------------------------- */
+/*  💬 雪地對講機 (Walkie-Talkie Chat) 邏輯                                    */
+/* -------------------------------------------------------------------------- */
+const chatMessagesRef = db.ref('chatMessages');
+let chatCurrentUser = localStorage.getItem('snowboard_chat_user') || null;
+
+const chatModal = document.getElementById('chat-modal');
+const fabChat = document.getElementById('fab-chat');
+const closeChatModal = document.getElementById('close-chat-modal');
+const chatIdentitySetup = document.getElementById('chat-identity-setup');
+const chatMessagesArea = document.getElementById('chat-messages');
+const chatInputArea = document.getElementById('chat-input-area');
+const stickerPanel = document.getElementById('sticker-panel');
+const btnSaveIdentity = document.getElementById('btn-save-identity');
+const chatIdentitySelect = document.getElementById('chat-identity-select');
+const btnToggleSticker = document.getElementById('btn-toggle-sticker');
+const btnSendChat = document.getElementById('btn-send-chat');
+const chatInput = document.getElementById('chat-input');
+
+// 打開聊天室
+if (fabChat) {
+    fabChat.addEventListener('click', () => {
+        chatModal.classList.remove('hidden');
+        if (!chatCurrentUser) {
+            chatIdentitySetup.classList.remove('hidden');
+            chatMessagesArea.classList.add('hidden');
+            chatInputArea.classList.add('hidden');
+        } else {
+            chatIdentitySetup.classList.add('hidden');
+            chatMessagesArea.classList.remove('hidden');
+            chatInputArea.classList.remove('hidden');
+            scrollToChatBottom();
+        }
+    });
+}
+
+// 關閉聊天室
+if (closeChatModal) {
+    closeChatModal.addEventListener('click', () => {
+        chatModal.classList.add('hidden');
+        stickerPanel.classList.add('hidden');
+    });
+}
+
+// 點擊 Modal 黑色半透明背景關閉 (聊天室)
+if (chatModal) {
+    chatModal.addEventListener('click', (e) => {
+        if (e.target === chatModal) {
+            chatModal.classList.add('hidden');
+            stickerPanel.classList.add('hidden');
+        }
+    });
+}
+
+// 儲存身分
+if (btnSaveIdentity) {
+    btnSaveIdentity.addEventListener('click', () => {
+        chatCurrentUser = chatIdentitySelect.value;
+        localStorage.setItem('snowboard_chat_user', chatCurrentUser);
+        chatIdentitySetup.classList.add('hidden');
+        chatMessagesArea.classList.remove('hidden');
+        chatInputArea.classList.remove('hidden');
+        scrollToChatBottom();
+    });
+}
+
+// 貼圖面板開關
+if (btnToggleSticker) {
+    btnToggleSticker.addEventListener('click', () => {
+        stickerPanel.classList.toggle('hidden');
+        scrollToChatBottom();
+    });
+}
+
+// 送出訊息 (共用邏輯)
+function sendChatMessage(text, type = 'text') {
+    if (!chatCurrentUser) return;
+    if (type === 'text' && text.trim() === '') return;
+
+    const newMsg = {
+        sender: chatCurrentUser,
+        text: text,
+        type: type, // 'text' 或 'sticker'
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    };
+
+    chatMessagesRef.push(newMsg);
+    
+    if (type === 'text') {
+        chatInput.value = '';
+    }
+    if (type === 'sticker') {
+        stickerPanel.classList.add('hidden');
+    }
+}
+
+// 點擊發送按鈕
+if (btnSendChat) {
+    btnSendChat.addEventListener('click', () => {
+        sendChatMessage(chatInput.value, 'text');
+    });
+}
+
+// Enter 鍵發送
+if (chatInput) {
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendChatMessage(chatInput.value, 'text');
+        }
+    });
+}
+
+// 點擊貼圖發送
+document.querySelectorAll('.sticker-option').forEach(img => {
+    img.addEventListener('click', () => {
+        const stickerId = img.getAttribute('data-sticker');
+        sendChatMessage(stickerId, 'sticker');
+    });
+});
+
+// 監聽新訊息
+if (chatMessagesRef) {
+    chatMessagesRef.on('child_added', (snapshot) => {
+        const msg = snapshot.val();
+        renderSingleMessage(msg);
+    });
+}
+
+// 渲染單筆訊息
+function renderSingleMessage(msg) {
+    if (!chatMessagesArea) return;
+    
+    const isMine = (msg.sender === chatCurrentUser);
+    const alignClass = isMine ? 'message-mine' : 'message-others';
+    
+    let contentHtml = '';
+    if (msg.type === 'sticker') {
+        // 貼圖
+        contentHtml = `<img src="./assets/stickers/${msg.text}.png" class="chat-sticker" alt="Sticker">`;
+    } else {
+        // 文字
+        contentHtml = `<div class="chat-bubble">${escapeHtml(msg.text)}</div>`;
+    }
+
+    const msgHtml = `
+        <div class="chat-message ${alignClass}">
+            <div class="message-sender">${avatarMap[msg.sender] || '👤'} ${msg.sender}</div>
+            ${contentHtml}
+        </div>
+    `;
+
+    chatMessagesArea.insertAdjacentHTML('beforeend', msgHtml);
+    scrollToChatBottom();
+}
+
+function scrollToChatBottom() {
+    if (chatMessagesArea) {
+        // 確保 DOM 渲染完畢再捲動
+        setTimeout(() => {
+            chatMessagesArea.scrollTop = chatMessagesArea.scrollHeight;
+        }, 50);
+    }
+}
+
+function escapeHtml(unsafe) {
+    if (!unsafe) return '';
+    return String(unsafe)
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+}
+
 // 結清欠款 (自動寫入一筆還款交易)
 window.settleDebt = async function(from, to, amount) {
     if (!confirm(`確定 ${from} 已經給了 ${to} ${amount} 元嗎？\n這將會自動新增一筆結清紀錄。`)) return;
