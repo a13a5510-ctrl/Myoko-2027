@@ -1631,7 +1631,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 讀取特定使用者的裝備狀態
     const loadUserGear = (userName) => {
-        if (!gearRef) return;
+        if (!gearRef) {
+            // 在沒有 Firebase 的情況下，至少在前端重置狀態，讓切換看起來有反應
+            gearCards.forEach(card => updateCardState(card, false, 'self'));
+            return;
+        }
         
         gearRef.child(userName).once('value').then((snapshot) => {
             const data = snapshot.val() || {};
@@ -1684,13 +1688,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 綁定使用者切換按鈕事件
     gearUserBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // 移除所有按鈕的 .active 狀態
             gearUserBtns.forEach(b => b.classList.remove('active'));
+            // 為當前點擊的按鈕加上 .active
             btn.classList.add('active');
             
             // 移除舊使用者的監聽器
-            if(gearRef) gearRef.child(currentGearUser).off('value');
+            if(gearRef) {
+                gearRef.child(currentGearUser).off('value');
+            }
             
+            // 更新 currentGearUser 並觸發 Firebase 讀取邏輯
             currentGearUser = btn.getAttribute('data-user');
             loadUserGear(currentGearUser);
         });
