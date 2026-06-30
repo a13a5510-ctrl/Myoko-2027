@@ -895,7 +895,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
         <!-- 💬 聊天室 Modal -->
-        <div id="chat-modal" class="modal hidden chat-modal-wrapper">
+        <div id="chat-modal" class="modal-overlay hidden chat-modal-wrapper">
             <div class="modal-content chat-modal-content">
                 <div class="modal-header">
                     <h3>💬 雪地對講機</h3>
@@ -1084,6 +1084,14 @@
             <div class="modal-footer">
                 <button id="btn-toggle-bright" class="btn-primary" style="width: 100%; background: #ff9800;">☀️ 切換最高亮度 (給司機看)</button>
             </div>
+        </div>
+    </div>
+    
+    <!-- 雪道地圖 Modal -->
+    <div id="resort-map-modal" class="modal-overlay hidden">
+        <div class="glass-card" style="width: 95%; max-width: 1000px; padding: 1rem; position: relative; display: flex; justify-content: center; align-items: center;">
+            <button class="btn-close" id="close-resort-map-modal" style="position: absolute; top: 10px; right: 10px; z-index: 10;">&times;</button>
+            <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/resort_map.png" style="width: 100%; height: auto; border-radius: 8px;" alt="妙高赤倉全區雪道圖">
         </div>
     </div>
     

@@ -1555,10 +1555,13 @@ function renderSingleMessage(msg) {
 
 function scrollToChatBottom() {
     if (chatMessagesArea) {
-        // 確保 DOM 渲染完畢再捲動
+        // 確保 DOM 渲染完畢再捲動，增加一點延遲以防貼圖尚未載入
         setTimeout(() => {
             chatMessagesArea.scrollTop = chatMessagesArea.scrollHeight;
-        }, 50);
+        }, 150);
+        setTimeout(() => {
+            chatMessagesArea.scrollTop = chatMessagesArea.scrollHeight;
+        }, 500); // 二次防錯捲動
     }
 }
 
@@ -1764,15 +1767,20 @@ document.addEventListener('DOMContentLoaded', () => {
 // --------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     const btnSkiMap = document.getElementById('btn-ski-map');
-    if (btnSkiMap) {
+    const resortMapModal = document.getElementById('resort-map-modal');
+    const closeResortMapModal = document.getElementById('close-resort-map-modal');
+    
+    if (btnSkiMap && resortMapModal) {
         btnSkiMap.addEventListener('click', () => {
-            // 使用現有 Lightbox 系統
-            const mapSrc = "https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/myoko_hero_1781516502253.png"; // 預留位
-            if (typeof openLightbox === 'function') {
-                openLightbox([mapSrc], 0);
-            } else {
-                window.open(mapSrc, '_blank');
-            }
+            resortMapModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    if (closeResortMapModal && resortMapModal) {
+        closeResortMapModal.addEventListener('click', () => {
+            resortMapModal.classList.add('hidden');
+            document.body.style.overflow = '';
         });
     }
 
@@ -1880,10 +1888,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // 新增品項
             btnAddGrocery.addEventListener('click', () => {
                 const name = groceryInput.value.trim();
+                const userName = (typeof currentGearUser !== 'undefined' && currentGearUser) ? currentGearUser : "當前旅伴";
                 if (name) {
                     groceryListRef.push({
                         name: name,
                         purchased: false,
+                        createdBy: userName,
                         timestamp: firebase.database.ServerValue.TIMESTAMP
                     });
                     groceryInput.value = '';
