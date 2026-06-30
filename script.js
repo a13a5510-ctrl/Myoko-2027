@@ -1735,3 +1735,167 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初次載入
     loadUserGear(currentGearUser);
 });
+
+// --------------------------------------------------------------------------
+// 12. 雪地對講機 (Chat FAB & Modal)
+// --------------------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+    const fabChat = document.getElementById('fab-chat');
+    const chatModal = document.getElementById('chat-modal');
+    const closeChatModal = document.getElementById('close-chat-modal');
+
+    if (fabChat && chatModal) {
+        fabChat.addEventListener('click', () => {
+            chatModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    if (closeChatModal && chatModal) {
+        closeChatModal.addEventListener('click', () => {
+            chatModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        });
+    }
+});
+
+// --------------------------------------------------------------------------
+// 13. 高解析雪道圖與戰術廣播
+// --------------------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+    const btnSkiMap = document.getElementById('btn-ski-map');
+    if (btnSkiMap) {
+        btnSkiMap.addEventListener('click', () => {
+            // 使用現有 Lightbox 系統
+            const mapSrc = "https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/myoko_hero_1781516502253.png"; // 預留位
+            if (typeof openLightbox === 'function') {
+                openLightbox([mapSrc], 0);
+            } else {
+                window.open(mapSrc, '_blank');
+            }
+        });
+    }
+
+    const btnTacticalPin = document.getElementById('btn-tactical-pin');
+    const chatInput = document.getElementById('chat-input');
+    const btnSendChat = document.getElementById('btn-send-chat');
+    
+    if (btnTacticalPin && chatInput && btnSendChat) {
+        btnTacticalPin.addEventListener('click', () => {
+            const location = prompt("請輸入要廣播的集合點 (例如: 居酒屋 或 Gondola 底部)");
+            if (location) {
+                chatInput.value = `📍 [戰術廣播] 大家注意！請於【${location}】集合會合！`;
+                btnSendChat.click();
+            }
+        });
+    }
+});
+
+// --------------------------------------------------------------------------
+// 14. 求生資訊 (Emergency SOS)
+// --------------------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+    const navEmergency = document.getElementById('nav-emergency');
+    const emergencyModal = document.getElementById('emergency-modal');
+    const closeEmergencyModal = document.getElementById('close-emergency-modal');
+    const emergencyModalCard = document.getElementById('emergency-modal-card');
+    const btnToggleBright = document.getElementById('btn-toggle-bright');
+
+    if (navEmergency && emergencyModal) {
+        navEmergency.addEventListener('click', (e) => {
+            e.preventDefault();
+            emergencyModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            if (window.innerWidth < 768) {
+                const navLinks = document.querySelector('.nav-links');
+                if (navLinks) navLinks.classList.remove('active');
+            }
+        });
+    }
+
+    if (closeEmergencyModal && emergencyModal) {
+        closeEmergencyModal.addEventListener('click', () => {
+            emergencyModal.classList.add('hidden');
+            emergencyModalCard.classList.remove('bright-mode');
+            document.body.style.overflow = '';
+        });
+    }
+
+    if (btnToggleBright && emergencyModalCard) {
+        btnToggleBright.addEventListener('click', () => {
+            emergencyModalCard.classList.toggle('bright-mode');
+            if (emergencyModalCard.classList.contains('bright-mode')) {
+                btnToggleBright.textContent = "🌙 關閉高亮度";
+            } else {
+                btnToggleBright.textContent = "☀️ 切換最高亮度 (給司機看)";
+            }
+        });
+    }
+});
+
+// --------------------------------------------------------------------------
+// 15. 實時共用採買清單 (Firebase Grocery List)
+// --------------------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+    if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
+        const groceryListRef = firebase.database().ref('groceryData');
+        const groceryListEl = document.getElementById('grocery-list');
+        const groceryInput = document.getElementById('grocery-input');
+        const btnAddGrocery = document.getElementById('btn-add-grocery');
+
+        if (groceryListEl && groceryInput && btnAddGrocery) {
+            // 監聽清單變更
+            groceryListRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                groceryListEl.innerHTML = '';
+                
+                if (!data) {
+                    groceryListEl.innerHTML = '<div class="empty-state">目前清單空空如也</div>';
+                    return;
+                }
+                
+                Object.keys(data).forEach(key => {
+                    const item = data[key];
+                    const itemEl = document.createElement('div');
+                    itemEl.className = `grocery-item ${item.purchased ? 'purchased' : ''}`;
+                    
+                    itemEl.innerHTML = `
+                        <span class="grocery-name">${item.name}</span>
+                        <input type="checkbox" class="grocery-check" ${item.purchased ? 'checked' : ''} data-key="${key}">
+                    `;
+                    groceryListEl.appendChild(itemEl);
+                });
+
+                // 綁定勾選事件
+                document.querySelectorAll('.grocery-check').forEach(check => {
+                    check.addEventListener('change', (e) => {
+                        const key = e.target.getAttribute('data-key');
+                        groceryListRef.child(key).update({
+                            purchased: e.target.checked
+                        });
+                    });
+                });
+            });
+
+            // 新增品項
+            btnAddGrocery.addEventListener('click', () => {
+                const name = groceryInput.value.trim();
+                if (name) {
+                    groceryListRef.push({
+                        name: name,
+                        purchased: false,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    });
+                    groceryInput.value = '';
+                }
+            });
+
+            // Enter 鍵新增
+            groceryInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    btnAddGrocery.click();
+                }
+            });
+        }
+    }
+});

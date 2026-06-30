@@ -22,6 +22,7 @@
             <li><a href="#expenses">公費分帳</a></li>
             <li><a href="#gear">裝備清單</a></li>
             <li><a href="#gallery">影音回憶</a></li>
+            <li><a href="#" id="nav-emergency" style="color: var(--color-danger); font-weight: bold;">🆘 求生資訊</a></li>
         </ul>
         <div class="hamburger">
             <span></span>
@@ -41,6 +42,31 @@
                     <!-- 倒數計時將由 JavaScript 動態寫入 -->
                 </div>
             </div>
+            
+            <!-- 天氣即時看板 -->
+            <div id="weather-widget" class="glass-card weather-widget">
+                <div class="weather-item">
+                    <span class="weather-icon">🥶</span>
+                    <span class="weather-value">-3°C</span>
+                    <span class="weather-label">當前氣溫</span>
+                </div>
+                <div class="weather-item">
+                    <span class="weather-icon">🧣</span>
+                    <span class="weather-value">-8°C</span>
+                    <span class="weather-label">體感溫度</span>
+                </div>
+                <div class="weather-item">
+                    <span class="weather-icon">❄️</span>
+                    <span class="weather-value">15cm</span>
+                    <span class="weather-label">今日降雪</span>
+                </div>
+                <div class="weather-item">
+                    <span class="weather-icon">⚠️</span>
+                    <span class="weather-value">強風注意</span>
+                    <span class="weather-label">Gondola可能停駛</span>
+                </div>
+            </div>
+
             <a href="#flights" class="btn-primary">開始探索</a>
         </div>
     </section>
@@ -477,6 +503,11 @@
     <section id="resort" class="section alt-bg">
         <div class="container">
             <h2 class="section-title">雪場與周邊 <span>Resort & Info</span></h2>
+            
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <button id="btn-ski-map" class="btn-primary" style="font-size: 1.2rem; padding: 1rem 3rem;">🗺️ 妙高赤倉全區雪道圖</button>
+            </div>
+
             <div class="cards-grid three-cols">
                 <!-- 夢幻雪場特搜 -->
                 <div class="glass-card resort-card" data-resort-target="resort-snow">
@@ -547,6 +578,23 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- 實時共用採買清單 -->
+            <div class="grocery-dashboard">
+                <div class="glass-card expense-panel" id="grocery-card">
+                    <h3>🛒 實時共用採買清單</h3>
+                    <p class="subtitle">超市採買即時同步</p>
+                    <div class="grocery-input-group">
+                        <input type="text" id="grocery-input" placeholder="想買什麼？(例: 鮮奶 2 瓶)">
+                        <button id="btn-add-grocery" class="btn-primary" style="padding: 0.8rem 1.5rem;">新增</button>
+                    </div>
+                    <div class="grocery-list" id="grocery-list">
+                        <!-- Firebase 動態注入 -->
+                        <div class="empty-state">目前清單空空如也</div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </section>
 
@@ -883,6 +931,7 @@
                 <!-- 底部輸入區塊 -->
                 <div id="chat-input-area" class="chat-input-area hidden">
                     <button id="btn-toggle-sticker" class="btn-toggle-sticker">😊</button>
+                    <button id="btn-tactical-pin" class="btn-toggle-sticker" style="margin-left: 5px;" title="釘選集合點">📍</button>
                     <input type="text" id="chat-input" placeholder="說點什麼..." autocomplete="off">
                     <button id="btn-send-chat" class="btn-send-chat">送出</button>
                 </div>
@@ -1012,6 +1061,32 @@
             </div>
         </div>
     </div>
+    <!-- 求生資訊 Modal -->
+    <div id="emergency-modal" class="modal-overlay hidden">
+        <div class="emergency-modal-content glass-card" id="emergency-modal-card">
+            <div class="modal-header">
+                <h3>🆘 求生與緊急資訊</h3>
+                <button class="btn-close" id="close-emergency-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="emergency-phrase">運転手さん、ここへ行ってください。</p>
+                <div class="emergency-address">
+                    〒949-2111<br>
+                    新潟県妙高市赤倉<br>
+                    (Airbnb地址/民宿名稱)
+                </div>
+                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 1.5rem 0;">
+                <h4 style="margin-bottom:1rem; color: var(--color-danger);">緊急電話</h4>
+                <p>🚑 救護車/消防: 119</p>
+                <p>🚓 警察局: 110</p>
+                <p>🏥 妙高醫院: 0255-86-2003</p>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-toggle-bright" class="btn-primary" style="width: 100%; background: #ff9800;">☀️ 切換最高亮度 (給司機看)</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- 引入資料檔案與主程式檔案 -->
     <script src="mediaData.js"></script>
     <script src="script.js"></script>

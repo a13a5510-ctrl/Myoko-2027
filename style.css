@@ -337,6 +337,140 @@ a {
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* ========================================================================== */
+/* 新增：雪地對講機 (Chat) */
+/* ========================================================================== */
+.chat-modal-wrapper {
+    z-index: 99999 !important; /* 確保不被其他全螢幕遮罩擋住 */
+}
+
+/* ========================================================================== */
+/* 新增：RWD 手機版頁籤選項垂直置中 */
+/* ========================================================================== */
+@media (max-width: 768px) {
+    #flights .tab-nav,
+    #itinerary .tab-nav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 10px;
+    }
+    #flights .tab-nav .tab-btn,
+    #itinerary .tab-nav .tab-btn {
+        width: 85%;
+        max-width: 300px;
+        text-align: center;
+    }
+}
+
+/* ========================================================================== */
+/* 新增：天氣即時看板 (Weather Widget) */
+/* ========================================================================== */
+.weather-widget {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    margin: 2rem auto;
+    max-width: 800px;
+    text-align: center;
+}
+.weather-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+.weather-icon {
+    font-size: 2.5rem;
+}
+.weather-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+}
+.weather-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* ========================================================================== */
+/* 新增：求生資訊面板 (Emergency Card) */
+/* ========================================================================== */
+.emergency-modal-content {
+    max-width: 500px;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+}
+.emergency-modal-content.bright-mode {
+    background: #ffffff;
+    color: #000000;
+}
+.emergency-modal-content.bright-mode h3,
+.emergency-modal-content.bright-mode h4,
+.emergency-modal-content.bright-mode p {
+    color: #000000 !important;
+}
+.emergency-address {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 1.5rem 0;
+    line-height: 1.4;
+}
+.emergency-phrase {
+    font-size: 1.2rem;
+    color: var(--color-danger);
+    margin-bottom: 2rem;
+}
+.bright-mode .emergency-phrase {
+    color: #d32f2f;
+}
+
+/* ========================================================================== */
+/* 新增：實時共用採買清單 (Grocery List) */
+/* ========================================================================== */
+.grocery-dashboard {
+    margin-top: 2rem;
+}
+.grocery-input-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.grocery-input-group input {
+    flex: 1;
+    padding: 0.8rem;
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+.grocery-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+.grocery-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+}
+.grocery-item.purchased {
+    opacity: 0.5;
+}
+.grocery-item.purchased .grocery-name {
+    text-decoration: line-through;
+}
+.grocery-name {
+    font-size: 1.1rem;
+}
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
     20% { transform: translateX(-8px); }
