@@ -1760,6 +1760,16 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = '';
         });
     }
+
+    // 點擊遠罩關閉對講機 modal
+    if (chatModal) {
+        chatModal.addEventListener('click', (e) => {
+            if (e.target === chatModal) {
+                chatModal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        });
+    }
 });
 
 // --------------------------------------------------------------------------
@@ -1824,8 +1834,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closeEmergencyModal && emergencyModal) {
         closeEmergencyModal.addEventListener('click', () => {
             emergencyModal.classList.add('hidden');
-            emergencyModalCard.classList.remove('bright-mode');
+            if (emergencyModalCard) emergencyModalCard.classList.remove('bright-mode');
             document.body.style.overflow = '';
+        });
+    }
+
+    // 點擊遠罩關閉求生資訊 modal
+    if (emergencyModal) {
+        emergencyModal.addEventListener('click', (e) => {
+            if (e.target === emergencyModal) {
+                emergencyModal.classList.add('hidden');
+                if (emergencyModalCard) emergencyModalCard.classList.remove('bright-mode');
+                document.body.style.overflow = '';
+            }
         });
     }
 
@@ -1848,8 +1869,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
         const groceryListRef = firebase.database().ref('groceryData');
         const groceryListEl = document.getElementById('grocery-list');
-        const groceryInput = document.getElementById('grocery-input');
-        const btnAddGrocery = document.getElementById('btn-add-grocery');
+        const groceryInput = document.getElementById('grocery-item-input'); // 對齊 HTML #grocery-item-input
+        const btnAddGrocery = document.getElementById('add-grocery-btn');  // 對齊 HTML #add-grocery-btn
 
         if (groceryListEl && groceryInput && btnAddGrocery) {
             // 監聽清單變更
@@ -1869,6 +1890,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     itemEl.innerHTML = `
                         <span class="grocery-name">${item.name}</span>
+                        <span class="grocery-meta" style="font-size:0.75rem;color:var(--text-secondary);margin-right:0.5rem;">${item.createdBy || ''}</span>
                         <input type="checkbox" class="grocery-check" ${item.purchased ? 'checked' : ''} data-key="${key}">
                     `;
                     groceryListEl.appendChild(itemEl);
@@ -1897,6 +1919,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         timestamp: firebase.database.ServerValue.TIMESTAMP
                     });
                     groceryInput.value = '';
+                    groceryInput.focus();
                 }
             });
 

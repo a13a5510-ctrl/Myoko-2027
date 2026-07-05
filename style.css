@@ -261,12 +261,13 @@ a {
 /*  首頁主視覺 Hero                                                          */
 /* -------------------------------------------------------------------------- */
 .hero-section {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     text-align: center;
+    overflow-y: auto;
     /* 背景圖設定，可替換 src */
     background: linear-gradient(rgba(11, 17, 33, 0.7), rgba(11, 17, 33, 0.3)), url('assets/myoko_hero_1781516502253.png') center/cover no-repeat;
     background-attachment: fixed;
@@ -274,26 +275,32 @@ a {
 
 .hero-content {
     z-index: 2;
-    padding: 0 20px;
+    padding: 2rem 20px;
     animation: fadeIn 1.5s ease-out;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 1rem;
+    width: 100%;
+    max-width: 900px;
 }
 
 .hero-title {
     font-size: 4rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0;
     text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    z-index: 3;
+    position: relative;
 }
 
 .hero-subtitle {
     font-size: 1.5rem;
     color: var(--accent);
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
     letter-spacing: 3px;
+    z-index: 3;
+    position: relative;
 }
 
 /* 倒數計時器 */
@@ -379,15 +386,20 @@ a {
     flex-wrap: wrap;
     gap: 1.5rem;
     padding: 1.5rem;
-    margin: 2rem auto;
+    margin-top: 2rem; /* 流暢置於標題與倒數計時下方 */
+    margin-bottom: 0;
     max-width: 800px;
+    width: 100%;
     text-align: center;
+    position: relative; /* 確保不遮擋 hero-title */
+    z-index: 2;
 }
 .weather-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    min-width: 80px;
 }
 .weather-icon {
     font-size: 2.5rem;
@@ -469,13 +481,24 @@ a {
     transition: all 0.3s ease;
 }
 .grocery-item.purchased {
-    opacity: 0.5;
+    opacity: 0.45;
+    filter: grayscale(0.4);
+    transition: opacity 0.4s ease, filter 0.4s ease;
 }
 .grocery-item.purchased .grocery-name {
     text-decoration: line-through;
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+}
+.grocery-check {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--accent);
 }
 .grocery-name {
     font-size: 1.1rem;
+    flex: 1;
 }
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
@@ -2332,12 +2355,24 @@ a {
     }
 
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 2rem;
+        line-height: 1.2;
     }
 
     .hero-subtitle {
         font-size: 1rem;
+        letter-spacing: 1px;
     }
+
+    /* 手機版天氣看板縮小並流暢排列於標題下方 */
+    .weather-widget {
+        gap: 1rem;
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+    .weather-icon { font-size: 1.8rem; }
+    .weather-value { font-size: 1.1rem; }
+    .weather-label { font-size: 0.75rem; }
 
     .section-title {
         font-size: 2rem;
