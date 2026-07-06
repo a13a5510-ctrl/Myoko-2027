@@ -275,7 +275,7 @@ a {
 
 .hero-content {
     z-index: 2;
-    padding: 2rem 20px;
+    padding: 120px 20px 2rem; /* padding-top: 120px 確保不被 fixed navbar 遮擋 */
     animation: fadeIn 1.5s ease-out;
     display: flex;
     flex-direction: column;
@@ -386,8 +386,8 @@ a {
     flex-wrap: wrap;
     gap: 1.5rem;
     padding: 1.5rem;
-    margin-top: 2rem; /* 流暢置於標題與倒數計時下方 */
-    margin-bottom: 0;
+    margin-top: 1.5rem; /* 流暢置於標題與倒數計時下方 */
+    margin-bottom: 1rem;
     max-width: 800px;
     width: 100%;
     text-align: center;
