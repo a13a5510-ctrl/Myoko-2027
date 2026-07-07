@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------
-// 0. ?啣??脣??菜葫璈
+// 0. 環境防呆偵測機制
 // --------------------------------------------------------------------------
 const isLocalFile = window.location.protocol === 'file:';
 
@@ -9,9 +9,9 @@ if (isLocalFile) {
         overlay.className = 'env-error-overlay';
         overlay.innerHTML = `
             <div class="env-error-content">
-                <h2>?? ?啣??航炊</h2>
-                <p>隢?湔暺? HTML 瑼? (file://) ????/p>
-                <p>?箔?霈?Firebase ?巨蝟餌絞甇?虜??嚗?br>隢蝙??Live Server ??Localhost ??蝬脤???/p>
+                <h2>⚠️ 環境錯誤</h2>
+                <p>請勿直接點擊 HTML 檔案 (file://) 開啟。</p>
+                <p>為了讓 Firebase 投票系統正常運作，<br>請使用 Live Server 或 Localhost 啟動網頁。</p>
             </div>
         `;
         document.body.appendChild(overlay);
@@ -20,13 +20,15 @@ if (isLocalFile) {
 }
 
 // --------------------------------------------------------------------------
-// 1. 撠汗??Navbar ?遝????????桀???// --------------------------------------------------------------------------
+// 1. 導覽列 Navbar 的滾動變化與手機版選單切換
+// --------------------------------------------------------------------------
 const navbar = document.querySelector('.navbar');
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links');
 const navItems = document.querySelectorAll('.nav-links a');
 
-// ??皛曉?鈭辣嚗 navbar ???啣蔣????window.addEventListener('scroll', () => {
+// 監聽滾動事件，為 navbar 加上陰影與背景
+window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
         navbar.classList.add('scrolled');
     } else {
@@ -34,11 +36,13 @@ const navItems = document.querySelectorAll('.nav-links a');
     }
 });
 
-// ????桅???hamburger.addEventListener('click', () => {
+// 手機版選單開關
+hamburger.addEventListener('click', () => {
     navLinks.classList.toggle('active');
 });
 
-// 暺??詨???敺??芸??嗅??????navItems.forEach(item => {
+// 點擊選單連結後，自動收合手機版選單
+navItems.forEach(item => {
     item.addEventListener('click', () => {
         navLinks.classList.remove('active');
     });
@@ -46,7 +50,7 @@ const navItems = document.querySelectorAll('.nav-links a');
 
 
 // --------------------------------------------------------------------------
-// 2. ?格??交??閮???(Target: 2027-03-01 00:00:00)
+// 2. 目標日期倒數計時器 (Target: 2027-03-01 00:00:00)
 // --------------------------------------------------------------------------
 const targetDate = new Date('2027-03-01T00:00:00').getTime();
 const countdownElement = document.getElementById('countdown');
@@ -55,19 +59,19 @@ function updateCountdown() {
     const now = new Date().getTime();
     const distance = targetDate - now;
 
-    // 憒?撌脩?頞??格??交?
+    // 如果已經超過目標日期
     if (distance < 0) {
-        countdownElement.innerHTML = "<h3>??撌脩???????嚗?/h3>";
+        countdownElement.innerHTML = "<h3>旅行已經開始或結束囉！</h3>";
         return;
     }
 
-    // 閮?憭押?????
+    // 計算天、時、分、秒
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-    // 皜脫??啁?Ｖ?
+    // 渲染到畫面上
     countdownElement.innerHTML = `
         <div class="time-box">
             <span class="num">${days}</span>
@@ -88,48 +92,53 @@ function updateCountdown() {
     `;
 }
 
-// ?活?澆銝西身摰?蝘?唬?甈?updateCountdown();
+// 初次呼叫並設定每秒更新一次
+updateCountdown();
 setInterval(updateCountdown, 1000);
 
 
 // --------------------------------------------------------------------------
-// 3. ??皜脫??蔣?喳??園???(霈??mediaData.js)
+// 3. 動態渲染「影音回憶錄」 (讀取 mediaData.js)
 // --------------------------------------------------------------------------
-// 蝑? DOM 頛摰?敺銵?document.addEventListener('DOMContentLoaded', () => {
+// 等待 DOM 載入完成後執行
+document.addEventListener('DOMContentLoaded', () => {
     const mediaGrid = document.getElementById('media-grid');
     
-    // 瑼Ｘ mediaData ?臬摮 (靘 mediaData.js)
+    // 檢查 mediaData 是否存在 (來自 mediaData.js)
     if (typeof mediaData !== 'undefined' && mediaData.length > 0) {
         mediaData.forEach(item => {
-            // 撱箇??ㄨ撅?            const mediaItem = document.createElement('div');
+            // 建立包裹層
+            const mediaItem = document.createElement('div');
             mediaItem.classList.add('media-item');
 
-            // ?斗?臬????臬蔣??            if (item.type === 'image') {
+            // 判斷是圖片還是影片
+            if (item.type === 'image') {
                 const img = document.createElement('img');
                 img.src = item.src;
-                img.alt = item.alt || '?芸迤???';
-                img.loading = 'lazy'; // ???
+                img.alt = item.alt || '雪季回憶圖片';
+                img.loading = 'lazy'; // 提升效能
                 mediaItem.appendChild(img);
             } else if (item.type === 'video') {
                 const video = document.createElement('video');
                 video.src = item.src;
-                video.controls = true; // 憿舐內?批??                mediaItem.appendChild(video);
+                video.controls = true; // 顯示控制列
+                mediaItem.appendChild(video);
             }
 
-            // 撠?蝝???grid 摰孵
+            // 將元素加入 grid 容器
             mediaGrid.appendChild(mediaItem);
         });
     } else {
-        // 憒?瘝?鞈????身??
-        mediaGrid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center;">?桀??????喳蔣?喉??祈???嚗?/p>';
+        // 如果沒有資料時的預設文字
+        mediaGrid.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center;">目前還沒有上傳影音，敬請期待！</p>';
     }
 });
 
 // --------------------------------------------------------------------------
-// 4. ??皜脫??踵??皜 (Slider) + ?舐?撣豢
+// 4. 動態渲染房源候選清單 (Slider) + 匯率常數
 // --------------------------------------------------------------------------
-const twdToHkdRate = 0.24; // TWD ??HKD ?舐?
-const nights = 4; // 銵??
+const twdToHkdRate = 0.24; // TWD → HKD 匯率
+const nights = 4; // 行程晚數
 
 function parsePriceNumber(priceStr) {
     const match = priceStr.match(/[\d,]+/);
@@ -139,21 +148,21 @@ function parsePriceNumber(priceStr) {
 const housingData = [
     {
         id: "house1",
-        name: "Genki House (頝?7?砍偕)",
-        rating: "5.0 (16??",
-        price: "$125,060 (?祥??)",
-        specs: "10鈭?/ 4??摨?/ 2.5銵?/ ????,
-        location: "瘙?撟?(Ikenotaira)",
+        name: "Genki House (距離斜坡7公尺)",
+        rating: "5.0 (16則)",
+        price: "$125,060 (免費停車)",
+        specs: "10人 / 4房8床 / 2.5衛 / 有廚房",
+        location: "池之平 (Ikenotaira)",
         coordinates: "36.861228, 138.196546",
         localGuide: [
-            "?儭?擗輒嚗?a href='https://www.google.com/maps/search/?api=1&query=LIME+KITCHEN+%E5%A6%99%E9%AB%98' target='_blank'>LIME KITCHEN (瘙?撟喟?脰正擗?</a> ??蝝?4 ??(2.5 ?祇?)",
-            "? 撠?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%83%B3%E3%83%89%E3%83%9E%E3%83%BC%E3%82%AF%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F' target='_blank'>Landmark Myokokogen 蝢?銵?/a> ??蝝?5 ??(3 ?祇?)",
-            "?剁? 皞急?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%82%A4%E3%83%A0%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E5%A6%99%E9%AB%98' target='_blank'>瘙?撟單澈瘜?(LIME RESORT 暺野皞急?)</a> ??蝝?5 ??(3 ?祇?)",
-            "?瘀? ?芸嚗?a href='https://www.google.com/maps/search/?api=1&query=%E6%B1%A0%E3%81%AE%E5%B9%B3%E6%B8%A9%E6%B3%89%E3%82%A2%E3%83%AB%E3%83%9A%E3%83%B3%E3%83%96%E3%83%AA%E3%83%83%E3%82%AF%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>瘙?撟單澈瘜??芸 (Alpen Blick)</a> ??蝝?5 ??(3 ?祇?)",
-            "?? ?芸嚗?a href='https://www.google.com/maps/search/?api=1&query=%E6%B1%A0%E3%81%AE%E5%B9%B3%E6%B8%A9%E6%B3%89%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4+%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>Alpen Blick 撠惇蝘?</a> ??蝝?5 ??(3 ?祇?)",
-            "?? 頠?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>憒?擃?頠?</a> ??蝝?4 ??(1.8 ?祇?)",
-            "?? 蝘?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (憒?擃?蝡?)</a> ??蝝?4 ??(1.8 ?祇?)",
-            "? ?舫?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E3%82%A2%E3%83%AB%E3%83%9A%E3%83%B3%E3%83%96%E3%83%AA%E3%83%83%E3%82%AF%E3%83%93%E3%83%BC%E3%83%AB' target='_blank'>憒?擃??日?撱?(Alpen Blick ??</a> ??蝝?5 ??(3 ?祇?)"
+            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=LIME+KITCHEN+%E5%A6%99%E9%AB%98' target='_blank'>LIME KITCHEN (池之平特色西餐)</a> — 約 4 分 (2.5 公里)",
+            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%83%B3%E3%83%89%E3%83%9E%E3%83%BC%E3%82%AF%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F' target='_blank'>Landmark Myokokogen 美食街</a> — 約 5 分 (3 公里)",
+            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%82%A4%E3%83%A0%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E5%A6%99%E9%AB%98' target='_blank'>池之平溫泉 (LIME RESORT 黑泥溫泉)</a> — 約 5 分 (3 公里)",
+            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E6%B1%A0%E3%81%AE%E5%B9%B3%E6%B8%A9%E6%B3%89%E3%82%A2%E3%83%AB%E3%83%9A%E3%83%B3%E3%83%96%E3%83%AA%E3%83%83%E3%82%AF%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>池之平溫泉滑雪場 (Alpen Blick)</a> — 約 5 分 (3 公里)",
+            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E6%B1%A0%E3%81%AE%E5%B9%B3%E6%B8%A9%E6%B3%89%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4+%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>Alpen Blick 專屬租借站</a> — 約 5 分 (3 公里)",
+            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 4 分 (1.8 公里)",
+            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 4 分 (1.8 公里)",
+            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E3%82%A2%E3%83%AB%E3%83%9A%E3%83%B3%E3%83%96%E3%83%AA%E3%83%83%E3%82%AF%E3%83%93%E3%83%BC%E3%83%AB' target='_blank'>妙高高原啤酒廠 (Alpen Blick 內)</a> — 約 5 分 (3 公里)"
         ],
         images: [
             "assets/house1/0b4b309b-f0e5-4a6d-9e04-810683e541fc.jpeg",
@@ -165,21 +174,21 @@ const housingData = [
     },
     {
         id: "house2",
-        name: "?臬捆蝝?憭?12 鈭箇? 5 ??2 摰Ｗ輒憟Ｚ?亙?",
-        rating: "5.0 (5??",
-        price: "$93,918 (?祥??)",
-        specs: "12鈭?/ 5??0摨?/ 2.5銵?/ ????,
-        location: "韏文澈瘜? (Akakura Onsen)",
+        name: "可容納最多 12 人的 5 房 2 客廳奢華別墅",
+        rating: "5.0 (5則)",
+        price: "$93,918 (免費停車)",
+        specs: "12人 / 5房10床 / 2.5衛 / 有廚房",
+        location: "赤倉溫泉區 (Akakura Onsen)",
         coordinates: "36.8905, 138.182",
         localGuide: [
-            "?儭?擗輒嚗?a href='https://www.google.com/maps/search/?api=1&query=%E3%83%AC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%B3%E6%9F%B4%E7%94%B0+%E8%B5%A4%E5%80%89' target='_blank'>Restaurant Shibata (擃犖瘞??憌?憌?</a> ??蝝?2 ??(600 ?砍偕)",
-            "? 撠?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E8%A1%97+%E9%A3%9F%E4%BA%8B' target='_blank'>韏文澈瘜?蝢?</a> ??蝝?3 ??(800 ?砍偕)",
-            "?剁? 皞急?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89' target='_blank'>韏文澈瘜?(Akakura Onsen)</a> ??蝝?2 ??(500 ?砍偕)",
-            "?瘀? ?芸嚗?a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>韏文澈瘜??芸</a> ??蝝?2 ??(500 ?砍偕)",
-            "?? ?芸嚗?a href='https://www.google.com/maps/search/?api=1&query=Myoko+Snowsports' target='_blank'>Myoko Snowsports</a> ??蝝?3 ??(800 ?砍偕)",
-            "?? 頠?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>憒?擃?頠?</a> ??蝝?10 ??(5 ?祇?)",
-            "?? 蝘?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E3%82%AA%E3%83%AA%E3%83%83%E3%82%AF%E3%82%B9%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E4%B8%8A%E8%B6%8A%E5%A6%99%E9%AB%98%E9%A7%85%E5%89%8D%E5%BA%97' target='_blank'>Orix Rent-A-Car (銝?憒?憭抒?)</a> ??蝝?35 ??(30 ?祇?嚗?之????",
-            "? ?舫?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E8%A1%97' target='_blank'>韏文澈瘜?銝剖?</a> ??蝝?2 ??(500 ?砍偕)"
+            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%AC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%B3%E6%9F%B4%E7%94%B0+%E8%B5%A4%E5%80%89' target='_blank'>Restaurant Shibata (高人氣洋食定食)</a> — 約 2 分 (600 公尺)",
+            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E8%A1%97+%E9%A3%9F%E4%BA%8B' target='_blank'>赤倉溫泉街美食</a> — 約 3 分 (800 公尺)",
+            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89' target='_blank'>赤倉溫泉 (Akakura Onsen)</a> — 約 2 分 (500 公尺)",
+            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>赤倉溫泉滑雪場</a> — 約 2 分 (500 公尺)",
+            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=Myoko+Snowsports' target='_blank'>Myoko Snowsports</a> — 約 3 分 (800 公尺)",
+            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 10 分 (5 公里)",
+            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%82%AA%E3%83%AA%E3%83%83%E3%82%AF%E3%82%B9%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E4%B8%8A%E8%B6%8A%E5%A6%99%E9%AB%98%E9%A7%85%E5%89%8D%E5%BA%97' target='_blank'>Orix Rent-A-Car (上越妙高大站)</a> — 約 35 分 (30 公里，適合大型休旅)",
+            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E8%A1%97' target='_blank'>赤倉溫泉街中心</a> — 約 2 分 (500 公尺)"
         ],
         images: [
             "assets/house2/28160ea0-cb4f-4fc1-aa0b-4957b8af5de8.png",
@@ -196,21 +205,21 @@ const housingData = [
     },
     {
         id: "house3",
-        name: "Myoko by kokomyoko?蝡恥?其???,
-        rating: "5.0 (7??",
-        price: "$90,774 (?祥??)",
-        specs: "8鈭?/ 4??摨?/ 1.5銵?/ ????,
-        location: "?啗?皛?",
+        name: "Myoko by kokomyoko的獨立客用住房",
+        rating: "5.0 (7則)",
+        price: "$90,774 (免費停車)",
+        specs: "8人 / 4房6床 / 1.5衛 / 有廚房",
+        location: "鄰近滑雪勝地",
         coordinates: "36.8753, 138.21",
         localGuide: [
-            "?儭?擗輒嚗?a href='https://www.google.com/maps/search/?api=1&query=%E3%82%84%E3%81%B6%E3%81%9D%E3%81%B0+%E5%A6%99%E9%AB%98' target='_blank'>?? Yabu Soba (????暻仿熊)</a> ??蝝?2 ??(1 ?祇?)",
-            "? 撠?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%81%8A%E5%9C%9F%E7%94%A3' target='_blank'>頠????Ｗ???</a> ??蝝?1 ??(500 ?砍偕)",
-            "?剁? 皞急?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%B8%A9%E6%B3%89' target='_blank'>憒?皞急??</a> ??蝝?4 ??(2 ?祇?)",
-            "?瘀? ?芸嚗?a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E8%A6%B3%E5%85%89%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>韏文??漲???芸 (Akakan)</a> ??蝝?8 ??(4.5 ?祇?)",
-            "?? ?芸嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%82%B9%E3%82%AD%E3%83%BC%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>頠??券??芸摨?/a> ??蝝?2 ??(1 ?祇?隞亙)",
-            "?? 頠?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>憒?擃?頠?</a> ??蝝?2 ??(500 ?砍偕)",
-            "?? 蝘?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (憒?擃?蝡?)</a> ??蝝?2 ??(500 ?砍偕)",
-            "? ?舫?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%8E%9F%E4%BF%A1+%E5%A6%99%E9%AB%98%E5%BA%97' target='_blank'>?縑頞? Harashin 憒?摨?(?∟眺擐)</a> ??蝝?20 ??(18 ?祇?)"
+            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=%E3%82%84%E3%81%B6%E3%81%9D%E3%81%B0+%E5%A6%99%E9%AB%98' target='_blank'>やぶそば Yabu Soba (老字號蕎麥麵)</a> — 約 2 分 (1 公里)",
+            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%81%8A%E5%9C%9F%E7%94%A3' target='_blank'>車站前土產小吃街</a> — 約 1 分 (500 公尺)",
+            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%B8%A9%E6%B3%89' target='_blank'>妙高溫泉區</a> — 約 4 分 (2 公里)",
+            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E8%A6%B3%E5%85%89%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>赤倉觀光度假滑雪場 (Akakan)</a> — 約 8 分 (4.5 公里)",
+            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%82%B9%E3%82%AD%E3%83%BC%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>車站周邊雪具店</a> — 約 2 分 (1 公里以內)",
+            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 2 分 (500 公尺)",
+            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 2 分 (500 公尺)",
+            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%8E%9F%E4%BF%A1+%E5%A6%99%E9%AB%98%E5%BA%97' target='_blank'>原信超市 Harashin 妙高店 (採買首選)</a> — 約 20 分 (18 公里)"
         ],
         images: [
             "assets/house3/0083f4f9-56ff-4b36-a136-37329ae846af.jpeg",
@@ -242,21 +251,21 @@ const housingData = [
     },
     {
         id: "house4",
-        name: "甇亥? 30 蝘?舀??擃???",
-        rating: "5.0 (8??",
-        price: "$88,416 (?祥??)",
-        specs: "8鈭?/ 3??摨?/ 1銵?/ ????,
-        location: "韏文?銋???撠整?憭拇鈭?,
+        name: "步行 30 秒即可抵達妙高高原站",
+        rating: "5.0 (8則)",
+        price: "$88,416 (免費停車)",
+        specs: "8人 / 3房6床 / 1衛 / 有廚房",
+        location: "赤倉、杉之原、斑尾、樂天新井",
         coordinates: "36.8726, 138.2114",
         localGuide: [
-            "?儭?擗輒嚗?a href='https://www.google.com/maps/search/?api=1&query=%E9%87%9C%E5%8F%B3%E8%A1%9B%E9%96%80+%E5%A6%99%E9%AB%98' target='_blank'>?銵? Kamaemon (?典擗輒)</a> ??蝝?1 ??(200 ?砍偕)",
-            "? 撠?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%B1%85%E9%85%92%E5%B1%8B+%E5%85%AB+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F' target='_blank'>撅?撅???Eight</a> ??蝝?2 ??(500 ?砍偕)",
-            "?剁? 皞急?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%B8%A9%E6%B3%89' target='_blank'>憒?皞急??</a> ??蝝?3 ??(1.5 ?祇?)",
-            "?瘀? ?芸嚗?a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>韏文澈瘜??芸</a> ??蝝?10 ??(5 ?祇?)",
-            "?? ?芸嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%82%B9%E3%82%AD%E3%83%BC%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>頠??券??芸摨?/a> ??蝝?1-10 ??,
-            "?? 頠?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>憒?擃?頠?</a> ??蝝?1 ??(50 ?砍偕嚗郊銵??",
-            "?? 蝘?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (憒?擃?蝡?)</a> ??蝝?1 ??(50 ?砍偕)",
-            "? ?舫?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E3%83%93%E3%82%B8%E3%82%BF%E3%83%BC%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC' target='_blank'>憒?擃??恥銝剖?</a> ??蝝?6 ??(4 ?祇?)"
+            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=%E9%87%9C%E5%8F%B3%E8%A1%9B%E9%96%80+%E5%A6%99%E9%AB%98' target='_blank'>釜右衛門 Kamaemon (在地餐廳)</a> — 約 1 分 (200 公尺)",
+            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E5%B1%85%E9%85%92%E5%B1%8B+%E5%85%AB+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F' target='_blank'>居酒屋 八 Eight</a> — 約 2 分 (500 公尺)",
+            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%B8%A9%E6%B3%89' target='_blank'>妙高溫泉區</a> — 約 3 分 (1.5 公里)",
+            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>赤倉溫泉滑雪場</a> — 約 10 分 (5 公里)",
+            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%82%B9%E3%82%AD%E3%83%BC%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>車站周邊雪具店</a> — 約 1-10 分",
+            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 1 分 (50 公尺，步行即達)",
+            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 1 分 (50 公尺)",
+            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E3%83%93%E3%82%B8%E3%82%BF%E3%83%BC%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC' target='_blank'>妙高高原遊客中心</a> — 約 6 分 (4 公里)"
         ],
         images: [
             "assets/house4/1ff321b1-9fc0-4422-8a20-812409637874.jpeg",
@@ -268,21 +277,21 @@ const housingData = [
     },
     {
         id: "house5",
-        name: "??憭?2鈭箝???砌?韏瑟擛??湔?摨血??典?",
-        rating: "5.0 (5??",
-        price: "$75,448 (?祥??)",
-        specs: "12鈭?/ 4??1摨?/ 1銵?/ ????,
-        location: "韏文?銋??撠?,
+        name: "【最多12人】可與愛犬一起放鬆的整棟度假木屋",
+        rating: "5.0 (5則)",
+        price: "$75,448 (免費停車)",
+        specs: "12人 / 4房11床 / 1衛 / 有廚房",
+        location: "赤倉、杉之原、長尾",
         coordinates: "36.88091, 138.18479",
         localGuide: [
-            "?儭?擗輒嚗?a href='https://www.google.com/maps/search/?api=1&query=Panorama+Cafe+%E5%A6%99%E9%AB%98' target='_blank'>Panorama Caf矇 & Dining</a> ??蝝?4 ??(2 ?祇?)",
-            "? 撠?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E8%A6%B3%E5%85%89%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88+%E3%83%AC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%B3' target='_blank'>韏文????券?擗ㄡ</a> ??蝝?5 ??(2.5 ?祇?)",
-            "?剁? 皞急?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89' target='_blank'>?啗竣?澈瘜?/a> ??蝝?3 ??(1.5 ?祇?)",
-            "?瘀? ?芸嚗?a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E8%A6%B3%E5%85%89%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>韏文??漲???芸 (Akakan)</a> ??蝝?4 ??(2 ?祇?)",
-            "?? ?芸嚗?a href='https://www.google.com/maps/search/?api=1&query=Japan+Snowsports+Myoko' target='_blank'>Japan Snowsports</a> ??蝝?4 ??(2 ?祇?)",
-            "?? 頠?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>憒?擃?頠?</a> ??蝝?8 ??(4.5 ?祇?)",
-            "?? 蝘?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (憒?擃?蝡?)</a> ??蝝?8 ??(4.5 ?祇?)",
-            "? ?舫?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E5%B1%B1%E7%99%BB%E5%B1%B1%E5%8F%A3' target='_blank'>憒?撅梁撅勗</a> ??蝝?10 ??(5 ?祇?)"
+            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=Panorama+Cafe+%E5%A6%99%E9%AB%98' target='_blank'>Panorama Café & Dining</a> — 約 4 分 (2 公里)",
+            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E8%A6%B3%E5%85%89%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88+%E3%83%AC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%B3' target='_blank'>赤倉觀光區周邊餐飲</a> — 約 5 分 (2.5 公里)",
+            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89' target='_blank'>新赤倉溫泉</a> — 約 3 分 (1.5 公里)",
+            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E8%A6%B3%E5%85%89%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>赤倉觀光度假滑雪場 (Akakan)</a> — 約 4 分 (2 公里)",
+            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=Japan+Snowsports+Myoko' target='_blank'>Japan Snowsports</a> — 約 4 分 (2 公里)",
+            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 8 分 (4.5 公里)",
+            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 8 分 (4.5 公里)",
+            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E5%B1%B1%E7%99%BB%E5%B1%B1%E5%8F%A3' target='_blank'>妙高山登山口</a> — 約 10 分 (5 公里)"
         ],
         images: [
             "assets/house5/1a8180ee-990d-4cf3-b526-40fcbfcd60d6.jpeg",
@@ -297,21 +306,21 @@ const housingData = [
     },
     {
         id: "house6",
-        name: "Hinode 撠撅???憒?撜嗥??冽??踹?",
-        rating: "4.9 (16??",
-        price: "$73,701 (?祥??)",
-        specs: "6鈭?/ 3??摨?/ 1.5銵?/ ????,
-        location: "???lpen Blick",
+        name: "Hinode 小木屋 • 妙高島的獨棟房屋",
+        rating: "4.9 (16則)",
+        price: "$73,701 (免費停車)",
+        specs: "6人 / 3房5床 / 1.5衛 / 有廚房",
+        location: "杉之原、Alpen Blick",
         coordinates: "36.86063, 138.16632",
         localGuide: [
-            "?儭?擗輒嚗?a href='https://www.google.com/maps/search/?api=1&query=Two+Pines+Myoko' target='_blank'>Two Pines (?亙??喟狗?怨)</a> ??蝝?3 ??(1 ?祇?)",
-            "? 撠?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E6%9D%89%E9%87%8E%E6%B2%A2+%E9%A3%9F%E5%A0%82' target='_blank'>??瞉斗??典憌?</a> ??蝝?4 ??(1.5 ?祇?)",
-            "?剁? 皞急?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E6%9D%89%E9%87%8E%E6%B2%A2%E6%B8%A9%E6%B3%89+%E8%8B%97%E5%90%8D%E3%81%AE%E6%B9%AF' target='_blank'>??瞉斗澈瘜???銋僖</a> ??蝝?4 ??(1.5 ?祇?)",
-            "?瘀? ?芸嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%9D%89%E3%83%8E%E5%8E%9F%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>憒??????芸</a> ??蝝?3 ??(1.2 ?祇?)",
-            "?? ?芸嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%9D%89%E3%83%8E%E5%8E%9F%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4+%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>????渡????</a> ??蝝?3 ??(1.2 ?祇?)",
-            "?? 頠?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>憒?擃?頠?</a> ??蝝?12 ??(6 ?祇?)",
-            "?? 蝘?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (憒?擃?蝡?)</a> ??蝝?12 ??(6 ?祇?)",
-            "? ?舫?嚗?a href='https://www.google.com/maps/search/?api=1&query=%E8%8B%97%E5%90%8D%E6%BB%9D' target='_blank'>???? (Naena Falls)</a> ??蝝?8 ??(4 ?祇?)"
+            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=Two+Pines+Myoko' target='_blank'>Two Pines (知名石窯披薩)</a> — 約 3 分 (1 公里)",
+            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E6%9D%89%E9%87%8E%E6%B2%A2+%E9%A3%9F%E5%A0%82' target='_blank'>杉之澤村在地食堂</a> — 約 4 分 (1.5 公里)",
+            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E6%9D%89%E9%87%8E%E6%B2%A2%E6%B8%A9%E6%B3%89+%E8%8B%97%E5%90%8D%E3%81%AE%E6%B9%AF' target='_blank'>杉野澤溫泉 苗名之湯</a> — 約 4 分 (1.5 公里)",
+            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%9D%89%E3%83%8E%E5%8E%9F%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>妙高杉之原滑雪場</a> — 約 3 分 (1.2 公里)",
+            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%9D%89%E3%83%8E%E5%8E%9F%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4+%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>杉之原雪場直營租借站</a> — 約 3 分 (1.2 公里)",
+            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 12 分 (6 公里)",
+            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 12 分 (6 公里)",
+            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E8%8B%97%E5%90%8D%E6%BB%9D' target='_blank'>苗名瀑布 (Naena Falls)</a> — 約 8 分 (4 公里)"
         ],
         images: [
             "assets/house6/01acdbda-8506-4f3b-a739-f1a2d359b746 (1).jpeg",
@@ -341,24 +350,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const card = document.createElement('div');
         card.className = 'glass-card house-card';
 
-        // --- ??頛芣 ---
+        // --- 圖片輪播 ---
         let imagesHtml = house.images.map(img => `<img src="${img}" alt="${house.name}" loading="lazy">`).join('');
         let dotsHtml = house.images.map((_, idx) => `<div class="dot ${idx === 0 ? 'active' : ''}"></div>`).join('');
 
-        // --- ?券?璈嚗帖????Pill ---
+        // --- 周邊機能：橫向滑動 Pill ---
         let guideHtml = (house.localGuide || []).map(item => {
             let processedItem = item;
-            if (processedItem.includes('甇亥?')) {
-                processedItem = processedItem.replace('甇亥?', '? 甇亥?');
-            } else if (processedItem.includes('??蝝?)) {
-                processedItem = processedItem.replace('??蝝?, '???? ??蝝?);
+            if (processedItem.includes('步行')) {
+                processedItem = processedItem.replace('步行', '🚶 步行');
+            } else if (processedItem.includes('— 約')) {
+                processedItem = processedItem.replace('— 約', '— 🚗 開車約');
             }
             return `<li class="guide-pill">${processedItem}</li>`;
         }).join('');
 
-        // --- ?寞??閮? ---
+        // --- 價格拆分計算 ---
         const totalTWD = parsePriceNumber(house.price);
-        const parkingNote = house.price.includes('?祥??') ? '?祥??' : '';
+        const parkingNote = house.price.includes('免費停車') ? '免費停車' : '';
         const per6TWD = Math.round((totalTWD / 6) / nights);
         const per8TWD = Math.round((totalTWD / 8) / nights);
         const per6HKD = Math.round(per6TWD * twdToHkdRate);
@@ -378,29 +387,29 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div class="house-content">
                 <h4 class="house-title">${house.name}</h4>
-                <div class="house-info"><span>潃?/span> ${house.rating} <span class="badge-airbnb">via Airbnb</span></div>
-                <div class="house-info price-main"><span>?</span> 蝮賢 NT$ ${totalTWD.toLocaleString()} (2027/03/03~03/07 ???? <span class="badge-parking">${parkingNote}</span></div>
+                <div class="house-info"><span>⭐</span> ${house.rating} <span class="badge-airbnb">via Airbnb</span></div>
+                <div class="house-info price-main"><span>💰</span> 總價 NT$ ${totalTWD.toLocaleString()} (2027/03/03~03/07 共4晚) <span class="badge-parking">${parkingNote}</span></div>
                 <div class="price-breakdown">
-                    <span class="badge-hkd">??HK$ ${totalHKD.toLocaleString()}</span>
+                    <span class="badge-hkd">≈ HK$ ${totalHKD.toLocaleString()}</span>
                 </div>
                 <div class="price-breakdown">
-                    <span class="badge-split">6鈭箏??歹?NT$ ${per6TWD.toLocaleString()} / HK$ ${per6HKD.toLocaleString()} (瘥犖/??</span>
+                    <span class="badge-split">6人均攤：NT$ ${per6TWD.toLocaleString()} / HK$ ${per6HKD.toLocaleString()} (每人/晚)</span>
                 </div>
                 <div class="price-breakdown">
-                    <span class="badge-split">8鈭箏??歹?NT$ ${per8TWD.toLocaleString()} / HK$ ${per8HKD.toLocaleString()} (瘥犖/??</span>
+                    <span class="badge-split">8人均攤：NT$ ${per8TWD.toLocaleString()} / HK$ ${per8HKD.toLocaleString()} (每人/晚)</span>
                 </div>
-                <div class="house-info"><span>??</span> ${house.specs}</div>
-                <div class="house-info"><span>??</span> ${house.location}</div>
+                <div class="house-info"><span>🏠</span> ${house.specs}</div>
+                <div class="house-info"><span>📍</span> ${house.location}</div>
                 <div class="guide-section">
-                    <p class="guide-title">?儭??券?璈 Local Guide <span style="font-size: 0.75rem; color: var(--text-secondary); font-weight: normal;">(?? ?身?粹?頠?隡?</span></p>
+                    <p class="guide-title">🗺️ 周邊機能 Local Guide <span style="font-size: 0.75rem; color: var(--text-secondary); font-weight: normal;">(🚗 預設為駕車預估)</span></p>
                     <ul class="scrollable-guide">
                         ${guideHtml}
                     </ul>
                 </div>
                 <div class="vote-results" id="votes-${house.id}"></div>
                 <div class="house-actions">
-                    <a href="https://www.google.com/maps/search/?api=1&query=${house.coordinates}" target="_blank" class="btn-secondary">?儭?暺?撠?單皞?/a>
-                    <a href="#" class="btn-vote" data-id="${house.id}" data-name="${house.name}">??銝蟡?/a>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${house.coordinates}" target="_blank" class="btn-secondary">🗺️ 點我導航至房源</a>
+                    <a href="#" class="btn-vote" data-id="${house.id}" data-name="${house.name}">投它一票</a>
                 </div>
             </div>
         `;
@@ -409,7 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setupSlider(card.querySelector('.slider-container'));
     });
 
-    // --- ?箸???slider ??蝬? Lightbox 鈭辣 ---
+    // --- 為所有 slider 圖片綁定 Lightbox 事件 ---
     document.querySelectorAll('.slider-images img').forEach(img => {
         img.style.cursor = 'zoom-in';
         img.addEventListener('click', (e) => {
@@ -461,7 +470,7 @@ function setupSlider(container) {
 
 
 // --------------------------------------------------------------------------
-// 5. Lightbox ???曉之瑼Ｚ?
+// 5. Lightbox 圖片放大檢視
 // --------------------------------------------------------------------------
 let lightboxImages = [];
 let lightboxIndex = 0;
@@ -534,34 +543,36 @@ function updateLightboxImage() {
 }
 
 // --------------------------------------------------------------------------
-// 6. ?巨蝟餌絞??Firebase ?游?
+// 6. 投票系統與 Firebase 整合
 // --------------------------------------------------------------------------
-// TODO: 隢??函? Firebase 撠?閮剖?
+// TODO: 請替換為您的 Firebase 專案設定
 const firebaseConfig = {
   apiKey: "AIzaSyCBQ0J-lnpf4dnqMWk0Hy6GwOUGH_VRzvI",
   authDomain: "myoko-snowboard-2027.firebaseapp.com",
-  // ?? 撠望??嚗??????脣 ??
+  // 👇 就是這行！請務必把它加進去 👇
   databaseURL: "https://myoko-snowboard-2027-default-rtdb.asia-southeast1.firebasedatabase.app",
-  // ?? 撠望??嚗??????脣 ??
+  // 👆 就是這行！請務必把它加進去 👆
   projectId: "myoko-snowboard-2027",
   storageBucket: "myoko-snowboard-2027.firebasestorage.app",
   messagingSenderId: "174950028588",
   appId: "1:174950028588:web:cd54a1b24b51e46dc9c889"
-};// ????Firebase
-// ?典?撅?Firebase db 摰?嚗甇Ｗ?蝥蝙??db ??敶望扔?臬??湧爸????let db = null;
+};// 初始化 Firebase
+// 全局層 Firebase db 宊告，防止後續使用 db 時區影極錯導致骨牌效應
+let db = null;
 
 if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
     firebase.initializeApp(firebaseConfig);
-    db = firebase.database(); // 韏文?典? db
+    db = firebase.database(); // 赋値到全局 db
     
-    // ?單??????蟡刻???    const votesRef = db.ref('votes');
+    // 即時監聽所有投票資料
+    const votesRef = db.ref('votes');
     votesRef.on('value', (snapshot) => {
         const data = snapshot.val();
         renderAllVotes(data);
     });
 }
 
-// 蝬? Modal ?賊? DOM
+// 綁定 Modal 相關 DOM
 const voteModal = document.getElementById('vote-modal');
 const closeVoteModal = document.getElementById('close-vote-modal');
 const voteModalTitle = document.getElementById('vote-modal-title');
@@ -571,7 +582,7 @@ const voteHouseIdInput = document.getElementById('vote-house-id');
 const submitVoteBtn = document.getElementById('submit-vote');
 const quickReasonBtns = document.querySelectorAll('.btn-quick-reason');
 
-// ?? Modal 鈭辣 (雿輻鈭辣憪晷)
+// 開啟 Modal 事件 (使用事件委派)
 document.addEventListener('click', (e) => {
     if (e.target.classList.contains('btn-vote')) {
         e.preventDefault();
@@ -579,7 +590,7 @@ document.addEventListener('click', (e) => {
         const houseName = e.target.getAttribute('data-name');
         
         voteHouseIdInput.value = houseId;
-        voteModalTitle.textContent = `?策: ${houseName}`;
+        voteModalTitle.textContent = `投給: ${houseName}`;
         voterNameInput.value = '';
         voterReasonInput.value = '';
         
@@ -589,7 +600,7 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// ?? Modal
+// 關閉 Modal
 function hideVoteModal() {
     voteModal.classList.remove('active');
     setTimeout(() => voteModal.classList.add('hidden'), 300);
@@ -600,31 +611,31 @@ voteModal?.addEventListener('click', (e) => {
     if (e.target === voteModal) hideVoteModal();
 });
 
-// 敹急?????摩
+// 快捷原因按鈕邏輯
 quickReasonBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         const reason = btn.textContent;
         const currentText = voterReasonInput.value.trim();
         if (currentText) {
-            voterReasonInput.value = currentText + '嚗? + reason;
+            voterReasonInput.value = currentText + '，' + reason;
         } else {
             voterReasonInput.value = reason;
         }
     });
 });
 
-// ??巨
+// 送出投票
 submitVoteBtn?.addEventListener('click', () => {
     const houseId = voteHouseIdInput.value;
     const name = voterNameInput.value.trim();
     const reason = voterReasonInput.value.trim();
     
     if (!name || !reason) {
-        alert('隢‵撖怠?????嚗?);
+        alert('請填寫姓名與原因！');
         return;
     }
     
-    // 憒? Firebase 撌脣?憪?嚗神?亥??澈嚗??憿舐內霅衣內
+    // 如果 Firebase 已初始化，寫入資料庫；否則僅顯示警示
     if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
         const newVoteRef = firebase.database().ref('votes/' + houseId).push();
         newVoteRef.set({
@@ -634,17 +645,17 @@ submitVoteBtn?.addEventListener('click', () => {
         }).then(() => {
             hideVoteModal();
         }).catch((error) => {
-            alert('?巨憭望?: ' + error.message);
+            alert('投票失敗: ' + error.message);
         });
     } else {
-        alert(`(璅⊥?巨??)\n憪?: ${name}\n??: ${reason}\n\n瘜冽?嚗???script.js ?踵? firebaseConfig 隞亙??函?撖西??澈嚗);
+        alert(`(模擬投票成功)\n姓名: ${name}\n原因: ${reason}\n\n注意：請至 script.js 替換 firebaseConfig 以啟用真實資料庫！`);
         hideVoteModal();
     }
 });
 
-// --- ??撠惇?剖?????---
+// --- 取得專屬頭像與顏色 ---
 function getVoterStyle(name) {
-    const avatars = ['??', '??, '?', '??', '??', '?', '??儭?];
+    const avatars = ['🏂', '⛄', '🐧', '❄️', '🦊', '🎿', '🏔️'];
     const colors = ['#38BDF8', '#7DD3FC', '#A78BFA', '#6EE7B7', '#FDBA74'];
     
     let hash = 0;
@@ -658,10 +669,11 @@ function getVoterStyle(name) {
     };
 }
 
-// 皜脫??巨蝯??喳??function renderAllVotes(votesData) {
+// 渲染投票結果至卡片
+function renderAllVotes(votesData) {
     if (!votesData) return;
     
-    // 皜征?暹??????巨?憛????
+    // 清空現有所有卡片的投票區塊與區隔線
     document.querySelectorAll('.vote-results').forEach(el => {
         el.innerHTML = '';
         if (el.previousElementSibling && el.previousElementSibling.classList.contains('vote-separator')) {
@@ -678,7 +690,7 @@ function getVoterStyle(name) {
         const voteCount = voteIds.length;
         
         if (voteCount > 0) {
-            resultContainer.insertAdjacentHTML('beforebegin', `<div class="vote-separator"><span>?? ?撈?巨蝯? (??${voteCount} 蟡?</span></div>`);
+            resultContainer.insertAdjacentHTML('beforebegin', `<div class="vote-separator"><span>📊 旅伴投票結果 (共 ${voteCount} 票)</span></div>`);
         }
         
         let html = '';
@@ -696,7 +708,7 @@ function getVoterStyle(name) {
     });
 }
 // --------------------------------------------------------------------------
-// 7. 敶梢???撅砍?蝣潮? (is-locked ?拍??瑞?璈)
+// 7. 影音回憶錄專屬密碼鎖 (is-locked 物理斷絕機制)
 // --------------------------------------------------------------------------
 const gallerySection = document.getElementById('gallery');
 const galleryAuthOverlay = document.getElementById('gallery-auth-overlay');
@@ -706,8 +718,10 @@ const btnUnlockGallery = document.getElementById('btn-unlock-gallery');
 const galleryAuthError = document.getElementById('gallery-auth-error');
 
 /**
- * 閫?? Gallery ??典撘?
- * 1. 蝘駁 #gallery ??.is-locked嚗SS ?拍??瑞?閫?嚗? * 2. ?梯?撖Ⅳ?蝵? * 3. 憿舐內?貊倏?批捆
+ * 解鎖 Gallery 的共用函式：
+ * 1. 移除 #gallery 的 .is-locked（CSS 物理斷絕解除）
+ * 2. 隱藏密碼鎖遮罩
+ * 3. 顯示相簿內容
  */
 function unlockGallery(animate) {
     if (animate) {
@@ -725,18 +739,19 @@ function unlockGallery(animate) {
     }
 }
 
-// 瑼Ｘ?臬撌脰圾??Session 閮嚗?if (sessionStorage.getItem('galleryUnlocked') === 'true') {
+// 檢查是否已解鎖（Session 記憶）
+if (sessionStorage.getItem('galleryUnlocked') === 'true') {
     if (galleryAuthOverlay && galleryContent && gallerySection) {
         unlockGallery(false);
     }
 } else {
-    // 蝣箔??芾圾???拍??瑞???
+    // 確保未解鎖時物理斷絕生效
     if (gallerySection) {
         gallerySection.classList.add('is-locked');
     }
 }
 
-// 暺?閫????
+// 點擊解鎖按鈕
 btnUnlockGallery?.addEventListener('click', () => {
     if (galleryPasswordInput.value === 'myoko2027') {
         sessionStorage.setItem('galleryUnlocked', 'true');
@@ -744,22 +759,25 @@ btnUnlockGallery?.addEventListener('click', () => {
         unlockGallery(true);
     } else {
         galleryAuthError.classList.remove('hidden');
-        // 頛詨獢?????        galleryPasswordInput.style.animation = 'none';
+        // 輸入框震動動畫
+        galleryPasswordInput.style.animation = 'none';
         galleryPasswordInput.offsetHeight; // trigger reflow
         galleryPasswordInput.style.animation = 'shake 0.4s ease';
     }
 });
 
-// Enter ?菔孛?潸圾??galleryPasswordInput?.addEventListener('keypress', (e) => {
+// Enter 鍵觸發解鎖
+galleryPasswordInput?.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         btnUnlockGallery.click();
     }
 });
 
 // --------------------------------------------------------------------------
-// 8. 敶梢???Firebase 銝?葡??頛?// --------------------------------------------------------------------------
+// 8. 影音回憶錄 Firebase 上傳與渲染邏輯
+// --------------------------------------------------------------------------
 if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
-    // ????Storage
+    // 初始化 Storage
     const storage = firebase.storage();
     const db = firebase.database();
     
@@ -772,16 +790,16 @@ if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !==
     const progressText = document.getElementById('upload-progress-text');
     const mediaGridDynamic = document.getElementById('media-grid');
     
-    // 銝?摩
+    // 上傳邏輯
     btnUploadMedia?.addEventListener('click', async () => {
         if (!fileInput || !fileInput.files.length) {
-            alert('隢?撠???獢?');
+            alert('請選擇至少一個檔案！');
             return;
         }
         
         const files = fileInput.files;
         const category = categorySelect.value;
-        const uploaderName = uploaderNameInput.value.trim() || '?踹??撈';
+        const uploaderName = uploaderNameInput.value.trim() || '匿名旅伴';
         
         progressContainer.classList.remove('hidden');
         btnUploadMedia.disabled = true;
@@ -802,7 +820,7 @@ if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !==
                         (snapshot) => {
                             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                             progressBar.style.width = progress + '%';
-                            progressText.textContent = `銝銝?.. 蝚?${i+1}/${files.length} ??(${Math.round(progress)}%)`;
+                            progressText.textContent = `上傳中... 第 ${i+1}/${files.length} 個 (${Math.round(progress)}%)`;
                         }, 
                         (error) => reject(error), 
                         async () => {
@@ -821,11 +839,11 @@ if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !==
                 });
             } catch (error) {
                 console.error("Upload error:", error);
-                alert(`瑼? ${file.name} 銝憭望?: ${error.message}`);
+                alert(`檔案 ${file.name} 上傳失敗: ${error.message}`);
             }
         }
         
-        progressText.textContent = `銝摰?嚗?????${successCount} ??獢;
+        progressText.textContent = `上傳完成！成功上傳 ${successCount} 個檔案。`;
         progressBar.style.width = '100%';
         fileInput.value = '';
         setTimeout(() => {
@@ -835,24 +853,24 @@ if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !==
         }, 3000);
     });
     
-    // ?單???皜脫??摩
+    // 即時監聽渲染邏輯
     const galleryDataRef = db.ref('galleryData').orderByChild('timestamp');
     galleryDataRef.on('value', (snapshot) => {
         const data = snapshot.val();
         if (!data) {
-            if (mediaGridDynamic) mediaGridDynamic.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center;">?桀??????喳蔣?喉?敹思??澈雿??嚗?/p>';
+            if (mediaGridDynamic) mediaGridDynamic.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center;">目前還沒有上傳影音，快來分享你的回憶！</p>';
             return;
         }
         
-        const categorizedData = { '皛?勗尿': [], '瘝輸◢??: [], '蝢???摰?: [] };
+        const categorizedData = { '滑雪英姿': [], '沿途風景': [], '美食與住宿': [] };
         
         Object.keys(data).forEach(key => {
             const item = data[key];
             if (categorizedData[item.category]) {
                 categorizedData[item.category].push(item);
             } else {
-                if (!categorizedData['?嗡?']) categorizedData['?嗡?'] = [];
-                categorizedData['?嗡?'].push(item);
+                if (!categorizedData['其他']) categorizedData['其他'] = [];
+                categorizedData['其他'].push(item);
             }
         });
         
@@ -861,18 +879,19 @@ if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !==
             const items = categorizedData[cat];
             if (items.length === 0) return;
             
-            // gallery-category-title ??grid-column:1/-1 撌脩 CSS ??嚗宏??style 撅祆?            html += `<h3 class="gallery-category-title">${cat}</h3>`;
+            // gallery-category-title 的 grid-column:1/-1 已由 CSS 處理，移除 style 屬性
+            html += `<h3 class="gallery-category-title">${cat}</h3>`;
             
             items.forEach(item => {
-                // media-item ??position:relative 撌脩 CSS ??
+                // media-item 的 position:relative 已由 CSS 處理
                 html += `<div class="media-item">`;
                 if (item.type === 'image') {
                     html += `<img src="${item.url}" alt="${cat}" loading="lazy">`;
                 } else if (item.type === 'video') {
                     html += `<video src="${item.url}" controls></video>`;
                 }
-                // 銝??蝐斗??CSS class
-                html += `<div class="media-uploader-badge">? ${item.uploader}</div>`;
+                // 上傳者標籤改用 CSS class
+                html += `<div class="media-uploader-badge">📸 ${item.uploader}</div>`;
                 html += `</div>`;
             });
         });
@@ -882,8 +901,8 @@ if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !==
 }
 
 // --------------------------------------------------------------------------
-// 9. ?璅∠???蝐文???(Universal Tab Switching)
-//    ?舀憭??函??惜 (data-tab-group) ?楷??惜
+// 9. 通用模組化頁籤切換 (Universal Tab Switching)
+//    支援多組獨立頁籤 (data-tab-group) 與巢狀頁籤
 // --------------------------------------------------------------------------
 document.addEventListener('click', (e) => {
     const btn = e.target.closest('.tab-btn');
@@ -900,7 +919,7 @@ document.addEventListener('click', (e) => {
         nav.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     }
 
-    // ?芸蔣?踹?銝 tab-group 撅斤???panel嚗?撟脫撌Ｙ? group
+    // 只影響同一 tab-group 層級的 panel，不干擾巢狀 group
     group.querySelectorAll('.tab-panel').forEach(p => {
         if (p.closest('.tab-group') === group) {
             p.classList.remove('active');
@@ -913,34 +932,35 @@ document.addEventListener('click', (e) => {
 });
 
 // --------------------------------------------------------------------------
-// 10. ?芸?????????鈭辣憪晷??(Event Delegation)
-//     ?寧?函摰孵??嚗??冽?撘萄??蝬? N ??listener
+// 10. 雪場與周邊卡片互動特效 — 事件委派版 (Event Delegation)
+//     改為在父容器監聽，不在每張卡片上綁定 N 個 listener
 // --------------------------------------------------------------------------
 (function initResortCards() {
     const resortSection = document.getElementById('resort');
     if (!resortSection) return;
 
-    // 暺?撅?/?嗅?嚗?瘣曇 section 撅歹?
+    // 點擊展開/收合（委派至 section 層）
     resortSection.addEventListener('click', (e) => {
         const card = e.target.closest('.resort-card');
         if (!card) return;
         const isActive = card.classList.contains('active');
-        // ????        resortSection.querySelectorAll('.resort-card').forEach(c => c.classList.remove('active'));
-        // ?亙??祆撅?嚗?撅?甇文
+        // 先收合全部
+        resortSection.querySelectorAll('.resort-card').forEach(c => c.classList.remove('active'));
+        // 若原本未展開，則展開此卡
         if (!isActive) card.classList.add('active');
     });
 
-    // 皛??ａ??游?resort section ??冽???踹?蝘餃撅??Ｘ?炊閫賂?
+    // 滑鼠離開整個 resort section 才全部收合（避免移到展開面板時誤觸）
     resortSection.addEventListener('mouseleave', () => {
         resortSection.querySelectorAll('.resort-card').forEach(c => c.classList.remove('active'));
     });
 })();
 
 // --------------------------------------------------------------------------
-// 11. ??閮董??璆菜?蝞頂蝯?(Firebase Expenses & AA Split)
+// 11. 動態記帳與終極清算系統 (Firebase Expenses & AA Split)
 // --------------------------------------------------------------------------
 
-// UI Elements (?典?敹怠? DOM?甇ａ?銴?querySelector)
+// UI Elements (全局快取 DOM—防止重複 querySelector)
 const fabAddExpense = document.getElementById('fab-add-expense');
 const ledgerModal = document.getElementById('ledger-modal');
 const closeLedgerModal = document.getElementById('close-ledger-modal');
@@ -950,13 +970,13 @@ const submitExpenseBtn = document.getElementById('submit-expense');
 const transactionList = document.getElementById('transaction-list');
 const settlementList = document.getElementById('settlement-list');
 
-  // expensesRef ?芸 Firebase 撌脣停蝺??????血?撅祆 null
+  // expensesRef 只在 Firebase 已就緒時初始化，否則屬於 null
 let expensesRef = null;
 
 if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
     if (db) expensesRef = db.ref('expenses');
 
-    // ?單????梯祥鞈?
+    // 即時監聽花費資料
     expensesRef.on('value', (snapshot) => {
         const data = snapshot.val() || {};
         const expenses = Object.keys(data).map(key => ({ id: key, ...data[key] }));
@@ -977,15 +997,16 @@ if (fabAddExpense && ledgerModal) {
         document.getElementById('expense-amount').value = '';
         document.getElementById('expense-item').value = '';
         
-        // ?身?箇????        const tzoffset = (new Date()).getTimezoneOffset() * 60000;
+        // 預設為當前時間
+        const tzoffset = (new Date()).getTimezoneOffset() * 60000;
         const localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, 16);
         document.getElementById('expense-time').value = localISOTime;
 
-        // ?身撟???JPY
+        // 重設幣別為 JPY
         const currencyBtn = document.getElementById('currency-toggle');
         if (currencyBtn) {
             currencyBtn.setAttribute('data-currency', 'JPY');
-            currencyBtn.textContent = '?? JPY';
+            currencyBtn.textContent = '🇯🇵 JPY';
             currencyBtn.classList.remove('twd');
         }
 
@@ -1014,7 +1035,7 @@ if (fabAddExpense && ledgerModal) {
 
     document.querySelectorAll('.quick-category-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            // ?? Emoji 敺???
+            // 提取 Emoji 後的文字
             const text = btn.textContent.split(' ')[1] || btn.textContent;
             document.getElementById('expense-item').value = text;
         });
@@ -1025,11 +1046,11 @@ if (fabAddExpense && ledgerModal) {
         currencyToggle.addEventListener('click', () => {
             if (currencyToggle.getAttribute('data-currency') === 'JPY') {
                 currencyToggle.setAttribute('data-currency', 'TWD');
-                currencyToggle.textContent = '?? TWD';
+                currencyToggle.textContent = '🇹🇼 TWD';
                 currencyToggle.classList.add('twd');
             } else {
                 currencyToggle.setAttribute('data-currency', 'JPY');
-                currencyToggle.textContent = '?? JPY';
+                currencyToggle.textContent = '🇯🇵 JPY';
                 currencyToggle.classList.remove('twd');
             }
         });
@@ -1039,7 +1060,7 @@ if (fabAddExpense && ledgerModal) {
         ledgerModal.classList.add('hidden');
     });
 
-    // 暺? Modal 暺?????
+    // 點擊 Modal 黑色半透明背景關閉
     ledgerModal.addEventListener('click', (e) => {
         if (e.target === ledgerModal) {
             ledgerModal.classList.add('hidden');
@@ -1081,14 +1102,14 @@ if (submitExpenseBtn) {
         const checkboxes = document.querySelectorAll('#participant-selector input[type="checkbox"]:checked');
         const participants = Array.from(checkboxes).map(cb => cb.value);
 
-        if (!payer) return alert('隢??甈曆犖嚗?);
-        if (finalAmount <= 0) return alert('??敹?憭扳 0嚗?);
-        if (!item) return alert('隢‵撖怠???蝔梧?');
-        if (!timeInput) return alert('隢‵撖急???');
-        if (participants.length === 0) return alert('?喳??閬??????斤??嚗?);
+        if (!payer) return alert('請選擇付款人！');
+        if (finalAmount <= 0) return alert('金額必須大於 0！');
+        if (!item) return alert('請填寫品項名稱！');
+        if (!timeInput) return alert('請填寫時間！');
+        if (participants.length === 0) return alert('至少需要一名參與均攤的成員！');
 
         if (!expensesRef) {
-            alert('閮董??閬?? Firebase嚗?雿輻 Live Server 銝??湔????);
+            alert('記帳功能需要連線 Firebase！請使用 Live Server 不要直接開檔。');
             return;
         }
 
@@ -1114,16 +1135,17 @@ if (submitExpenseBtn) {
             }
             ledgerModal.classList.add('hidden');
             setTimeout(() => {
-                alert(editId ? '靽格??嚗? : '閮董??嚗?);
+                alert(editId ? '修改成功！' : '記帳成功！');
             }, 300);
         } catch (err) {
             console.error('Error saving expense:', err);
-            alert('??憭望?嚗?瑼Ｘ蝬脰楝?????);
+            alert('操作失敗，請檢查網路連線。');
         }
     });
 }
 
-// Listen to Expenses Data ??甇斤?賢歇蝘餉銝 Firebase ????憛?
+// Listen to Expenses Data — 此監聽已移至上方 Firebase 初始化區塊
+
 window.editTransaction = function(id) {
     if (!expensesRef) return;
     expensesRef.child(id).once('value').then(snapshot => {
@@ -1147,14 +1169,14 @@ window.editTransaction = function(id) {
         if (exp.originalJPY) {
             if (currencyBtn) {
                 currencyBtn.setAttribute('data-currency', 'JPY');
-                currencyBtn.textContent = '?? JPY';
+                currencyBtn.textContent = '🇯🇵 JPY';
                 currencyBtn.classList.remove('twd');
             }
             document.getElementById('expense-amount').value = exp.originalJPY;
         } else {
             if (currencyBtn) {
                 currencyBtn.setAttribute('data-currency', 'TWD');
-                currencyBtn.textContent = '?? TWD';
+                currencyBtn.textContent = '🇹🇼 TWD';
                 currencyBtn.classList.add('twd');
             }
             document.getElementById('expense-amount').value = exp.amount;
@@ -1178,15 +1200,15 @@ window.editTransaction = function(id) {
 };
 
 window.deleteTransaction = function(id) {
-    if (!confirm('蝣箏?閬?日??梯祥蝝??嚗n?芷敺?蝞董?砍?????啁?蝞?)) return;
+    if (!confirm('確定要刪除這筆花費紀錄嗎？\n刪除後清算帳本將會自動重新結算。')) return;
     if (expensesRef) {
-        expensesRef.child(id).remove().catch(err => alert('?芷憭望?: ' + err.message));
+        expensesRef.child(id).remove().catch(err => alert('刪除失敗: ' + err.message));
     }
 };
 
 function renderTransactions(expenses) {
     if (expenses.length === 0) {
-        transactionList.innerHTML = '<div class="empty-state">撠?遙雿鞎餌???/div>';
+        transactionList.innerHTML = '<div class="empty-state">尚未有任何花費紀錄</div>';
         return;
     }
 
@@ -1194,22 +1216,22 @@ function renderTransactions(expenses) {
         const date = exp.timestamp
             ? new Date(exp.timestamp).toLocaleDateString('zh-TW', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
             : '';
-        const jpyDisplay = exp.originalJPY ? `<div class="tx-amount-jpy">(瞼${exp.originalJPY.toLocaleString()})</div>` : '';
-        const creatorDisplay = exp.createdBy ? ` 繚 撱箇??? ${exp.createdBy}` : '';
+        const jpyDisplay = exp.originalJPY ? `<div class="tx-amount-jpy">(¥${exp.originalJPY.toLocaleString()})</div>` : '';
+        const creatorDisplay = exp.createdBy ? ` · 建立者: ${exp.createdBy}` : '';
 
         return `
             <div class="transaction-item">
                 <div class="tx-content">
                     <div class="tx-title">${exp.item}</div>
-                    <div class="tx-meta">${date} 繚 ??${exp.payer} 隞狡${creatorDisplay}</div>
+                    <div class="tx-meta">${date} · 由 ${exp.payer} 付款${creatorDisplay}</div>
                 </div>
                 <div class="tx-amount-group">
                     <div class="tx-amount">NT$ ${exp.amount.toLocaleString()}</div>
                     ${jpyDisplay}
                 </div>
                 <div class="tx-actions">
-                    <button class="btn-edit-tx" onclick="window.editTransaction('${exp.id}')">??</button>
-                    <button class="btn-delete-tx" onclick="window.deleteTransaction('${exp.id}')">??儭?/button>
+                    <button class="btn-edit-tx" onclick="window.editTransaction('${exp.id}')">✏️</button>
+                    <button class="btn-delete-tx" onclick="window.deleteTransaction('${exp.id}')">🗑️</button>
                 </div>
             </div>
         `;
@@ -1217,23 +1239,23 @@ function renderTransactions(expenses) {
 }
 
 const avatarMap = {
-    'Bonnie': '?',
-    'Leo': '??',
-    'Yuk': '?',
-    'Dino': '??',
-    'Ian': '?',
-    'TaiwanBL': '??'
+    'Bonnie': '🐰',
+    'Leo': '🦁',
+    'Yuk': '🐻',
+    'Dino': '🦖',
+    'Ian': '🐺',
+    'TaiwanBL': '👑'
 };
 let currentAvatarFilter = null;
 
-// ??global scope ???蕪?賣
+// 在 global scope 加上過濾函數
 window.toggleAvatarFilter = function(name) {
     if (currentAvatarFilter === name) {
-        currentAvatarFilter = null; // ???蕪
+        currentAvatarFilter = null; // 取消過濾
     } else {
         currentAvatarFilter = name;
     }
-    // ?皜脫?皜?皜
+    // 重新渲染清算清單
     if (expensesRef) {
         expensesRef.once('value').then(snapshot => {
             const data = snapshot.val() || {};
@@ -1273,12 +1295,12 @@ function calculateAndRenderSettlements(expenses) {
     };
     
     expenses.forEach(exp => {
-        // 隞狡鈭粹?憿???(?乩犖甈?)
+        // 付款人餘額增加 (別人欠他)
         if (balances[exp.payer] !== undefined) {
             balances[exp.payer] += exp.amount;
         }
         
-        // ???嚗???憿?撠?(隞??乩犖)
+        // 應攤金額：參與者餘額減少 (他欠別人)
         if (exp.participants && exp.participants.length > 0) {
             const splitAmount = exp.amount / exp.participants.length;
             exp.participants.forEach(p => {
@@ -1289,7 +1311,7 @@ function calculateAndRenderSettlements(expenses) {
         }
     });
 
-    // AA 皜?瞍?瘜?(Greedy)
+    // AA 清算演算法 (Greedy)
     let creditors = [];
     let debtors = [];
     for (let person in balances) {
@@ -1323,20 +1345,21 @@ function calculateAndRenderSettlements(expenses) {
     }
 
     if (settlements.length === 0) {
-        settlementList.innerHTML = '<div class="empty-state">?桀??∩遙雿?甈???</div>';
+        settlementList.innerHTML = '<div class="empty-state">目前無任何欠款 🎉</div>';
     } else {
-        // 憒???Filter嚗??蕪
+        // 如果有 Filter，則過濾
         if (currentAvatarFilter) {
             settlements = settlements.filter(s => s.from === currentAvatarFilter || s.to === currentAvatarFilter);
         }
 
         if (settlements.length === 0) {
-            settlementList.innerHTML = `<div class="empty-state">?桀???${currentAvatarFilter} ?∩遙雿??甈???</div>`;
+            settlementList.innerHTML = `<div class="empty-state">目前與 ${currentAvatarFilter} 無任何相關欠款 🎉</div>`;
             return;
         }
 
         settlementList.innerHTML = settlements.map((s, index) => {
-            // ?曉?賊?鈭斗?嚗?濁隞???B?澤隞?            const relatedExpenses = expenses.filter(e => 
+            // 找出相關交易：A替B付 或 B替A付
+            const relatedExpenses = expenses.filter(e => 
                 (e.payer === s.to && e.participants && e.participants.includes(s.from)) ||
                 (e.payer === s.from && e.participants && e.participants.includes(s.to))
             );
@@ -1348,25 +1371,25 @@ function calculateAndRenderSettlements(expenses) {
                     const share = Math.round(e.amount / e.participants.length);
                     return `
                         <div class="debt-history-item">
-                            <span>${date} ${e.item} (${e.payer}隞?</span>
-                            <span>? NT$ ${share}</span>
+                            <span>${date} ${e.item} (${e.payer}付)</span>
+                            <span>均攤 NT$ ${share}</span>
                         </div>
                     `;
                 }).join('');
             } else {
-                detailsHtml = `<div class="debt-history-item">?∠?乩漱????(?航蝬瞍?瘜?雿?</div>`;
+                detailsHtml = `<div class="debt-history-item">無直接交易紀錄 (可能經由演算法合併)</div>`;
             }
 
             return `
             <div class="settlement-item" onclick="window.toggleDebtDetails(${index})">
                 <div class="settlement-header">
                     <div>
-                        <strong>${avatarMap[s.from] || ''} ${s.from}</strong> ?策 <strong>${avatarMap[s.to] || ''} ${s.to}</strong>
-                        <div class="tx-meta">暺?撅?皞舀??敦 繚 暺?游蝯??狡</div>
+                        <strong>${avatarMap[s.from] || ''} ${s.from}</strong> 應給 <strong>${avatarMap[s.to] || ''} ${s.to}</strong>
+                        <div class="tx-meta">點擊展開溯源明細 · 點右側可結清還款</div>
                     </div>
                     <div class="settle-row" onclick="event.stopPropagation()">
                         <span class="settle-amount">NT$ ${s.amount.toLocaleString()}</span>
-                        <button class="btn-settle" onclick="window.settleDebt('${s.from}', '${s.to}', ${s.amount})">蝣箄?蝯?</button>
+                        <button class="btn-settle" onclick="window.settleDebt('${s.from}', '${s.to}', ${s.amount})">確認結清</button>
                     </div>
                 </div>
                 <div class="debt-details" id="debt-details-${index}" onclick="event.stopPropagation()">
@@ -1379,9 +1402,9 @@ function calculateAndRenderSettlements(expenses) {
 }
 
 /* -------------------------------------------------------------------------- */
-/*  ? ?芸撠?璈?(Walkie-Talkie Chat) ?摩                                    */
+/*  💬 雪地對講機 (Walkie-Talkie Chat) 邏輯                                    */
 /* -------------------------------------------------------------------------- */
-// chatMessagesRef ?脣?嚗b ?航??null嚗? Firebase ?啣?嚗???null 瑼Ｘ?踹?撉函???
+// chatMessagesRef 防咑：db 可能為 null（非 Firebase 環境），加 null 檢查避免骨牌效應
 const chatMessagesRef = db ? db.ref('chatMessages') : null;
 let chatCurrentUser = localStorage.getItem('snowboard_chat_user') || null;
 
@@ -1398,7 +1421,8 @@ const btnToggleSticker = document.getElementById('btn-toggle-sticker');
 const btnSendChat = document.getElementById('btn-send-chat');
 const chatInput = document.getElementById('chat-input');
 
-// ???予摰?if (fabChat) {
+// 打開聊天室
+if (fabChat) {
     fabChat.addEventListener('click', () => {
         chatModal.classList.remove('hidden');
         if (!chatCurrentUser) {
@@ -1414,14 +1438,15 @@ const chatInput = document.getElementById('chat-input');
     });
 }
 
-// ???予摰?if (closeChatModal) {
+// 關閉聊天室
+if (closeChatModal) {
     closeChatModal.addEventListener('click', () => {
         chatModal.classList.add('hidden');
         stickerPanel.classList.add('hidden');
     });
 }
 
-// 暺? Modal 暺????? (?予摰?
+// 點擊 Modal 黑色半透明背景關閉 (聊天室)
 if (chatModal) {
     chatModal.addEventListener('click', (e) => {
         if (e.target === chatModal) {
@@ -1431,7 +1456,7 @@ if (chatModal) {
     });
 }
 
-// ?脣?頨怠?
+// 儲存身分
 if (btnSaveIdentity) {
     btnSaveIdentity.addEventListener('click', () => {
         chatCurrentUser = chatIdentitySelect.value;
@@ -1443,7 +1468,7 @@ if (btnSaveIdentity) {
     });
 }
 
-// 鞎澆??Ｘ??
+// 貼圖面板開關
 if (btnToggleSticker) {
     btnToggleSticker.addEventListener('click', () => {
         stickerPanel.classList.toggle('hidden');
@@ -1451,7 +1476,7 @@ if (btnToggleSticker) {
     });
 }
 
-// ?閮 (?梁?摩)
+// 送出訊息 (共用邏輯)
 function sendChatMessage(text, type = 'text') {
     if (!chatCurrentUser) return;
     if (type === 'text' && text.trim() === '') return;
@@ -1459,7 +1484,7 @@ function sendChatMessage(text, type = 'text') {
     const newMsg = {
         sender: chatCurrentUser,
         text: text,
-        type: type, // 'text' ??'sticker'
+        type: type, // 'text' 或 'sticker'
         timestamp: firebase.database.ServerValue.TIMESTAMP
     };
 
@@ -1473,13 +1498,15 @@ function sendChatMessage(text, type = 'text') {
     }
 }
 
-// 暺??潮???if (btnSendChat) {
+// 點擊發送按鈕
+if (btnSendChat) {
     btnSendChat.addEventListener('click', () => {
         sendChatMessage(chatInput.value, 'text');
     });
 }
 
-// Enter ?萇??if (chatInput) {
+// Enter 鍵發送
+if (chatInput) {
     chatInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             sendChatMessage(chatInput.value, 'text');
@@ -1487,21 +1514,23 @@ function sendChatMessage(text, type = 'text') {
     });
 }
 
-// 暺?鞎澆??潮?document.querySelectorAll('.sticker-option').forEach(img => {
+// 點擊貼圖發送
+document.querySelectorAll('.sticker-option').forEach(img => {
     img.addEventListener('click', () => {
         const stickerId = img.getAttribute('data-sticker');
         sendChatMessage(stickerId, 'sticker');
     });
 });
 
-// ???啗???if (chatMessagesRef) {
+// 監聽新訊息
+if (chatMessagesRef) {
     chatMessagesRef.on('child_added', (snapshot) => {
         const msg = snapshot.val();
         renderSingleMessage(msg);
     });
 }
 
-// 皜脫??桃?閮
+// 渲染單筆訊息
 function renderSingleMessage(msg) {
     if (!chatMessagesArea) return;
     
@@ -1510,16 +1539,16 @@ function renderSingleMessage(msg) {
     
     let contentHtml = '';
     if (msg.type === 'sticker') {
-        // 鞎澆?
+        // 貼圖
         contentHtml = `<img src="./assets/stickers/${msg.text}.png" class="chat-sticker" alt="Sticker">`;
     } else {
-        // ??
+        // 文字
         contentHtml = `<div class="chat-bubble">${escapeHtml(msg.text)}</div>`;
     }
 
     const msgHtml = `
         <div class="chat-message ${alignClass}">
-            <div class="message-sender">${avatarMap[msg.sender] || '?'} ${msg.sender}</div>
+            <div class="message-sender">${avatarMap[msg.sender] || '👤'} ${msg.sender}</div>
             ${contentHtml}
         </div>
     `;
@@ -1530,12 +1559,13 @@ function renderSingleMessage(msg) {
 
 function scrollToChatBottom() {
     if (chatMessagesArea) {
-        // 蝣箔? DOM 皜脫?摰???憓?銝暺辣?脖誑?脰票???芾???        setTimeout(() => {
+        // 確保 DOM 渲染完畢再捲動，增加一點延遲以防貼圖尚未載入
+        setTimeout(() => {
             chatMessagesArea.scrollTop = chatMessagesArea.scrollHeight;
         }, 150);
         setTimeout(() => {
             chatMessagesArea.scrollTop = chatMessagesArea.scrollHeight;
-        }, 500); // 鈭活?脤?脣?
+        }, 500); // 二次防錯捲動
     }
 }
 
@@ -1549,19 +1579,19 @@ function escapeHtml(unsafe) {
          .replace(/'/g, "&#039;");
 }
 
-// 蝯?甈狡 (?芸?撖怠銝蝑?甈曆漱??
+// 結清欠款 (自動寫入一筆還款交易)
 window.settleDebt = async function(from, to, amount) {
-    if (!confirm(`蝣箏? ${from} 撌脩?蝯虫? ${to} ${amount} ??嚗n????憓?蝑?皜??)) return;
+    if (!confirm(`確定 ${from} 已經給了 ${to} ${amount} 元嗎？\n這將會自動新增一筆結清紀錄。`)) return;
     
     if (!expensesRef) {
-        alert('??? Firebase 敺??賜?皜?);
+        alert('連線 Firebase 後才能結清。');
         return;
     }
 
     const newExpense = {
         payer: from,
         amount: amount,
-        item: `蝯?甈狡 (蝯?${to})`,
+        item: `結清欠款 (給 ${to})`,
         participants: [to],
         timestamp: firebase.database.ServerValue.TIMESTAMP
     };
@@ -1570,25 +1600,27 @@ window.settleDebt = async function(from, to, amount) {
         await expensesRef.push(newExpense);
     } catch (err) {
         console.error('Error settling debt:', err);
-        alert('蝯?憭望?嚗?瑼Ｘ蝬脰楝?????);
+        alert('結清失敗，請檢查網路連線。');
     }
 };
 
-// 12. 憭?隡渲????桀祕??甇?(Firebase Gear Sync)
+// 12. 多旅伴裝備清單實時同步 (Firebase Gear Sync)
 document.addEventListener('DOMContentLoaded', () => {
     const gearUserBtns = document.querySelectorAll('.gear-user-btn');
     const gearCards = document.querySelectorAll('.gear-card');
     if(gearUserBtns.length === 0 || gearCards.length === 0) return;
     
-    let currentGearUser = 'Bonnie'; // ?身雿輻??    
-    // ????Firebase Reference
+    let currentGearUser = 'Bonnie'; // 預設使用者
+    
+    // 初始化 Firebase Reference
     let gearRef = null;
     if (!isLocalFile && typeof firebase !== 'undefined' && typeof firebaseConfig !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
         gearRef = firebase.database().ref('gearData');
     }
 
-    // ?湔?∠??澆???????    const updateCardState = (card, checked, status) => {
-        // ?宏?斗?????class
+    // 更新卡片發光效果與打勾
+    const updateCardState = (card, checked, status) => {
+        // 先移除所有狀態 class
         card.classList.remove('status-self', 'status-reserved', 'status-rental');
         
         card.classList.add(`status-${status}`);
@@ -1604,9 +1636,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // 霈?摰蝙?刻?鋆????    const loadUserGear = (userName) => {
+    // 讀取特定使用者的裝備狀態
+    const loadUserGear = (userName) => {
         if (!gearRef) {
-            // ?冽???Firebase ??瘜?嚗撠?垢?蔭???霈???韏瑚?????            gearCards.forEach(card => updateCardState(card, false, 'self'));
+            // 在沒有 Firebase 的情況下，至少在前端重置狀態，讓切換看起來有反應
+            gearCards.forEach(card => updateCardState(card, false, 'self'));
             return;
         }
         
@@ -1627,9 +1661,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }).catch(err => console.error("Error loading gear data:", err));
         
-        // ?單???
+        // 即時監聽
         gearRef.child(userName).on('value', (snapshot) => {
-            if(currentGearUser !== userName) return; // 蝣箔??芣?啁?銝凋蝙?刻?            const data = snapshot.val() || {};
+            if(currentGearUser !== userName) return; // 確保只更新當前選中使用者
+            const data = snapshot.val() || {};
             gearCards.forEach(card => {
                 const gearId = card.getAttribute('data-gear-id');
                 let checked = false;
@@ -1645,7 +1680,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // 撖怠?孵?鋆??? Firebase
+    // 寫入特定裝備狀態到 Firebase
     const updateGearState = (gearId, checked, status) => {
         if (!gearRef) {
             console.warn("Firebase not connected. Gear state not saved.");
@@ -1658,23 +1693,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // 蝬?雿輻??????隞?    gearUserBtns.forEach(btn => {
+    // 綁定使用者切換按鈕事件
+    gearUserBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
-            // 蝘駁????? .active ???            gearUserBtns.forEach(b => b.classList.remove('active'));
-            // ?箇???????? .active
+            // 移除所有按鈕的 .active 狀態
+            gearUserBtns.forEach(b => b.classList.remove('active'));
+            // 為當前點擊的按鈕加上 .active
             btn.classList.add('active');
             
-            // 蝘駁?蝙?刻?????            if(gearRef) {
+            // 移除舊使用者的監聽器
+            if(gearRef) {
                 gearRef.child(currentGearUser).off('value');
             }
             
-            // ?湔 currentGearUser 銝西孛??Firebase 霈??頛?            currentGearUser = btn.getAttribute('data-user');
+            // 更新 currentGearUser 並觸發 Firebase 讀取邏輯
+            currentGearUser = btn.getAttribute('data-user');
             loadUserGear(currentGearUser);
         });
     });
 
-    // 蝬? Checkbox ??Select 霈鈭辣
+    // 綁定 Checkbox 與 Select 變更事件
     gearCards.forEach(card => {
         const gearId = card.getAttribute('data-gear-id');
         const checkbox = card.querySelector('.gear-checkbox');
@@ -1693,19 +1732,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateCardState(card, checkbox.checked, select.value);
             });
             
-            // ?餅迫?部嚗????select ?孛??label ??checkbox
+            // 阻止冒泡，避免點擊 select 時觸發 label 的 checkbox
             select.addEventListener('click', (e) => {
                 e.stopPropagation();
             });
         }
     });
 
-    // ?活頛
+    // 初次載入
     loadUserGear(currentGearUser);
 });
 
 // --------------------------------------------------------------------------
-// 12. ?芸撠?璈?(Chat FAB & Modal)
+// 12. 雪地對講機 (Chat FAB & Modal)
 // --------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     const fabChat = document.getElementById('fab-chat');
@@ -1726,7 +1765,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 暺??蔗??撠?璈?modal
+    // 點擊遠罩關閉對講機 modal
     if (chatModal) {
         chatModal.addEventListener('click', (e) => {
             if (e.target === chatModal) {
@@ -1738,7 +1777,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --------------------------------------------------------------------------
-// 13. 擃圾????銵誨??// --------------------------------------------------------------------------
+// 13. 高解析雪道圖與戰術廣播
+// --------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     const btnSkiMap = document.getElementById('btn-ski-map');
     const resortMapModal = document.getElementById('resort-map-modal');
@@ -1764,9 +1804,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (btnTacticalPin && chatInput && btnSendChat) {
         btnTacticalPin.addEventListener('click', () => {
-            const location = prompt("隢撓?亥?撱????? (靘?: 撅?撅???Gondola 摨)");
+            const location = prompt("請輸入要廣播的集合點 (例如: 居酒屋 或 Gondola 底部)");
             if (location) {
-                chatInput.value = `?? [?啗?撱?] 憭批振瘜冽?嚗??潦?{location}??????`;
+                chatInput.value = `📍 [戰術廣播] 大家注意！請於【${location}】集合會合！`;
                 btnSendChat.click();
             }
         });
@@ -1774,7 +1814,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --------------------------------------------------------------------------
-// 14. 瘙?鞈? (Emergency SOS)
+// 14. 求生資訊 (Emergency SOS)
 // --------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     const navEmergency = document.getElementById('nav-emergency');
@@ -1803,7 +1843,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 暺??蔗??瘙?鞈? modal
+    // 點擊遠罩關閉求生資訊 modal
     if (emergencyModal) {
         emergencyModal.addEventListener('click', (e) => {
             if (e.target === emergencyModal) {
@@ -1818,33 +1858,33 @@ document.addEventListener('DOMContentLoaded', () => {
         btnToggleBright.addEventListener('click', () => {
             emergencyModalCard.classList.toggle('bright-mode');
             if (emergencyModalCard.classList.contains('bright-mode')) {
-                btnToggleBright.textContent = "?? ??擃漁摨?;
+                btnToggleBright.textContent = "🌙 關閉高亮度";
             } else {
-                btnToggleBright.textContent = "?儭????擃漁摨?(蝯血璈?)";
+                btnToggleBright.textContent = "☀️ 切換最高亮度 (給司機看)";
             }
         });
     }
 });
 
 // --------------------------------------------------------------------------
-// 15. 撖行??梁?∟眺皜 (Firebase Grocery List)
+// 15. 實時共用採買清單 (Firebase Grocery List)
 // --------------------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
         const groceryListRef = firebase.database().ref('groceryData');
         const groceryListEl = document.getElementById('grocery-list');
-        const groceryInput = document.getElementById('grocery-input');
-        const btnAddGrocery = document.getElementById('btn-add-grocery');
-        const groceryAssigneeEl = document.getElementById('grocery-assignee');
+        const groceryInput = document.getElementById('grocery-input');         // 對齊 HTML #grocery-input
+        const groceryAssigneeEl = document.getElementById('grocery-assignee'); // 採買負責人下拉
+        const btnAddGrocery = document.getElementById('btn-add-grocery');       // 對齊 HTML #btn-add-grocery
 
         if (groceryListEl && groceryInput && btnAddGrocery) {
-            // ??皜霈
+            // 監聽清單變更並渲染
             groceryListRef.on('value', (snapshot) => {
                 const data = snapshot.val();
                 groceryListEl.innerHTML = '';
                 
                 if (!data) {
-                    groceryListEl.innerHTML = '<div class="empty-state">?桀?皜蝛箇征憒?</div>';
+                    groceryListEl.innerHTML = '<div class="empty-state">目前清單空空如也</div>';
                     return;
                 }
                 
@@ -1852,15 +1892,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     const item = data[key];
                     const itemEl = document.createElement('div');
                     itemEl.className = `grocery-item ${item.purchased ? 'purchased' : ''}`;
+
+                    // 若有負責人，顯示專屬徽章
+                    const assigneeBadge = (item.assignee && item.assignee !== '')
+                        ? `<span class="badge-assignee" style="margin-left: 10px; font-size: 0.75rem; background: rgba(56, 189, 248, 0.2); color: #38BDF8; padding: 2px 8px; border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.4);">負責人: ${item.assignee}</span>`
+                        : '';
                     
                     itemEl.innerHTML = `
-                        <span class="grocery-name">${item.name}${item.assignee ? '<span class="badge-assignee" style="margin-left: 10px; font-size: 0.75rem; background: rgba(56, 189, 248, 0.2); color: #38BDF8; padding: 2px 8px; border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.4);">負責人: ${item.assignee}</span>' : ''}</span>
+                        <span class="grocery-name">${item.name}${assigneeBadge}</span>
+                        <span class="grocery-meta" style="font-size:0.75rem;color:var(--text-secondary);margin-right:0.5rem;">${item.createdBy || ''}</span>
                         <input type="checkbox" class="grocery-check" ${item.purchased ? 'checked' : ''} data-key="${key}">
                     `;
                     groceryListEl.appendChild(itemEl);
                 });
 
-                // 蝬??暸鈭辣
+                // 綁定勾選事件
                 document.querySelectorAll('.grocery-check').forEach(check => {
                     check.addEventListener('change', (e) => {
                         const key = e.target.getAttribute('data-key');
@@ -1871,25 +1917,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
 
-            // ?啣???
+            // 新增品項（含負責人）
             btnAddGrocery.addEventListener('click', () => {
                 const name = groceryInput.value.trim();
                 const assignee = groceryAssigneeEl ? groceryAssigneeEl.value : '';
-                const userName = (typeof currentGearUser !== 'undefined' && currentGearUser) ? currentGearUser : "?嗅??撈";
+                const userName = (typeof currentGearUser !== 'undefined' && currentGearUser) ? currentGearUser : "當前旅伴";
                 if (name) {
                     groceryListRef.push({
                         name: name,
-                        purchased: false,
                         assignee: assignee,
+                        purchased: false,
                         createdBy: userName,
                         timestamp: firebase.database.ServerValue.TIMESTAMP
                     });
                     groceryInput.value = '';
+                    if (groceryAssigneeEl) groceryAssigneeEl.value = '';
                     groceryInput.focus();
                 }
             });
 
-            // Enter ?菜憓?            groceryInput.addEventListener('keypress', (e) => {
+            // Enter 鍵新增
+            groceryInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
                     btnAddGrocery.click();
                 }
@@ -1899,7 +1947,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --------------------------------------------------------------------------
-// 16. 妙高即時天氣串接 (Real Weather API - wttr.in)
+// 16. �����Y�ɤѮ�걵 (Real Weather API - wttr.in)
 // --------------------------------------------------------------------------
 async function fetchMyokoWeather() {
     try {
@@ -1913,7 +1961,7 @@ async function fetchMyokoWeather() {
         const tempC = cc.temp_C;
         const feelsLikeC = cc.FeelsLikeC;
 
-        // 更新天氣看板：第 1 項 = 當前氣溫，第 2 項 = 體感溫度
+        // ��s�Ѯ�ݪO�G�� 1 �� = ���e��šA�� 2 �� = ��P�ū�
         const weatherItems = document.querySelectorAll('#weather-widget .weather-item');
         if (weatherItems.length >= 2) {
             const tempEl = weatherItems[0].querySelector('.weather-value');
@@ -1923,14 +1971,14 @@ async function fetchMyokoWeather() {
             if (feelsEl) feelsEl.textContent = feelsLikeC + String.fromCharCode(176) + 'C';
         }
 
-        console.log('[Weather] 妙高即時天氣已更新 — 氣溫: ' + tempC + '°C，體感: ' + feelsLikeC + '°C');
+        console.log('[Weather] �����Y�ɤѮ�w��s �X ���: ' + tempC + '�XC�A��P: ' + feelsLikeC + '�XC');
     } catch (err) {
-        // API 失敗時保持預設模擬資料，不顯示錯誤給使用者
-        console.warn('[Weather] 天氣 API 無法取得，保持預設模擬數據。', err);
+        // API ���ѮɫO���w�]������ơA����ܿ��~���ϥΪ�
+        console.warn('[Weather] �Ѯ� API �L�k���o�A�O���w�]�����ƾڡC', err);
     }
 }
 
-// 頁面載入後立即抓天氣，每 15 分鐘自動刷新
+// �������J��ߧY��Ѯ�A�C 15 �����۰ʨ�s
 document.addEventListener('DOMContentLoaded', function() {
     fetchMyokoWeather();
     setInterval(fetchMyokoWeather, 15 * 60 * 1000);
