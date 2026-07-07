@@ -585,8 +585,9 @@
                     <h3>🛒 實時共用採買清單</h3>
                     <p class="subtitle">超市採買即時同步</p>
                     <div class="grocery-input-group">
-                        <input type="text" id="grocery-item-input" placeholder="想買什麼？(例: 鮮奶 2 瓶)">
-                        <button id="add-grocery-btn" class="btn-primary" style="padding: 0.8rem 1.5rem;">新增</button>
+                        <input type="text" id="grocery-input" placeholder="想買什麼？(例: 鮮奶 2 瓶)">
+                        <select id="grocery-assignee" class="select-input" style="padding: 0.8rem; border-radius: 8px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid rgba(255,255,255,0.2);"><option value="">負責人(選填)</option><option value="Bonnie">🐰 Bonnie</option><option value="Leo">🦁 Leo</option><option value="Yuk">🐻 Yuk</option><option value="Dino">🦖 Dino</option><option value="Ian">🐺 Ian</option><option value="總召">👑 總召</option></select>
+                        <button id="btn-add-grocery" class="btn-primary" style="padding: 0.8rem 1.5rem;">新增</button>
                     </div>
                     <div class="grocery-list" id="grocery-list">
                         <!-- Firebase 動態注入 -->
@@ -1091,7 +1092,7 @@
     <div id="resort-map-modal" class="modal-overlay hidden">
         <div class="glass-card" style="width: 95%; max-width: 1000px; padding: 1rem; position: relative; display: flex; justify-content: center; align-items: center;">
             <button class="btn-close" id="close-resort-map-modal" style="position: absolute; top: 10px; right: 10px; z-index: 10;">&times;</button>
-            <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/resort_map.png" style="width: 100%; height: auto; border-radius: 8px;" alt="妙高赤倉全區雪道圖">
+            <img src="./assets/resort_map.png" style="width: 100%; height: auto; border-radius: 8px;" alt="妙高雪道圖">
         </div>
     </div>
     
