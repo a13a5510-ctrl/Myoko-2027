@@ -362,6 +362,15 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (processedItem.includes('— 約')) {
                 processedItem = processedItem.replace('— 約', '— 🚗 開車約');
             }
+            
+            // 偵測雪具，自動在第二行插入價格表按鈕
+            if (processedItem.includes('🏂 雪具')) {
+                return `<li class="guide-pill" style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem;">
+                            <span>${processedItem}</span>
+                            <button class="gear-price-btn" onclick="openGearPriceModal()">❄️ 雪具價格詳細列表圖</button>
+                        </li>`;
+            }
+            
             return `<li class="guide-pill">${processedItem}</li>`;
         }).join('');
 
@@ -1973,13 +1982,41 @@ async function fetchMyokoWeather() {
 
         console.log('[Weather] �����Y�ɤѮ�w��s �X ���: ' + tempC + '�XC�A��P: ' + feelsLikeC + '�XC');
     } catch (err) {
-        // API ���ѮɫO���w�]������ơA����ܿ��~���ϥΪ�
-        console.warn('[Weather] �Ѯ� API �L�k���o�A�O���w�]�����ƾڡC', err);
+        // API ѮɫOw]ơAܿ~ϥΪ
+        console.warn('[Weather] Ѯ API LkoAOw]ƾڡC', err);
     }
 }
 
-// �������J��ߧY��Ѯ�A�C 15 �����۰ʨ�s
+// JߧYѮAC 15// JߧYѮAC 15 ۰ʨs
 document.addEventListener('DOMContentLoaded', function() {
     fetchMyokoWeather();
     setInterval(fetchMyokoWeather, 15 * 60 * 1000);
+});
+
+// --------------------------------------------------------------------------
+// 17. 雪具價格詳細列表 Modal 控制
+// --------------------------------------------------------------------------
+function openGearPriceModal() {
+    const modal = document.getElementById('gear-price-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('gear-price-modal');
+    const closeBtn = document.getElementById('close-gear-price-modal');
+
+    if (closeBtn && modal) {
+        closeBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        // 點擊背景關閉
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+    }
 });

@@ -454,16 +454,24 @@ a {
 }
 .grocery-input-group {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
     margin-bottom: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
 }
 .grocery-input-group input {
     flex: 1;
+    min-width: 140px;
     padding: 0.8rem;
     border-radius: 8px;
     border: 1px solid var(--glass-border);
     background: rgba(255, 255, 255, 0.05);
     color: #fff;
+}
+.grocery-input-group select {
+    flex-shrink: 0;
+    padding: 0.8rem 0.6rem;
+    min-width: 130px;
 }
 .grocery-list {
     display: flex;
@@ -499,6 +507,20 @@ a {
 .grocery-name {
     font-size: 1.1rem;
     flex: 1;
+}
+.badge-assignee {
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    background: rgba(56, 189, 248, 0.15);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    color: var(--accent);
+    font-weight: 600;
+    margin-left: 0.5rem;
+    white-space: nowrap;
 }
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
@@ -2304,6 +2326,193 @@ a {
     flex-wrap: wrap;
     gap: 1rem;
 }
+
+/* -------------------------------------------------------------------------- */
+/*  雪具價格詳細列表 Modal (Winter CSS Infographic)                         */
+/* -------------------------------------------------------------------------- */
+.gear-price-btn {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-shadow: 0 0 5px rgba(56, 189, 248, 0.5);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.1);
+}
+
+.gear-price-btn:hover {
+    background: rgba(56, 189, 248, 0.3);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    transform: translateY(-2px);
+}
+
+.gear-price-container {
+    width: 95%;
+    max-width: 800px;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    box-shadow: 0 0 40px rgba(56, 189, 248, 0.15);
+    position: relative;
+    padding: 2rem;
+    overflow: hidden;
+}
+
+/* 冬季雪花裝飾 (CSS 偽元素) */
+.gear-price-container::before {
+    content: '❄️';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 150px;
+    opacity: 0.03;
+    transform: rotate(15deg);
+    pointer-events: none;
+}
+
+.gear-price-container::after {
+    content: '❄️';
+    position: absolute;
+    bottom: -40px;
+    left: -20px;
+    font-size: 100px;
+    opacity: 0.03;
+    transform: rotate(-15deg);
+    pointer-events: none;
+}
+
+.gear-price-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+}
+
+.gear-price-header h3 {
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.gear-price-header p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.exchange-rates {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.rate-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rate-badge.jpy { color: #fca5a5; border-color: rgba(252, 165, 165, 0.3); }
+.rate-badge.twd { color: #86efac; border-color: rgba(134, 239, 172, 0.3); }
+.rate-badge.hkd { color: #fcd34d; border-color: rgba(252, 211, 77, 0.3); }
+
+.gear-price-table-wrapper {
+    overflow-x: auto;
+}
+
+.gear-price-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    text-align: center;
+}
+
+.gear-price-table th {
+    color: #94a3b8;
+    font-weight: 500;
+    padding: 10px;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.gear-price-table th:first-child {
+    text-align: left;
+}
+
+.gear-price-table tbody tr {
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.3s ease;
+}
+
+.gear-price-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: scale(1.01);
+}
+
+.gear-price-table td {
+    padding: 15px 10px;
+    vertical-align: middle;
+}
+
+.gear-price-table td:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    text-align: left;
+}
+
+.gear-price-table td:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.item-name strong {
+    display: block;
+    color: #e2e8f0;
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+}
+
+.item-name small {
+    color: #64748b;
+    font-size: 0.75rem;
+}
+
+.price-jpy {
+    color: #fca5a5;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.2rem;
+}
+
+.price-other {
+    color: #94a3b8;
+    font-size: 0.75rem;
+}
+
+.highlight-row {
+    background: rgba(56, 189, 248, 0.08) !important;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.highlight-row .item-name strong {
+    color: var(--accent);
+}
+
+.gear-price-footer {
+    text-align: right;
+    margin-top: 1.5rem;
+    color: #64748b;
+}
+
 
 
 /* -------------------------------------------------------------------------- */
