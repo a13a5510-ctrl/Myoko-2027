@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -9,6 +9,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- 降雪特效容器 -->
+            <div class="snowflakes" aria-hidden="true">
+        <div class="snowflake">&#10052;</div>
+        <div class="snowflake">&#10053;</div>
+        <div class="snowflake">&#10052;</div>
+        <div class="snowflake">&#10053;</div>
+        <div class="snowflake">&#10052;</div>
+        <div class="snowflake">&#10053;</div>
+        <div class="snowflake">&#10052;</div>
+        <div class="snowflake">&#10053;</div>
+        <div class="snowflake">&#10052;</div>
+        <div class="snowflake">&#10053;</div>
+    </div>
 
     <!-- 導覽列 Navbar -->
     <nav class="navbar">
@@ -359,8 +372,7 @@
 
             <!-- 住宿候選 -->
             <div class="housing-section">
-                <h3 style="text-align: center; margin-bottom: 1rem;">🏨 房源候選清單</h3>
-                <p style="color: #F87171; font-weight: bold; margin-bottom: 2rem; text-align: center;">⚠️ 溫馨提醒：8 人團體強烈建議選擇 2 衛浴以上的房源，以免早晚搶廁所排隊。</p>
+                <h3 style="text-align: center; margin-bottom: 2rem; font-size: 2rem; color: var(--accent); text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);">🏠 我們的妙高滑雪大本營</h3>
                 
                 <div id="housing-grid" class="housing-grid">
                     <!-- 卡片將由 JavaScript 動態生成 -->
@@ -505,12 +517,12 @@
             <h2 class="section-title">雪場與周邊 <span>Resort & Info</span></h2>
             
             <div style="text-align: center; margin-bottom: 2rem;">
-                <button id="btn-ski-map" class="btn-primary" style="font-size: 1.2rem; padding: 1rem 3rem;">🗺️ 妙高赤倉全區雪道圖</button>
+                <button id="btn-ski-map" class="btn-primary" onclick="document.getElementById('resort-map-modal').classList.remove('hidden'); document.body.style.overflow='hidden';" style="font-size: 1.2rem; padding: 1rem 3rem;">🗺️ 妙高赤倉全區雪道圖</button>
             </div>
 
             <div class="cards-grid three-cols">
                 <!-- 夢幻雪場特搜 -->
-                <div class="glass-card resort-card" data-resort-target="resort-snow">
+                <div class="glass-card resort-card" onclick="document.querySelectorAll('.resort-card').forEach(c => { if(c !== this) c.classList.remove('active') }); this.classList.toggle('active');">
                     <h3 class="neon-title">🎿 夢幻雪場特搜</h3>
                     <p class="resort-hint">點擊揭密粉雪天堂</p>
                     <div class="resort-expand-panel" id="resort-snow">
@@ -522,7 +534,7 @@
                     </div>
                 </div>
                 <!-- 赤倉美食地圖 -->
-                <div class="glass-card resort-card" data-resort-target="resort-food">
+                <div class="glass-card resort-card" onclick="document.querySelectorAll('.resort-card').forEach(c => { if(c !== this) c.classList.remove('active') }); this.classList.toggle('active');">
                     <h3 class="neon-title">🍽️ 赤倉美食地圖</h3>
                     <p class="resort-hint">點擊挖掘隱藏美味</p>
                     <div class="resort-expand-panel" id="resort-food">
@@ -534,7 +546,7 @@
                     </div>
                 </div>
                 <!-- 祕境溫泉鄉 -->
-                <div class="glass-card resort-card" data-resort-target="resort-onsen">
+                <div class="glass-card resort-card" onclick="document.querySelectorAll('.resort-card').forEach(c => { if(c !== this) c.classList.remove('active') }); this.classList.toggle('active');">
                     <h3 class="neon-title">♨️ 祕境溫泉鄉</h3>
                     <p class="resort-hint">點擊解鎖美人湯</p>
                     <div class="resort-expand-panel" id="resort-onsen">
@@ -1089,17 +1101,17 @@
     </div>
     
     <!-- 雪道地圖 Modal -->
-    <div id="resort-map-modal" class="modal-overlay hidden">
+    <div id="resort-map-modal" class="modal-overlay hidden" onclick="if(event.target === this) { this.classList.add('hidden'); document.body.style.overflow=''; }">
         <div class="glass-card" style="width: 95%; max-width: 1000px; padding: 1rem; position: relative; display: flex; justify-content: center; align-items: center;">
-            <button class="btn-close" id="close-resort-map-modal" style="position: absolute; top: 10px; right: 10px; z-index: 10;">&times;</button>
+            <button class="btn-close" id="close-resort-map-modal" onclick="document.getElementById('resort-map-modal').classList.add('hidden'); document.body.style.overflow='';" style="position: absolute; top: 10px; right: 10px; z-index: 10;">&times;</button>
             <img src="./assets/resort_map.png" style="width: 100%; height: auto; border-radius: 8px;" alt="妙高雪道圖">
         </div>
     </div>
     
     <!-- 雪具價格詳細列表 Modal -->
-    <div id="gear-price-modal" class="modal-overlay hidden">
+    <div id="gear-price-modal" class="modal-overlay hidden" onclick="if(event.target === this) this.classList.add('hidden')">
         <div class="glass-card gear-price-container">
-            <button class="btn-close" id="close-gear-price-modal">&times;</button>
+            <button class="btn-close" id="close-gear-price-modal" onclick="document.getElementById('gear-price-modal').classList.add('hidden')">&times;</button>
             <div class="gear-price-header">
                 <h3>❄️ 妙高地區・雪具租借價位表</h3>
                 <p>以 Myoko Snowsports 等熱門租借站為參考均價 (含稅)</p>
@@ -1222,5 +1234,28 @@
     <!-- 引入資料檔案與主程式檔案 -->
     <script src="mediaData.js"></script>
     <script src="script.js"></script>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox-modal" class="modal-overlay hidden" style="z-index: 10000; background: rgba(0,0,0,0.95); display: flex; flex-direction: column;">
+        <div style="padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;">
+            <span id="lightbox-counter" style="color: white; font-size: 1.2rem; font-family: monospace;">1 / 10</span>
+            <button class="btn-close" onclick="closeLightbox()" style="position: static; font-size: 2.5rem; color: white;">&times;</button>
+        </div>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; position: relative;">
+            <button class="slider-btn prev" onclick="lightboxPrev()" style="left: 5%; font-size: 2rem; z-index: 10001; background: rgba(0,0,0,0.5); border: 2px solid white;">&#10094;</button>
+            <img id="lightbox-img" src="" style="max-width: 85%; max-height: 75vh; object-fit: contain; transition: opacity 0.3s;" alt="Gallery">
+            <button class="slider-btn next" onclick="lightboxNext()" style="right: 5%; font-size: 2rem; z-index: 10001; background: rgba(0,0,0,0.5); border: 2px solid white;">&#10095;</button>
+        </div>
+        <div id="lightbox-thumbnails" style="display: flex; gap: 10px; overflow-x: auto; padding: 1rem; justify-content: center; max-width: 90vw; margin: 0 auto; padding-bottom: 2rem;">
+            <!-- thumbnails injected here -->
+        </div>
+    </div>
 </body>
 </html>
+
+
+
+
+
+
+

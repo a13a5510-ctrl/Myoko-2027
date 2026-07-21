@@ -1,25 +1,3 @@
-// --------------------------------------------------------------------------
-// 0. 環境防呆偵測機制
-// --------------------------------------------------------------------------
-const isLocalFile = window.location.protocol === 'file:';
-
-if (isLocalFile) {
-    document.addEventListener('DOMContentLoaded', () => {
-        const overlay = document.createElement('div');
-        overlay.className = 'env-error-overlay';
-        overlay.innerHTML = `
-            <div class="env-error-content">
-                <h2>⚠️ 環境錯誤</h2>
-                <p>請勿直接點擊 HTML 檔案 (file://) 開啟。</p>
-                <p>為了讓 Firebase 投票系統正常運作，<br>請使用 Live Server 或 Localhost 啟動網頁。</p>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-        document.body.style.overflow = 'hidden';
-    });
-}
-
-// --------------------------------------------------------------------------
 // 1. 導覽列 Navbar 的滾動變化與手機版選單切換
 // --------------------------------------------------------------------------
 const navbar = document.querySelector('.navbar');
@@ -147,197 +125,104 @@ function parsePriceNumber(priceStr) {
 
 const housingData = [
     {
-        id: "house1",
-        name: "Genki House (距離斜坡7公尺)",
-        rating: "5.0 (16則)",
-        price: "$125,060 (免費停車)",
-        specs: "10人 / 4房8床 / 2.5衛 / 有廚房",
-        location: "池之平 (Ikenotaira)",
-        coordinates: "36.861228, 138.196546",
+        id: "house7",
+        name: "【歡迎訓練營、團體】最大23人的大型包場小屋／享受大自然的妙高住宿 - Myoko的待客小屋",
+        rating: "4.83",
+        price: "$54,103 (已付訂金，免費停車)",
+        specs: "最多23人 / 8臥室23床 / 1.5衛 / 有廚房",
+        location: "妙高 (Myoko)",
+        coordinates: "36.89104, 138.18643",
         localGuide: [
-            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=LIME+KITCHEN+%E5%A6%99%E9%AB%98' target='_blank'>LIME KITCHEN (池之平特色西餐)</a> — 約 4 分 (2.5 公里)",
-            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%83%B3%E3%83%89%E3%83%9E%E3%83%BC%E3%82%AF%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F' target='_blank'>Landmark Myokokogen 美食街</a> — 約 5 分 (3 公里)",
-            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%A9%E3%82%A4%E3%83%A0%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E5%A6%99%E9%AB%98' target='_blank'>池之平溫泉 (LIME RESORT 黑泥溫泉)</a> — 約 5 分 (3 公里)",
-            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E6%B1%A0%E3%81%AE%E5%B9%B3%E6%B8%A9%E6%B3%89%E3%82%A2%E3%83%AB%E3%83%9A%E3%83%B3%E3%83%96%E3%83%AA%E3%83%83%E3%82%AF%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>池之平溫泉滑雪場 (Alpen Blick)</a> — 約 5 分 (3 公里)",
-            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E6%B1%A0%E3%81%AE%E5%B9%B3%E6%B8%A9%E6%B3%89%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4+%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>Alpen Blick 專屬租借站</a> — 約 5 分 (3 公里)",
-            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 4 分 (1.8 公里)",
-            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 4 分 (1.8 公里)",
-            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E3%82%A2%E3%83%AB%E3%83%9A%E3%83%B3%E3%83%96%E3%83%AA%E3%83%83%E3%82%AF%E3%83%93%E3%83%BC%E3%83%AB' target='_blank'>妙高高原啤酒廠 (Alpen Blick 內)</a> — 約 5 分 (3 公里)"
+            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=Myoko+Restaurant' target='_blank'>周邊特色餐廳</a>",
+            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=Myoko+Izakaya' target='_blank'>周邊居酒屋</a>",
+            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=Myoko+Onsen' target='_blank'>妙高溫泉區</a>",
+            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=Akakura+Onsen+Ski+Resort' target='_blank'>赤倉溫泉滑雪場 / 妙高周邊雪場</a>",
+            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=Myoko+Snowsports' target='_blank'>滑雪用具租用場(Myoko Snowsports)</a>",
+            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=Myoko+Kogen+Station' target='_blank'>妙高高原車站</a>",
+            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=Nippon+Rent-A-Car+Myoko' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a>"
         ],
         images: [
-            "assets/house1/0b4b309b-f0e5-4a6d-9e04-810683e541fc.jpeg",
-            "assets/house1/53edafcf-cb74-42ec-a69a-b6cd0ea908ec.jpeg",
-            "assets/house1/54410718-dd8e-41f1-9f5f-a97bef760a2e.jpeg",
-            "assets/house1/e6534bf3-4aa0-4d81-8fec-b6fd81ce7a4b.jpeg",
-            "assets/house1/fe9b79e3-8e21-46cf-af34-eac674dfe645.jpeg"
-        ]
-    },
-    {
-        id: "house2",
-        name: "可容納最多 12 人的 5 房 2 客廳奢華別墅",
-        rating: "5.0 (5則)",
-        price: "$93,918 (免費停車)",
-        specs: "12人 / 5房10床 / 2.5衛 / 有廚房",
-        location: "赤倉溫泉區 (Akakura Onsen)",
-        coordinates: "36.8905, 138.182",
-        localGuide: [
-            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%AC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%B3%E6%9F%B4%E7%94%B0+%E8%B5%A4%E5%80%89' target='_blank'>Restaurant Shibata (高人氣洋食定食)</a> — 約 2 分 (600 公尺)",
-            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E8%A1%97+%E9%A3%9F%E4%BA%8B' target='_blank'>赤倉溫泉街美食</a> — 約 3 分 (800 公尺)",
-            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89' target='_blank'>赤倉溫泉 (Akakura Onsen)</a> — 約 2 分 (500 公尺)",
-            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>赤倉溫泉滑雪場</a> — 約 2 分 (500 公尺)",
-            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=Myoko+Snowsports' target='_blank'>Myoko Snowsports</a> — 約 3 分 (800 公尺)",
-            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 10 分 (5 公里)",
-            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%82%AA%E3%83%AA%E3%83%83%E3%82%AF%E3%82%B9%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E4%B8%8A%E8%B6%8A%E5%A6%99%E9%AB%98%E9%A7%85%E5%89%8D%E5%BA%97' target='_blank'>Orix Rent-A-Car (上越妙高大站)</a> — 約 35 分 (30 公里，適合大型休旅)",
-            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E8%A1%97' target='_blank'>赤倉溫泉街中心</a> — 約 2 分 (500 公尺)"
-        ],
-        images: [
-            "assets/house2/28160ea0-cb4f-4fc1-aa0b-4957b8af5de8.png",
-            "assets/house2/3fe4c824-0ca0-4468-a210-36e472f84873.jpeg",
-            "assets/house2/5e9ea3b5-d866-46aa-b7c9-886a84dc95c9.jpeg",
-            "assets/house2/64ab1b42-c107-4e1b-bfb6-c4cf99e006c7.jpeg",
-            "assets/house2/72b5b34a-5105-4a6c-a7fe-1706e4e39648.jpeg",
-            "assets/house2/865a6352-8208-4bb4-b1e9-87f0380bfee9.jpeg",
-            "assets/house2/952289ec-6e09-4335-9a7a-a01219691d4a.jpeg",
-            "assets/house2/d39eb235-826b-4531-84e2-0262354cf823.jpeg",
-            "assets/house2/d8da23a7-6d05-4fe6-b5cc-22413bcec116.jpeg",
-            "assets/house2/e624c9a8-a52d-4a49-bed3-d10b1aacc75e.jpeg"
-        ]
-    },
-    {
-        id: "house3",
-        name: "Myoko by kokomyoko的獨立客用住房",
-        rating: "5.0 (7則)",
-        price: "$90,774 (免費停車)",
-        specs: "8人 / 4房6床 / 1.5衛 / 有廚房",
-        location: "鄰近滑雪勝地",
-        coordinates: "36.8753, 138.21",
-        localGuide: [
-            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=%E3%82%84%E3%81%B6%E3%81%9D%E3%81%B0+%E5%A6%99%E9%AB%98' target='_blank'>やぶそば Yabu Soba (老字號蕎麥麵)</a> — 約 2 分 (1 公里)",
-            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%81%8A%E5%9C%9F%E7%94%A3' target='_blank'>車站前土產小吃街</a> — 約 1 分 (500 公尺)",
-            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%B8%A9%E6%B3%89' target='_blank'>妙高溫泉區</a> — 約 4 分 (2 公里)",
-            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E8%A6%B3%E5%85%89%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>赤倉觀光度假滑雪場 (Akakan)</a> — 約 8 分 (4.5 公里)",
-            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%82%B9%E3%82%AD%E3%83%BC%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>車站周邊雪具店</a> — 約 2 分 (1 公里以內)",
-            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 2 分 (500 公尺)",
-            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 2 分 (500 公尺)",
-            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%8E%9F%E4%BF%A1+%E5%A6%99%E9%AB%98%E5%BA%97' target='_blank'>原信超市 Harashin 妙高店 (採買首選)</a> — 約 20 分 (18 公里)"
-        ],
-        images: [
-            "assets/house3/0083f4f9-56ff-4b36-a136-37329ae846af.jpeg",
-            "assets/house3/1da62436-90fd-4527-a612-fc604a85b732.jpeg",
-            "assets/house3/2b980f79-f40f-4de9-bd85-6684e160a67e.jpeg",
-            "assets/house3/57e54a54-06de-4c69-bf6d-f4d0f7eeac2a.jpeg",
-            "assets/house3/5e40d0b9-d8b1-4889-9c85-5def9a59e481.jpeg",
-            "assets/house3/66c6398f-53f8-4942-a526-8a8fc413de07.jpeg",
-            "assets/house3/6a95409b-359c-4e2e-abd3-27b1d6a6a56c.jpeg",
-            "assets/house3/7ecf23ac-d02d-4214-90b2-c704917dcefa.jpeg",
-            "assets/house3/83bdf8d9-f360-4c90-bf68-eccd433d2f1f.jpeg",
-            "assets/house3/846a5374-6877-4c81-8f81-114c30226498.jpeg",
-            "assets/house3/8b61da83-cf08-4773-b0db-071c310b3b17.jpeg",
-            "assets/house3/a1b82473-3baa-43b0-b02e-8fbab16bdca8.jpeg",
-            "assets/house3/aa5cea53-e640-47c1-9bc1-85db4fb08ef6.jpeg",
-            "assets/house3/ad072cd5-d140-472a-95d6-b9b09edaaaca.jpeg",
-            "assets/house3/ca0ed149-02b3-44cd-bae3-ed54d5180f19.jpeg",
-            "assets/house3/cd60bca8-ae03-4363-8d53-4e3191607cb8.jpeg",
-            "assets/house3/d3cdb5be-a679-4c72-a78b-32bc91768fa9.jpeg",
-            "assets/house3/d660015c-9528-4fb9-81fe-2c21f77ccc1c.jpeg",
-            "assets/house3/e12e47e5-20f0-47d8-9ea0-deaa850701de.jpeg",
-            "assets/house3/e39ddaef-25f4-46b2-9e33-6b99a3a752bd.jpeg",
-            "assets/house3/e5db67de-e0ff-46e4-ac2c-031d12dce906.jpeg",
-            "assets/house3/ed9462ab-5344-43d8-8a03-d7de49be95fc.jpeg",
-            "assets/house3/f4d92218-5176-40c7-89dd-44329711d28a.jpeg",
-            "assets/house3/fb30a554-1293-46ec-a9d0-07640155f0f7.jpeg",
-            "assets/house3/fdce4607-d414-4146-a91f-8a02990c22e4.jpeg"
-        ]
-    },
-    {
-        id: "house4",
-        name: "步行 30 秒即可抵達妙高高原站",
-        rating: "5.0 (8則)",
-        price: "$88,416 (免費停車)",
-        specs: "8人 / 3房6床 / 1衛 / 有廚房",
-        location: "赤倉、杉之原、斑尾、樂天新井",
-        coordinates: "36.8726, 138.2114",
-        localGuide: [
-            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=%E9%87%9C%E5%8F%B3%E8%A1%9B%E9%96%80+%E5%A6%99%E9%AB%98' target='_blank'>釜右衛門 Kamaemon (在地餐廳)</a> — 約 1 分 (200 公尺)",
-            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E5%B1%85%E9%85%92%E5%B1%8B+%E5%85%AB+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F' target='_blank'>居酒屋 八 Eight</a> — 約 2 分 (500 公尺)",
-            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%B8%A9%E6%B3%89' target='_blank'>妙高溫泉區</a> — 約 3 分 (1.5 公里)",
-            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>赤倉溫泉滑雪場</a> — 約 10 分 (5 公里)",
-            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85+%E3%82%B9%E3%82%AD%E3%83%BC%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>車站周邊雪具店</a> — 約 1-10 分",
-            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 1 分 (50 公尺，步行即達)",
-            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 1 分 (50 公尺)",
-            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E3%83%93%E3%82%B8%E3%82%BF%E3%83%BC%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC' target='_blank'>妙高高原遊客中心</a> — 約 6 分 (4 公里)"
-        ],
-        images: [
-            "assets/house4/1ff321b1-9fc0-4422-8a20-812409637874.jpeg",
-            "assets/house4/72fef5d4-3bab-4528-97b6-8289e2eb8a7d.jpeg",
-            "assets/house4/7daa0bb7-f4bc-42e6-a5f9-6672176c26a0.jpeg",
-            "assets/house4/a3a6d199-8445-4b66-9b6b-a4c5d3355a44.jpeg",
-            "assets/house4/d054d464-93f4-4c36-9455-85973a4a8412.jpeg"
-        ]
-    },
-    {
-        id: "house5",
-        name: "【最多12人】可與愛犬一起放鬆的整棟度假木屋",
-        rating: "5.0 (5則)",
-        price: "$75,448 (免費停車)",
-        specs: "12人 / 4房11床 / 1衛 / 有廚房",
-        location: "赤倉、杉之原、長尾",
-        coordinates: "36.88091, 138.18479",
-        localGuide: [
-            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=Panorama+Cafe+%E5%A6%99%E9%AB%98' target='_blank'>Panorama Café & Dining</a> — 約 4 分 (2 公里)",
-            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E8%A6%B3%E5%85%89%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88+%E3%83%AC%E3%82%B9%E3%83%88%E3%83%A9%E3%83%B3' target='_blank'>赤倉觀光區周邊餐飲</a> — 約 5 分 (2.5 公里)",
-            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E8%B5%A4%E5%80%89%E6%B8%A9%E6%B3%89' target='_blank'>新赤倉溫泉</a> — 約 3 分 (1.5 公里)",
-            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E8%B5%A4%E5%80%89%E8%A6%B3%E5%85%89%E3%83%AA%E3%82%BE%E3%83%BC%E3%83%88%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>赤倉觀光度假滑雪場 (Akakan)</a> — 約 4 分 (2 公里)",
-            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=Japan+Snowsports+Myoko' target='_blank'>Japan Snowsports</a> — 約 4 分 (2 公里)",
-            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 8 分 (4.5 公里)",
-            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 8 分 (4.5 公里)",
-            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E5%B1%B1%E7%99%BB%E5%B1%B1%E5%8F%A3' target='_blank'>妙高山登山口</a> — 約 10 分 (5 公里)"
-        ],
-        images: [
-            "assets/house5/1a8180ee-990d-4cf3-b526-40fcbfcd60d6.jpeg",
-            "assets/house5/3e8ec512-2ea7-470b-a2fc-f8606c45732c.jpeg",
-            "assets/house5/4fffd217-67e3-49c5-a8d1-186aaeca20d8.jpeg",
-            "assets/house5/57746c97-b86a-4e85-8d96-5d32ed72e670.jpeg",
-            "assets/house5/a8990ea6-780f-4787-a2e1-f4c59e06e78c.jpeg",
-            "assets/house5/b4f5c15e-0fb7-428c-b136-39f3ae9ca1c2.jpeg",
-            "assets/house5/c8788810-d5cc-444b-92f9-417033e4e413.jpeg",
-            "assets/house5/d97eaee6-66d5-46ac-aae9-05545a5930a1.jpeg"
-        ]
-    },
-    {
-        id: "house6",
-        name: "Hinode 小木屋 • 妙高島的獨棟房屋",
-        rating: "4.9 (16則)",
-        price: "$73,701 (免費停車)",
-        specs: "6人 / 3房5床 / 1.5衛 / 有廚房",
-        location: "杉之原、Alpen Blick",
-        coordinates: "36.86063, 138.16632",
-        localGuide: [
-            "🍽️ 餐廳：<a href='https://www.google.com/maps/search/?api=1&query=Two+Pines+Myoko' target='_blank'>Two Pines (知名石窯披薩)</a> — 約 3 分 (1 公里)",
-            "🍢 小吃：<a href='https://www.google.com/maps/search/?api=1&query=%E6%9D%89%E9%87%8E%E6%B2%A2+%E9%A3%9F%E5%A0%82' target='_blank'>杉之澤村在地食堂</a> — 約 4 分 (1.5 公里)",
-            "♨️ 溫泉：<a href='https://www.google.com/maps/search/?api=1&query=%E6%9D%89%E9%87%8E%E6%B2%A2%E6%B8%A9%E6%B3%89+%E8%8B%97%E5%90%8D%E3%81%AE%E6%B9%AF' target='_blank'>杉野澤溫泉 苗名之湯</a> — 約 4 分 (1.5 公里)",
-            "⛷️ 雪場：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%9D%89%E3%83%8E%E5%8E%9F%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4' target='_blank'>妙高杉之原滑雪場</a> — 約 3 分 (1.2 公里)",
-            "🏂 雪具：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E6%9D%89%E3%83%8E%E5%8E%9F%E3%82%B9%E3%82%AD%E3%83%BC%E5%A0%B4+%E3%83%AC%E3%83%B3%E3%82%BF%E3%83%AB' target='_blank'>杉之原雪場直營租借站</a> — 約 3 分 (1.2 公里)",
-            "🚉 車站：<a href='https://www.google.com/maps/search/?api=1&query=%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85' target='_blank'>妙高高原車站</a> — 約 12 分 (6 公里)",
-            "🚗 租車：<a href='https://www.google.com/maps/search/?api=1&query=%E3%83%8B%E3%83%83%E3%83%9D%E3%83%B3%E3%83%AC%E3%83%B3%E3%82%BF%E3%82%AB%E3%83%BC+%E5%A6%99%E9%AB%98%E9%AB%98%E5%8E%9F%E9%A7%85%E5%89%8D%E5%96%B6%E6%A5%AD%E6%89%80' target='_blank'>Nippon Rent-A-Car (妙高高原站前)</a> — 約 12 分 (6 公里)",
-            "📸 景點：<a href='https://www.google.com/maps/search/?api=1&query=%E8%8B%97%E5%90%8D%E6%BB%9D' target='_blank'>苗名瀑布 (Naena Falls)</a> — 約 8 分 (4 公里)"
-        ],
-        images: [
-            "assets/house6/01acdbda-8506-4f3b-a739-f1a2d359b746 (1).jpeg",
-            "assets/house6/1d2ced4a-3a67-4bf0-a9a0-71c380534367 (1).jpeg",
-            "assets/house6/26de4aa7-c8f0-449a-b89a-5e65ae81ccc5 (1).jpeg",
-            "assets/house6/43b2b3a6-5dc6-4656-91fe-3e12da19e2f7.jpeg",
-            "assets/house6/43e7cc56-0cd6-4634-bd17-a21f8fa74d64.jpeg",
-            "assets/house6/49337be8-78e5-4b76-b595-bfad03ce56d8.jpeg",
-            "assets/house6/6e008380-8f99-4e38-8f87-94f2b5d6582f.jpeg",
-            "assets/house6/759f7ecd-3806-44e5-835e-81820acd5015.jpeg",
-            "assets/house6/8460026f-1ff9-42e9-887c-cd4e2c8a51aa.jpeg",
-            "assets/house6/918c31ed-19c6-42c5-ae27-be6b399aad30.jpeg",
-            "assets/house6/934aa782-dd92-46da-92f8-236e6fd51724.jpeg",
-            "assets/house6/a89b88e5-b67a-4ca9-9b04-02fc98692076 (1).jpeg",
-            "assets/house6/c8cb93b8-379f-4a31-8a51-3ada4585ca02.jpeg",
-            "assets/house6/de5cadc4-6179-4aa8-89b1-05a9ffdad9d9.jpeg",
-            "assets/house6/edda3f49-ca75-4299-824e-ffe1fc2eb943.jpeg"
+            "assets/house7/3406741f-bfdf-41ec-859e-234d6a6d471f.jpg",
+            "assets/house7/04ba5a3b-67c4-4b6c-9174-11a3c21c32ab.jpeg",
+            "assets/house7/0691dc06-593e-4c28-9c19-8461838832da.jpeg",
+            "assets/house7/0712ad87-005d-474f-a3a0-4eb109dfa07b.jpg",
+            "assets/house7/09c3f680-a0cf-4baf-99ec-71c181e8f8f3.jpeg",
+            "assets/house7/0d19c89e-2a1a-427e-9026-52ca71a07472.jpeg",
+            "assets/house7/12032ffc-dae6-4d77-8696-254eae89a248.jpg",
+            "assets/house7/15dc70a7-65f8-4c0e-a2f2-bfd3712ddbc2.jpeg",
+            "assets/house7/1974fa71-e958-49aa-b654-125e25cc2166.jpg",
+            "assets/house7/19b237cf-6b3d-454d-be8b-13d74eaa284e.jpeg",
+            "assets/house7/19f101fb-00d1-4e8b-97c5-57920d527715.jpg",
+            "assets/house7/1c3b0551-ff2d-4919-8d34-eef698e222fb.jpg",
+            "assets/house7/1f10bd5a-ffc0-44b8-b5e4-000edc335da8.jpg",
+            "assets/house7/1f570727-7e78-4273-9915-f811f664e140.jpeg",
+            "assets/house7/25b21121-907a-4009-a019-ed5177de5bd7.jpg",
+            "assets/house7/25fc06be-1c61-4b48-a501-1aea930eea0c.jpg",
+            "assets/house7/2795b738-0a7e-40b3-ab93-709492eb2476.jpeg",
+            "assets/house7/2dfe64aa-05a7-4496-86c0-3f96429e8792.jpeg",
+            "assets/house7/2e3e5e11-022d-4e38-9706-e9a5a88a5002.jpg",
+            "assets/house7/3676be64-6d8c-4956-b225-a65500dd2c4c.jpg",
+            "assets/house7/3d3e15fe-5884-4ae7-ad61-7b541f91cde0.jpeg",
+            "assets/house7/3ffb6372-d398-4676-8dce-d50ffe3e98f7.jpeg",
+            "assets/house7/40e46d0f-c3e7-402b-bd13-208b82c7f3c9.jpeg",
+            "assets/house7/44b3ea9d-8076-4e47-bc0b-e043703afcbb.jpeg",
+            "assets/house7/47322baa-2d0c-4e46-b329-29816b67329d.jpeg",
+            "assets/house7/47c7732b-ee4e-4234-b25f-c25283fabdd2.jpeg",
+            "assets/house7/4889e3b7-5423-4875-ab47-eca8c5f9729f.jpeg",
+            "assets/house7/4f065208-77a9-4bdd-83d9-789a1357ceb0.jpeg",
+            "assets/house7/5df40fe9-cb47-4dfb-9be7-079a4796685f.jpg",
+            "assets/house7/61ffbca9-8489-49b9-abe8-e6f830874426.jpg",
+            "assets/house7/6208b522-7452-446c-8451-13a0e19d56dd.jpg",
+            "assets/house7/63ff348d-0180-4a52-b3d4-12d95788bab3.jpeg",
+            "assets/house7/665aee69-96c8-423c-8c47-6cf3ebf4bef3.jpg",
+            "assets/house7/6ce743d4-697a-454b-aff5-704a58ca8f78.jpg",
+            "assets/house7/6d7955fe-928c-4728-91cb-9b660571fbba.jpeg",
+            "assets/house7/7172cf67-d03e-4e38-8b56-8ee864cedac4.jpeg",
+            "assets/house7/72c90793-e5b7-41b0-a65e-136a186a2d08.jpeg",
+            "assets/house7/7a3e63bc-dfd7-496f-b2b4-0fde5e1e49cf.jpg",
+            "assets/house7/7f0eaed6-1973-4462-8d79-795decc75249.jpg",
+            "assets/house7/84858a1c-eccb-4791-8bd3-9418ac3ac65a.jpeg",
+            "assets/house7/86cffee1-b54b-4b65-bca3-1f8b96bcbb51.jpg",
+            "assets/house7/8c479ff0-4a8d-4211-ae13-2eecf83da603.jpg",
+            "assets/house7/911dd792-aa64-41d7-8412-7113cba083d7.jpeg",
+            "assets/house7/923b3adb-c56b-4a9f-81c3-da589d34e24a.jpg",
+            "assets/house7/92abcd12-0894-4751-b6f2-22afebbd7301.jpeg",
+            "assets/house7/966a3920-8baa-4d66-ac03-bc8b71b642fa.jpeg",
+            "assets/house7/9d0a3b91-45ad-43eb-ba71-5e417cbb1300.jpeg",
+            "assets/house7/a1a8ef09-78cc-4f09-af87-32c4f02a33b5.jpeg",
+            "assets/house7/a43ba6b5-e6a7-46b6-90e7-8538ae36493e.jpeg",
+            "assets/house7/a450e575-0bec-43be-a58e-9472c7215a99.jpg",
+            "assets/house7/a8c9683e-05ed-4ec9-90ec-782f2859e256.jpeg",
+            "assets/house7/a8d0d228-a4c7-4dc4-bd3f-0f000746998c.jpeg",
+            "assets/house7/abfb1513-30dc-4980-9297-d26b2a0c90a9.jpeg",
+            "assets/house7/b4c6a742-7afc-4ead-a27d-2a93e2c6615d.jpg",
+            "assets/house7/b58005d1-0744-428a-81ba-93e6eb4ecf89.jpg",
+            "assets/house7/b709c743-5f97-4a5e-88bb-26452699dd92.jpeg",
+            "assets/house7/ba98d641-04b8-4af4-9b36-63713a0cc359.jpg",
+            "assets/house7/c69e76bb-9ec3-43d3-bad1-041c084d317b.jpg",
+            "assets/house7/d043502e-4cde-4020-9803-dbec425d26a6.jpg",
+            "assets/house7/d2bb3fbe-06b8-4fb9-82fb-3cd821dca408.jpg",
+            "assets/house7/d3419290-ddfa-4ea6-8aba-6f9d19f51dbe.jpg",
+            "assets/house7/d54013c6-2a2d-4c4f-9bdd-a41b4da6226d.jpeg",
+            "assets/house7/d808d695-e694-4d7c-bccb-1981433565d9.jpeg",
+            "assets/house7/dc4754fb-de3b-42ee-be7d-b7fb5bc8883c.jpg",
+            "assets/house7/dfff0e95-2759-45a6-adf1-ade438c7fd01.jpeg",
+            "assets/house7/e30034a3-ad8a-43db-8f52-c79bdb9f1e4a.jpg",
+            "assets/house7/e44f79e6-8824-4db5-aac6-ae2b9c3967b9.jpeg",
+            "assets/house7/e6b244cb-a340-410b-9e34-e0e8a5b1ab8e.jpeg",
+            "assets/house7/e7d150bf-5545-476c-805e-4d23baa744b1.jpg",
+            "assets/house7/e81bb4dd-b15d-4201-86ba-0d78242b7d65.jpeg",
+            "assets/house7/e8bd07e8-6b87-4fdc-b617-9003395c324f.jpg",
+            "assets/house7/eca719bf-c3c7-4bf7-aa75-d5e8aa621a1e.jpeg",
+            "assets/house7/ed109a32-8fa9-47b8-a9ab-2fdbd537d598.jpg",
+            "assets/house7/edb08d2b-e286-4adc-8c0d-1a050067ee8e.jpeg",
+            "assets/house7/ee7d8049-b3eb-49b7-929e-8bf09990f959.jpeg",
+            "assets/house7/f1e030b2-d969-466c-93bc-515e771e99c2.jpeg",
+            "assets/house7/f240afc0-7fc0-40df-ab07-7bffbec046c9.jpeg",
+            "assets/house7/f2f45c82-dc72-45ca-9ab5-d037d92d8534.jpg",
+            "assets/house7/f6c2d2fa-c6be-4196-918c-a5a574edf08a.jpg",
+            "assets/house7/ff7c5cee-796d-4158-a172-45b609f9471e.jpg",
+            "assets/house7/ff986e64-43e7-4502-ac36-082c9e4c5a6d.jpeg"
         ]
     }
 ];
@@ -367,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (processedItem.includes('🏂 雪具')) {
                 return `<li class="guide-pill" style="display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem;">
                             <span>${processedItem}</span>
-                            <button class="gear-price-btn" onclick="openGearPriceModal()">❄️ 雪具價格詳細列表圖</button>
+                            <button class="gear-price-btn" onclick="event.stopPropagation(); openGearPriceModal()">❄️ 雪具價格詳細列表圖</button>
                         </li>`;
             }
             
@@ -383,176 +268,201 @@ document.addEventListener('DOMContentLoaded', () => {
         const per8HKD = Math.round(per8TWD * twdToHkdRate);
         const totalHKD = Math.round(totalTWD * twdToHkdRate);
 
-        card.innerHTML = `
-            <div class="slider-container">
-                <div class="slider-images">
-                    ${imagesHtml}
+                        card.innerHTML = `
+            <div class="house-hero-layout">
+                <div class="bento-gallery">
+                    <div class="bento-main">
+                        <a href="${house.images[0]}" target="_blank" style="display: block; width: 100%; height: 100%;">
+                            <img src="${house.images[0]}" alt="Main" loading="lazy">
+                        </a>
+                    </div>
+                    <div class="bento-side">
+                        <div class="bento-item"><a href="${house.images[1]}" target="_blank" style="display: block; width: 100%; height: 100%;"><img src="${house.images[1]}" loading="lazy"></a></div>
+                        <div class="bento-item"><a href="${house.images[2]}" target="_blank" style="display: block; width: 100%; height: 100%;"><img src="${house.images[2]}" loading="lazy"></a></div>
+                        <div class="bento-item"><a href="${house.images[3]}" target="_blank" style="display: block; width: 100%; height: 100%;"><img src="${house.images[3]}" loading="lazy"></a></div>
+                        <div class="bento-item more-photos">
+                            <a href="${house.images[4]}" target="_blank" style="display: block; width: 100%; height: 100%;">
+                                <img src="${house.images[4]}" loading="lazy">
+                                <div class="more-overlay">
+                                    <span>+${house.images.length - 4} 張照片</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <button class="slider-btn prev">&#10094;</button>
-                <button class="slider-btn next">&#10095;</button>
-                <div class="slider-dots">
-                    ${dotsHtml}
+                <div class="house-content">
+                    <h4 class="house-title" style="font-size: 1.8rem; margin-bottom: 1rem;">${house.name}</h4>
+                    <div class="house-info"><span>⭐</span> ${house.rating} <span class="badge-airbnb">via Airbnb</span></div>
+                    <div class="house-info price-main" style="font-size: 1.4rem;"><span>💰</span> 總價 NT$ ${totalTWD.toLocaleString()} <span style="font-size: 0.9rem; color: var(--text-secondary);">(共4晚)</span> <span class="badge-parking">${parkingNote}</span></div>
+                    <div class="price-breakdown">
+                        <span class="badge-hkd">≈ HK$ ${totalHKD.toLocaleString()}</span>
+                    </div>
+                    <div class="price-breakdown" style="margin-top: 1rem;">
+                        <span class="badge-split" style="font-size: 1rem; padding: 0.5rem 1rem;">6人均攤：NT$ ${per6TWD.toLocaleString()} / HK$ ${per6HKD.toLocaleString()} (每人/晚)</span>
+                    </div>
+                    <div class="price-breakdown">
+                        <span class="badge-split" style="font-size: 1rem; padding: 0.5rem 1rem;">8人均攤：NT$ ${per8TWD.toLocaleString()} / HK$ ${per8HKD.toLocaleString()} (每人/晚)</span>
+                    </div>
+                    <div class="house-info" style="margin-top: 1rem; font-size: 1.1rem;"><span>🏠</span> ${house.specs}</div>
+                    <div class="house-info" style="font-size: 1.1rem;"><span>📍</span> ${house.location}</div>
+                    
+                    <div class="route-infographic" style="margin-top: 2rem; padding: 1.2rem; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);">
+                        <p style="font-size: 1rem; font-weight: bold; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><span style="font-size: 1.2rem;">🗺️</span> 距離重點設施</p>
+                        
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 0.8rem; position: relative;">
+                            <span style="font-weight: 500; font-size: 0.9rem; z-index: 2;">🏠 大本營</span>
+                            <div style="flex-grow: 1; border-top: 2px dashed var(--color-success); margin: 0 1rem; position: relative; display: flex; justify-content: center; z-index: 1;">
+                                <span style="background: var(--bg-dark); color: var(--color-success); padding: 0 0.5rem; font-size: 0.75rem; transform: translateY(-50%); border-radius: 10px; font-weight: bold;">🚗 開車 6 分鐘</span>
+                            </div>
+                            <span style="font-weight: 500; font-size: 0.9rem; z-index: 2;">🏂 滑雪用具租用場(Myoko Snowsports)</span>
+                        </div>
+
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.05); border-radius: 8px; position: relative;">
+                            <span style="font-weight: 500; font-size: 0.9rem; z-index: 2;">🏠 大本營</span>
+                            <div style="flex-grow: 1; border-top: 2px dashed #60A5FA; margin: 0 1rem; position: relative; display: flex; justify-content: center; z-index: 1;">
+                                <span style="background: var(--bg-dark); color: #60A5FA; padding: 0 0.5rem; font-size: 0.75rem; transform: translateY(-50%); border-radius: 10px; font-weight: bold;">🚗 開車 7 分鐘</span>
+                            </div>
+                            <span style="font-weight: 500; font-size: 0.9rem; z-index: 2;">⛷️ 赤倉溫泉滑雪場</span>
+                        </div>
+
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.05); border-radius: 8px; margin-top: 0.8rem; position: relative;">
+                            <span style="font-weight: 500; font-size: 0.9rem; z-index: 2;">🏠 大本營</span>
+                            <div style="flex-grow: 1; border-top: 2px dashed #F87171; margin: 0 1rem; position: relative; display: flex; justify-content: center; z-index: 1;">
+                                <span style="background: var(--bg-dark); color: #F87171; padding: 0 0.5rem; font-size: 0.75rem; transform: translateY(-50%); border-radius: 10px; font-weight: bold;">🚗 開車 8 分鐘</span>
+                            </div>
+                            <span style="font-weight: 500; font-size: 0.9rem; z-index: 2;">♨️ 赤倉溫泉街</span>
+                        </div>
+                    </div>
+                                        <div class="house-actions" style="margin-top: 1rem; justify-content: center; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="https://www.google.com/maps/dir/?api=1&origin=${house.coordinates}&destination=Myoko+Snowsports" target="_blank" class="btn-secondary" style="flex: 1; min-width: 200px; text-align: center; padding: 1rem; font-size: 1.1rem; background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.5); color: #A7F3D0;">🗺️ 導航至 滑雪用具租用場</a>
+                        <a href="https://www.google.com/maps/dir/?api=1&origin=${house.coordinates}&destination=Akakura+Onsen+Ski+Resort" target="_blank" class="btn-secondary" style="flex: 1; min-width: 200px; text-align: center; padding: 1rem; font-size: 1.1rem; background: rgba(96, 165, 250, 0.2); border-color: rgba(96, 165, 250, 0.5); color: #BFDBFE;">🗺️ 導航至 赤倉溫泉滑雪場</a>
+                        <a href="https://www.google.com/maps/dir/?api=1&origin=${house.coordinates}&destination=Akakura+Onsen" target="_blank" class="btn-secondary" style="flex: 1; min-width: 200px; text-align: center; padding: 1rem; font-size: 1.1rem; background: rgba(248, 113, 113, 0.2); border-color: rgba(248, 113, 113, 0.5); color: #FECACA;">🗺️ 導航至 赤倉溫泉街</a>
+                    </div>
                 </div>
             </div>
-            <div class="house-content">
-                <h4 class="house-title">${house.name}</h4>
-                <div class="house-info"><span>⭐</span> ${house.rating} <span class="badge-airbnb">via Airbnb</span></div>
-                <div class="house-info price-main"><span>💰</span> 總價 NT$ ${totalTWD.toLocaleString()} (2027/03/03~03/07 共4晚) <span class="badge-parking">${parkingNote}</span></div>
-                <div class="price-breakdown">
-                    <span class="badge-hkd">≈ HK$ ${totalHKD.toLocaleString()}</span>
-                </div>
-                <div class="price-breakdown">
-                    <span class="badge-split">6人均攤：NT$ ${per6TWD.toLocaleString()} / HK$ ${per6HKD.toLocaleString()} (每人/晚)</span>
-                </div>
-                <div class="price-breakdown">
-                    <span class="badge-split">8人均攤：NT$ ${per8TWD.toLocaleString()} / HK$ ${per8HKD.toLocaleString()} (每人/晚)</span>
-                </div>
-                <div class="house-info"><span>🏠</span> ${house.specs}</div>
-                <div class="house-info"><span>📍</span> ${house.location}</div>
-                <div class="guide-section">
-                    <p class="guide-title">🗺️ 周邊機能 Local Guide <span style="font-size: 0.75rem; color: var(--text-secondary); font-weight: normal;">(🚗 預設為駕車預估)</span></p>
-                    <ul class="scrollable-guide">
-                        ${guideHtml}
-                    </ul>
-                </div>
-                <div class="vote-results" id="votes-${house.id}"></div>
-                <div class="house-actions">
-                    <a href="https://www.google.com/maps/search/?api=1&query=${house.coordinates}" target="_blank" class="btn-secondary">🗺️ 點我導航至房源</a>
-                    <a href="#" class="btn-vote" data-id="${house.id}" data-name="${house.name}">投它一票</a>
+            
+                        <div class="local-guide-section">
+                <h4 class="local-guide-title">🧭 鄰近機能大補帖 Local Guide</h4>
+                <div class="local-guide-grid">
+                    
+                    <!-- Card 1: Ski Resort -->
+                    <div class="flip-card" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="images/guide_ski.png" alt="赤倉溫泉滑雪場">
+                                <div class="flip-card-front-title">⛷️ 赤倉溫泉滑雪場</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <h5>⛷️ 赤倉溫泉滑雪場</h5>
+                                <p>全日本唯一可直接夜滑到溫泉街的粉雪天堂，雪道超寬適合熱身！從大本營出發超級近。</p>
+                                <span class="route-badge">🚗 車程 7 分鐘</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Gear Shop -->
+                    <div class="flip-card" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="images/guide_shop.png" alt="滑雪用具租用場(Myoko Snowsports)">
+                                <div class="flip-card-front-title">🏂 滑雪用具租用場(Myoko Snowsports)</div>
+                            </div>
+                            <div class="flip-card-back" style="border-color: rgba(56, 189, 248, 0.8);">
+                                <h5>🏂 滑雪用具租用場(Myoko Snowsports)</h5>
+                                <p>專業雪具租借站！提供高品質的裝備，我們預計將在此租賃。</p>
+                                <button class="gear-price-btn" onclick="event.stopPropagation(); openGearPriceModal()" style="margin-top: auto; padding: 0.5rem; width: 100%;">❄️ 點擊查看價格表</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Tonkatsu -->
+                    <div class="flip-card" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="images/guide_tonkatsu.png" alt="Restaurant Shibata">
+                                <div class="flip-card-front-title">🥩 Restaurant Shibata</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <h5>🥩 Restaurant Shibata</h5>
+                                <p>赤倉特搜美食！傳奇爆量炸豬排飯、招牌漢堡排，滑雪後補足熱量的終極大魔王。</p>
+                                <span class="route-badge">🚗 車程 8 分鐘</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Soba -->
+                    <div class="flip-card" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="images/guide_soba.png" alt="Yabu Soba">
+                                <div class="flip-card-front-title">🍜 やぶそば (Yabu Soba)</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <h5>🍜 やぶそば (Yabu Soba)</h5>
+                                <p>高原車站前老字號手工蕎麥麵與酥脆天婦羅，搭配在地地酒絕配，滑雪完必吃。</p>
+                                <span class="route-badge">🚗 車程 10 分鐘</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5: Onsen -->
+                    <div class="flip-card" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="images/guide_onsen.png" alt="赤倉溫泉">
+                                <div class="flip-card-front-title">♨️ 赤倉溫泉 (美人湯)</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <h5>♨️ 赤倉溫泉 (美人湯)</h5>
+                                <p>妙高山直引的天然硫酸鹽「美人湯」，專治全身滑雪酸痛！歷史悠久的江戶開湯名泉。</p>
+                                <span class="route-badge">🚗 車程 8 分鐘</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 6: Village -->
+                    <div class="flip-card" onclick="this.classList.toggle('active')">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <img src="images/guide_village.png" alt="鄰近住宿聚落">
+                                <div class="flip-card-front-title">🏪 鄰近住宿聚落</div>
+                            </div>
+                            <div class="flip-card-back">
+                                <h5>🏪 鄰近住宿聚落</h5>
+                                <p>地圖上周邊有旅館おかやま、JAPOWHOUSE 等知名住宿，機能完善不愁吃穿。</p>
+                                <span class="route-badge">🚶 步行範圍內</span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         `;
 
         grid.appendChild(card);
-        setupSlider(card.querySelector('.slider-container'));
-    });
-
-    // --- 為所有 slider 圖片綁定 Lightbox 事件 ---
-    document.querySelectorAll('.slider-images img').forEach(img => {
-        img.style.cursor = 'zoom-in';
-        img.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const container = img.closest('.slider-container');
-            const allImgs = Array.from(container.querySelectorAll('.slider-images img'));
-            const srcs = allImgs.map(i => i.src);
-            const idx = allImgs.indexOf(img);
-            openLightbox(srcs, idx);
+        
+        // FOOLPROOF EVENT BINDING FOR LIGHTBOX
+        const mainBento = card.querySelector(".bento-main");
+        if (mainBento) {
+            mainBento.style.cursor = "pointer";
+            mainBento.addEventListener("click", (e) => {
+                e.preventDefault();
+                if(window.openLightbox) window.openLightbox(0);
+            });
+        }
+        const bentoItems = card.querySelectorAll(".bento-side .bento-item");
+        bentoItems.forEach((item, idx) => {
+            item.style.cursor = "pointer";
+            item.addEventListener("click", (e) => {
+                e.preventDefault();
+                if(window.openLightbox) window.openLightbox(idx + 1);
+            });
         });
     });
 });
 
-function setupSlider(container) {
-    const imagesContainer = container.querySelector('.slider-images');
-    const images = container.querySelectorAll('.slider-images img');
-    const prevBtn = container.querySelector('.prev');
-    const nextBtn = container.querySelector('.next');
-    const dots = container.querySelectorAll('.dot');
-
-    let currentIndex = 0;
-    const total = images.length;
-    if (total === 0) return;
-
-    function updateSlider() {
-        imagesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
-        dots.forEach((dot, idx) => {
-            dot.classList.toggle('active', idx === currentIndex);
-        });
-    }
-
-    prevBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex === 0) ? total - 1 : currentIndex - 1;
-        updateSlider();
-    });
-
-    nextBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex === total - 1) ? 0 : currentIndex + 1;
-        updateSlider();
-    });
-
-    dots.forEach((dot, idx) => {
-        dot.addEventListener('click', () => {
-            currentIndex = idx;
-            updateSlider();
-        });
-    });
-}
-
-
 // --------------------------------------------------------------------------
-// 5. Lightbox 圖片放大檢視
-// --------------------------------------------------------------------------
-let lightboxImages = [];
-let lightboxIndex = 0;
-// Lightbox DOM \u7de9\u5b58\u2014\u9867\u540d\u601d\u7fa9\uff0c\u907f\u514d\u6bcf\u6b21\u4ea4\u4e92\u90fd getElementById
-let _lbOverlay = null;
-let _lbImg = null;
-let _lbCounter = null;
-
-function createLightbox() {
-    if (_lbOverlay) return; // \u5df2\u5efa\u7acb\u5247\u8df3\u904e
-    _lbOverlay = document.createElement('div');
-    _lbOverlay.id = 'lightbox-overlay';
-    _lbOverlay.innerHTML = `
-        <button class="lb-close" aria-label="\u95dc\u9589">&times;</button>
-        <button class="lb-prev" aria-label="\u4e0a\u4e00\u5f35">&#10094;</button>
-        <img class="lb-img" src="" alt="Lightbox">
-        <button class="lb-next" aria-label="\u4e0b\u4e00\u5f35">&#10095;</button>
-        <div class="lb-counter"></div>
-    `;
-    document.body.appendChild(_lbOverlay);
-
-    // \u5b50\u5143\u7d20\u7de9\u5b58
-    _lbImg = _lbOverlay.querySelector('.lb-img');
-    _lbCounter = _lbOverlay.querySelector('.lb-counter');
-
-    _lbOverlay.querySelector('.lb-close').addEventListener('click', closeLightbox);
-    _lbOverlay.querySelector('.lb-prev').addEventListener('click', () => navigateLightbox(-1));
-    _lbOverlay.querySelector('.lb-next').addEventListener('click', () => navigateLightbox(1));
-    _lbOverlay.addEventListener('click', (e) => {
-        if (e.target === _lbOverlay) closeLightbox();
-    });
-
-    document.addEventListener('keydown', handleLightboxKey);
-}
-
-function handleLightboxKey(e) {
-    if (!_lbOverlay || !_lbOverlay.classList.contains('active')) return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') navigateLightbox(-1);
-    if (e.key === 'ArrowRight') navigateLightbox(1);
-}
-
-function openLightbox(images, startIndex) {
-    createLightbox();
-    lightboxImages = images;
-    lightboxIndex = startIndex;
-    _lbOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    updateLightboxImage();
-}
-
-function closeLightbox() {
-    if (_lbOverlay) {
-        _lbOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-}
-
-function navigateLightbox(direction) {
-    lightboxIndex += direction;
-    if (lightboxIndex < 0) lightboxIndex = lightboxImages.length - 1;
-    if (lightboxIndex >= lightboxImages.length) lightboxIndex = 0;
-    updateLightboxImage();
-}
-
-function updateLightboxImage() {
-    if (!_lbImg || !_lbCounter) return;
-    _lbImg.src = lightboxImages[lightboxIndex];
-    _lbCounter.textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
-}
-
-// --------------------------------------------------------------------------
-// 6. 投票系統與 Firebase 整合
+// --------------------------------------------------------------------------\n// 6. 投票系統與 Firebase 整合
 // --------------------------------------------------------------------------
 // TODO: 請替換為您的 Firebase 專案設定
 const firebaseConfig = {
@@ -2020,3 +1930,106 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
+
+
+
+
+
+// --------------------------------------------------------------------------
+// 18. 降雪特效 (Snow Effect)
+// --------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+// --- Lightbox Logic ---
+let currentLightboxIndex = 0;
+let lightboxImages = [];
+
+window.openLightbox = function(index) {
+    try {
+        if (housingData.length > 0) {
+            lightboxImages = housingData[0].images;
+            currentLightboxIndex = index;
+            updateLightbox();
+            
+            const modal = document.getElementById("lightbox-modal");
+            if (modal) {
+                modal.classList.remove("hidden");
+                modal.style.display = "flex";
+                modal.style.opacity = "1";
+                modal.style.visibility = "visible";
+                modal.style.pointerEvents = "auto";
+                document.body.style.overflow = "hidden";
+            } else {
+                alert("Lightbox Modal 元素遺失，請聯絡開發者！");
+            }
+        }
+    } catch (e) {
+        alert("Lightbox 發生錯誤: " + e.message);
+    }
+};
+
+window.closeLightbox = function() {
+    const modal = document.getElementById("lightbox-modal");
+    if (modal) {
+        modal.classList.add("hidden");
+        modal.style.opacity = "0";
+        modal.style.visibility = "hidden";
+        modal.style.pointerEvents = "none";
+    }
+    document.body.style.overflow = "";
+};
+
+window.lightboxNext = function() {
+    currentLightboxIndex = (currentLightboxIndex + 1) % lightboxImages.length;
+    updateLightbox();
+};
+
+window.lightboxPrev = function() {
+    currentLightboxIndex = (currentLightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+    updateLightbox();
+};
+
+window.setLightboxImage = function(index) {
+    currentLightboxIndex = index;
+    updateLightbox();
+}
+
+function updateLightbox() {
+    const imgEl = document.getElementById("lightbox-img");
+    const counter = document.getElementById("lightbox-counter");
+    const thumbContainer = document.getElementById("lightbox-thumbnails");
+    
+    imgEl.style.opacity = 0;
+    setTimeout(() => {
+        imgEl.src = lightboxImages[currentLightboxIndex];
+        imgEl.style.opacity = 1;
+    }, 150);
+    
+    counter.textContent = `${currentLightboxIndex + 1} / ${lightboxImages.length}`;
+    
+    if (thumbContainer.children.length === 0) {
+        thumbContainer.innerHTML = lightboxImages.map((img, idx) => 
+            `<img src="${img}" onclick="setLightboxImage(${idx})" style="height: 60px; width: 80px; object-fit: cover; cursor: pointer; border-radius: 4px; opacity: 0.5; transition: opacity 0.3s; flex-shrink: 0;" class="lb-thumb" id="lb-thumb-${idx}">`
+        ).join("");
+    }
+    
+    document.querySelectorAll(".lb-thumb").forEach((th, idx) => {
+        th.style.opacity = idx === currentLightboxIndex ? "1" : "0.4";
+        th.style.border = idx === currentLightboxIndex ? "2px solid white" : "none";
+    });
+}
+
+
+
+
+
+
