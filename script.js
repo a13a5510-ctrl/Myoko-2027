@@ -1,5 +1,6 @@
 // 1. 導覽列 Navbar 的滾動變化與手機版選單切換
 // --------------------------------------------------------------------------
+const isLocalFile = window.location.protocol === 'file:';
 const navbar = document.querySelector('.navbar');
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links');
