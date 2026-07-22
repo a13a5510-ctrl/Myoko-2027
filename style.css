@@ -2370,12 +2370,13 @@ a {
 .gear-price-container {
     width: 95%;
     max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
     background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
     border: 1px solid rgba(148, 163, 184, 0.3);
     box-shadow: 0 0 40px rgba(56, 189, 248, 0.15);
     position: relative;
     padding: 2rem;
-    overflow: hidden;
 }
 
 /* 冬季雪花裝飾 (CSS 偽元素) */
@@ -3803,3 +3804,22 @@ a {
 
 
 
+
+@media screen and (max-width: 768px) {
+    .gear-price-container {
+        padding: 1rem !important;
+        width: 100% !important;
+        max-height: 95vh !important;
+    }
+    .gear-storage-info {
+        padding: 1rem !important;
+        margin-top: 1rem !important;
+    }
+    .gear-price-header {
+        margin-bottom: 1rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+    .gear-price-header h3 {
+        font-size: 1.2rem !important;
+    }
+}
