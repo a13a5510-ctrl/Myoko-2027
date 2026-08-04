@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="house-content">
                     <h4 class="house-title" style="font-size: 1.8rem; margin-bottom: 1rem;">${house.name}</h4>
                     <div class="house-info"><span>⭐</span> ${house.rating} <span class="badge-airbnb">via Airbnb</span></div>
-                    <div class="house-info price-main" style="font-size: 1.4rem;"><span>💰</span> 總價 NT$ ${totalTWD.toLocaleString()} <span style="font-size: 0.9rem; color: var(--text-secondary);">(共4晚)</span> <span class="badge-parking">${parkingNote}</span></div>
+                    <div class="house-info price-main" style="font-size: 1.4rem;"><span>💰</span> 總價 NT$ ${totalTWD.toLocaleString()} <span style="font-size: 0.9rem; color: var(--text-secondary);">(共4晚 | 3/3 15:00 Check-in - 3/7 10:00 Check-out)</span> <span class="badge-parking">${parkingNote}</span></div>
                     <div class="price-breakdown">
                         <span class="badge-hkd">≈ HK$ ${totalHKD.toLocaleString()}</span>
                     </div>
