@@ -2034,3 +2034,61 @@ function updateLightbox() {
 
 
 
+
+// --- DINO SECRET EASTER EGG (LONG PRESS) ---
+document.addEventListener('DOMContentLoaded', () => {
+    const hkTabs = document.querySelectorAll('button[data-tab-target="tab-hk"], button[data-tab-target="iti-hk"]');
+    let pressTimer;
+    
+    hkTabs.forEach(tab => {
+        tab.classList.add('hk-tab-scanning');
+        
+        const startPress = (e) => {
+            // Prevent default context menu on mobile long press
+            if(e.type === 'touchstart') {
+                // Don't prevent default here otherwise scroll might break, 
+                // but we will clear timer on touchmove.
+            }
+            
+            tab.classList.add('scanning');
+            pressTimer = setTimeout(() => {
+                triggerDinoSecret();
+            }, 3000); // 3 seconds
+        };
+        
+        const cancelPress = () => {
+            clearTimeout(pressTimer);
+            tab.classList.remove('scanning');
+        };
+        
+        tab.addEventListener('mousedown', startPress);
+        tab.addEventListener('touchstart', startPress, {passive: true});
+        
+        tab.addEventListener('mouseup', cancelPress);
+        tab.addEventListener('mouseleave', cancelPress);
+        tab.addEventListener('touchend', cancelPress);
+        tab.addEventListener('touchmove', cancelPress);
+        tab.addEventListener('contextmenu', (e) => {
+            // If they long press, some devices show context menu, we can cancel
+            cancelPress();
+        });
+    });
+
+    function triggerDinoSecret() {
+        // Vibrate if supported
+        if (navigator.vibrate) {
+            navigator.vibrate([200, 100, 200, 100, 500]);
+        }
+        
+        // Hacker glitch effect
+        document.body.classList.add('hacker-glitch-active');
+        
+        setTimeout(() => {
+            document.body.classList.remove('hacker-glitch-active');
+            const modal = document.getElementById('dino-secret-modal');
+            if(modal) {
+                modal.classList.remove('hidden');
+            }
+        }, 800);
+    }
+});

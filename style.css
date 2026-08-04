@@ -3823,3 +3823,37 @@ a {
         font-size: 1.2rem !important;
     }
 }
+
+/* --- DINO SECRET EASTER EGG --- */
+@keyframes glitch {
+    0% { transform: translate(0) }
+    20% { transform: translate(-2px, 2px) }
+    40% { transform: translate(-2px, -2px) }
+    60% { transform: translate(2px, 2px) }
+    80% { transform: translate(2px, -2px) }
+    100% { transform: translate(0) }
+}
+
+.hacker-glitch-active {
+    animation: glitch 0.2s infinite;
+    filter: hue-rotate(90deg) invert(10%);
+}
+
+.hk-tab-scanning {
+    position: relative;
+    overflow: hidden;
+}
+.hk-tab-scanning::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: rgba(255, 0, 0, 0.4);
+    transition: width 3s linear;
+    z-index: -1;
+}
+.hk-tab-scanning.scanning::after {
+    width: 100%;
+}
