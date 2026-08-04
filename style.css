@@ -3857,3 +3857,83 @@ a {
 .hk-tab-scanning.scanning::after {
     width: 100%;
 }
+
+/* Dino Easter Egg Flip Cards */
+.dino-flip-card {
+    height: 380px;
+}
+.dino-flip-card .flip-card-front-title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    padding: 2rem 1.5rem 1.5rem;
+}
+.dino-flip-card .flip-card-front-title h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+.dino-flip-card .flip-card-front-title p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+}
+.dino-flip-card .flip-card-back {
+    padding: 1.5rem;
+    justify-content: flex-start;
+    overflow-y: auto;
+}
+.dino-flip-card .flip-card-back h4 {
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 0.5rem;
+}
+.dino-flip-card .info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+}
+.dino-flip-card .info-row strong {
+    color: #94a3b8;
+}
+.dino-flip-card .info-row span {
+    color: #e2e8f0;
+    text-align: right;
+}
+.dino-map-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+.dino-map-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+.dino-map-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+.dino-map-btn.hotel:hover { border-color: #34D399; color: #34D399; }
+.dino-map-btn.resort:hover { border-color: #38BDF8; color: #38BDF8; }
+.dino-map-btn.gear:hover { border-color: #FBBF24; color: #FBBF24; }
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}

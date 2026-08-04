@@ -1288,81 +1288,132 @@
             <!-- thumbnails injected here -->
         </div>
     </div>
-    <!-- Secret Dino Modal -->
+        <!-- Secret Dino Modal -->
     <div id="dino-secret-modal" class="modal-overlay hidden" style="z-index: 999999; background: rgba(0, 0, 0, 0.95); flex-direction: column; align-items: center; justify-content: flex-start; padding: 2rem; overflow-y: auto; backdrop-filter: blur(15px);">
-        <div style="width: 100%; max-width: 800px; margin-top: 2rem; padding-bottom: 4rem;">
+        <div style="width: 100%; max-width: 1000px; margin-top: 2rem; padding-bottom: 4rem;">
             <div style="text-align: center; margin-bottom: 2rem; animation: glitch 1s infinite alternate;">
                 <h2 style="color: #10B981; font-family: monospace; letter-spacing: 5px; font-size: 1.8rem; text-shadow: 0 0 10px #10B981;">AUTHORIZED ACCESS GRANTED</h2>
                 <h1 style="color: #fff; font-size: 2.5rem; margin-top: 0.5rem; text-shadow: 0 0 20px rgba(255,255,255,0.5);">AGENT DINO</h1>
                 <p style="color: #94A3B8; font-family: monospace; margin-top: 0.5rem;">MISSION: MYOKO 30-DAY SNOWBOARD INTENSIVE</p>
             </div>
             
-            <div style="display: flex; flex-direction: column; gap: 2rem;">
-                <!-- Mode 1 -->
-                <div class="glass-card" style="background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.3); display: flex; flex-direction: column; overflow: hidden;">
-                    <img src="images/dino_mode_1_kanko_1785841839462.jpg" style="width: 100%; height: 250px; object-fit: cover; border-bottom: 1px solid rgba(16, 185, 129, 0.3);" alt="Mode 1">
-                    <div style="padding: 1.5rem;">
-                        <h3 style="color: #34D399; margin-bottom: 1rem; font-size: 1.5rem;">👑 模式一：終極財富自由模式</h3>
-                        <h4 style="color: #fff; margin-bottom: 1rem;">🏨 赤倉觀光飯店 (Akakura Kanko Hotel)</h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem; color: #cbd5e1; margin-bottom: 1rem;">
-                            <div><strong style="color:#94a3b8;">💸 經費(月):</strong> 約 ¥120萬~¥240萬</div>
-                            <div><strong style="color:#94a3b8;">🚗 距大本營:</strong> 車程 12-15分</div>
-                            <div><strong style="color:#94a3b8;">🏂 雪場:</strong> 真・Ski-in/out (赤倉觀光)</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+                
+                <!-- Mode 1 Flip Card -->
+                <div class="flip-card dino-flip-card" onclick="this.classList.toggle('active')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front" style="border-color: rgba(16, 185, 129, 0.4);">
+                            <img src="images/dino_mode_1_kanko_1785841839462.jpg" alt="Mode 1">
+                            <div class="flip-card-front-title">
+                                <h3 style="color: #34D399;">👑 模式一：終極財富自由</h3>
+                                <p>🏨 赤倉觀光飯店 (Akakura Kanko)</p>
+                                <div style="margin-top: auto; font-size: 0.8rem; color: #10B981; font-weight: normal; animation: pulse 2s infinite; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="font-size: 1.2rem;">🔄</span> 點擊解密詳細情報與地圖
+                                </div>
+                            </div>
                         </div>
-                        <p style="line-height: 1.6; color: #e2e8f0;">建於1937年的日本皇室級高山飯店。專屬的「Spa & Suite 頂級新館」房內自帶絕景溫泉。每天狂練Snowboard到雙腿發軟後，回房直接泡湯看雪景。你的雙語天賦能讓你體驗極致的日本「御機嫌」款待！</p>
+                        <div class="flip-card-back" style="border-color: rgba(16, 185, 129, 0.6); box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1);">
+                            <h4 style="color: #34D399;">👑 終極財富自由模式</h4>
+                            <div class="info-row"><strong>💸 經費(月):</strong><span>約 ¥120萬~¥240萬</span></div>
+                            <div class="info-row"><strong>🚗 距大本營:</strong><span>車程 12-15分</span></div>
+                            <p style="font-size:0.85rem; color:#cbd5e1; margin-bottom: 0.5rem;">建於1937年的日本皇室級飯店，自帶絕景溫泉。雙語天賦讓你體驗極致的「御機嫌」款待！</p>
+                            <div class="dino-map-links">
+                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Kanko+Hotel" target="_blank" class="dino-map-btn hotel">🏨 飯店地圖</a>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Kanko+Resort+Ski+Area" target="_blank" class="dino-map-btn resort">🏂 雪場地圖 (真・Ski-in/out)</a>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Kanko+Hotel" target="_blank" class="dino-map-btn gear">🧳 裝備租借 (飯店內專屬)</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Mode 2 -->
-                <div class="glass-card" style="background: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.3); display: flex; flex-direction: column; overflow: hidden;">
-                    <img src="images/dino_mode_2_arai_1785841860444.jpg" style="width: 100%; height: 250px; object-fit: cover; border-bottom: 1px solid rgba(56, 189, 248, 0.3);" alt="Mode 2">
-                    <div style="padding: 1.5rem;">
-                        <h3 style="color: #38BDF8; margin-bottom: 1rem; font-size: 1.5rem;">🚁 模式二：粉雪與現代奢華模式</h3>
-                        <h4 style="color: #fff; margin-bottom: 1rem;">🏨 樂天新井度假村 (Lotte Arai Resort)</h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem; color: #cbd5e1; margin-bottom: 1rem;">
-                            <div><strong style="color:#94a3b8;">💸 經費(月):</strong> 約 ¥100萬~¥180萬</div>
-                            <div><strong style="color:#94a3b8;">🚗 距大本營:</strong> 車程 30-40分</div>
-                            <div><strong style="color:#94a3b8;">🏂 雪場:</strong> 頂級非壓雪區天堂</div>
+                <!-- Mode 2 Flip Card -->
+                <div class="flip-card dino-flip-card" onclick="this.classList.toggle('active')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front" style="border-color: rgba(56, 189, 248, 0.4);">
+                            <img src="images/dino_mode_2_arai_1785841860444.jpg" alt="Mode 2">
+                            <div class="flip-card-front-title">
+                                <h3 style="color: #38BDF8;">🚁 模式二：粉雪與現代奢華</h3>
+                                <p>🏨 樂天新井度假村 (Lotte Arai)</p>
+                                <div style="margin-top: auto; font-size: 0.8rem; color: #38BDF8; font-weight: normal; animation: pulse 2s infinite; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="font-size: 1.2rem;">🔄</span> 點擊解密詳細情報與地圖
+                                </div>
+                            </div>
                         </div>
-                        <p style="line-height: 1.6; color: #e2e8f0;">現代化巨大雪山堡壘，超高品質單人客房。亞洲頂尖粉雪與野雪地形，是進階練功房！新井歐美客與富豪極多，你的英日雙語能在星空溫泉與高空酒吧如魚得水，拓展國際滑雪人脈。</p>
+                        <div class="flip-card-back" style="border-color: rgba(56, 189, 248, 0.6); box-shadow: inset 0 0 20px rgba(56, 189, 248, 0.1);">
+                            <h4 style="color: #38BDF8;">🚁 粉雪與現代奢華模式</h4>
+                            <div class="info-row"><strong>💸 經費(月):</strong><span>約 ¥100萬~¥180萬</span></div>
+                            <div class="info-row"><strong>🚗 距大本營:</strong><span>車程 30-40分</span></div>
+                            <p style="font-size:0.85rem; color:#cbd5e1; margin-bottom: 0.5rem;">亞洲頂尖粉雪與野雪地形，是進階練功房！新井歐美客極多，英日雙語能拓展國際滑雪人脈。</p>
+                            <div class="dino-map-links">
+                                <a href="https://www.google.com/maps/search/?api=1&query=Lotte+Arai+Resort" target="_blank" class="dino-map-btn hotel">🏨 飯店地圖</a>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Lotte+Arai+Resort" target="_blank" class="dino-map-btn resort">🏂 雪場地圖 (專屬粉雪天堂)</a>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Salomon+Station+Lotte+Arai" target="_blank" class="dino-map-btn gear">🧳 裝備租借 (Salomon Station)</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Mode 3 -->
-                <div class="glass-card" style="background: rgba(251, 191, 36, 0.05); border-color: rgba(251, 191, 36, 0.3); display: flex; flex-direction: column; overflow: hidden;">
-                    <img src="images/dino_mode_3_onsen_1785841879808.jpg" style="width: 100%; height: 250px; object-fit: cover; border-bottom: 1px solid rgba(251, 191, 36, 0.3);" alt="Mode 3">
-                    <div style="padding: 1.5rem;">
-                        <h3 style="color: #FBBF24; margin-bottom: 1rem; font-size: 1.5rem;">🏮 模式三：溫泉街機能平衡模式</h3>
-                        <h4 style="color: #fff; margin-bottom: 1rem;">🏨 Hotel Alp Myoko / 赤倉飯店本館</h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem; color: #cbd5e1; margin-bottom: 1rem;">
-                            <div><strong style="color:#94a3b8;">💸 經費(月):</strong> 約 ¥50萬~¥90萬</div>
-                            <div><strong style="color:#94a3b8;">🚗 距大本營:</strong> 車程 7-8分</div>
-                            <div><strong style="color:#94a3b8;">🏂 雪場:</strong> 走路 1-3分直達赤倉</div>
+                <!-- Mode 3 Flip Card -->
+                <div class="flip-card dino-flip-card" onclick="this.classList.toggle('active')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front" style="border-color: rgba(251, 191, 36, 0.4);">
+                            <img src="images/dino_mode_3_onsen_1785841879808.jpg" alt="Mode 3">
+                            <div class="flip-card-front-title">
+                                <h3 style="color: #FBBF24;">🏮 模式三：溫泉街機能平衡</h3>
+                                <p>🏨 Hotel Alp Myoko / 赤倉飯店</p>
+                                <div style="margin-top: auto; font-size: 0.8rem; color: #FBBF24; font-weight: normal; animation: pulse 2s infinite; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="font-size: 1.2rem;">🔄</span> 點擊解密詳細情報與地圖
+                                </div>
+                            </div>
                         </div>
-                        <p style="line-height: 1.6; color: #e2e8f0;">兼顧高級感與接地氣的最佳選擇。精通日文的你絕對能成為溫泉街的「地頭蛇」，每晚探索不同居酒屋，結交當地雪友。裝備店 Myoko Snowsports 就在走路 2 分鐘的距離，機能滿分！</p>
+                        <div class="flip-card-back" style="border-color: rgba(251, 191, 36, 0.6); box-shadow: inset 0 0 20px rgba(251, 191, 36, 0.1);">
+                            <h4 style="color: #FBBF24;">🏮 溫泉街機能平衡模式</h4>
+                            <div class="info-row"><strong>💸 經費(月):</strong><span>約 ¥50萬~¥90萬</span></div>
+                            <div class="info-row"><strong>🚗 距大本營:</strong><span>車程 7-8分</span></div>
+                            <p style="font-size:0.85rem; color:#cbd5e1; margin-bottom: 0.5rem;">兼顧高級感與接地氣的最佳選擇。精通日文的你絕對能成為溫泉街的「地頭蛇」。</p>
+                            <div class="dino-map-links">
+                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Hotel+Myoko" target="_blank" class="dino-map-btn hotel">🏨 飯店地圖</a>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Onsen+Ski+Area" target="_blank" class="dino-map-btn resort">🏂 雪場地圖 (走路1-3分)</a>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Myoko+Snowsports" target="_blank" class="dino-map-btn gear">🧳 裝備租借 (Myoko Snowsports)</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Mode 4 -->
-                <div class="glass-card" style="background: rgba(244, 63, 94, 0.05); border-color: rgba(244, 63, 94, 0.3); display: flex; flex-direction: column; overflow: hidden;">
-                    <img src="images/dino_mode_4_apartment_1785841900232.jpg" style="width: 100%; height: 250px; object-fit: cover; border-bottom: 1px solid rgba(244, 63, 94, 0.3);" alt="Mode 4">
-                    <div style="padding: 1.5rem;">
-                        <h3 style="color: #FB7185; margin-bottom: 1rem; font-size: 1.5rem;">🍳 模式四：隱藏版生活大師 (極度推薦)</h3>
-                        <h4 style="color: #fff; margin-bottom: 1rem;">🏨 頂級酒店式公寓 (如 Address Akakura)</h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem; color: #cbd5e1; margin-bottom: 1rem;">
-                            <div><strong style="color:#94a3b8;">💸 經費(月):</strong> 約 ¥100萬~¥150萬</div>
-                            <div><strong style="color:#94a3b8;">🚗 距大本營:</strong> 車程 7-8分</div>
-                            <div><strong style="color:#94a3b8;">🏂 雪場:</strong> 走路 2-5分</div>
+                <!-- Mode 4 Flip Card -->
+                <div class="flip-card dino-flip-card" onclick="this.classList.toggle('active')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front" style="border-color: rgba(244, 63, 94, 0.4);">
+                            <img src="images/dino_mode_4_apartment_1785841900232.jpg" alt="Mode 4">
+                            <div class="flip-card-front-title">
+                                <h3 style="color: #FB7185;">🍳 模式四：隱藏版生活大師</h3>
+                                <p>🏨 頂級酒店式公寓 (Address Akakura)</p>
+                                <div style="margin-top: auto; font-size: 0.8rem; color: #FB7185; font-weight: normal; animation: pulse 2s infinite; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="font-size: 1.2rem;">🔄</span> 點擊解密詳細情報與地圖
+                                </div>
+                            </div>
                         </div>
-                        <p style="line-height: 1.6; color: #e2e8f0;">有錢人的最高境界，是在雪山裡有一個家。擁有超大客廳與「全套現代化高級廚房」，日文超溜的你可以網購頂級和牛海鮮，休雪日悠哉煎牛排泡咖啡。擺脫連吃一個月飯店菜的倦怠感，過上令人嫉妒的頂級生活質感！</p>
+                        <div class="flip-card-back" style="border-color: rgba(244, 63, 94, 0.6); box-shadow: inset 0 0 20px rgba(244, 63, 94, 0.1);">
+                            <h4 style="color: #FB7185;">🍳 隱藏版生活大師 (激推)</h4>
+                            <div class="info-row"><strong>💸 經費(月):</strong><span>約 ¥100萬~¥150萬</span></div>
+                            <div class="info-row"><strong>🚗 距大本營:</strong><span>車程 7-8分</span></div>
+                            <p style="font-size:0.85rem; color:#cbd5e1; margin-bottom: 0.5rem;">擁有超大客廳與現代廚房，日文超溜的你可以網購頂級和牛，過上令人嫉妒的生活質感！</p>
+                            <div class="dino-map-links">
+                                <a href="https://www.google.com/maps/search/?api=1&query=Address+Akakura" target="_blank" class="dino-map-btn hotel">🏨 公寓地圖</a>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Onsen+Ski+Area" target="_blank" class="dino-map-btn resort">🏂 雪場地圖 (走路2-5分)</a>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Myoko+Snowsports" target="_blank" class="dino-map-btn gear">🧳 裝備租借 (Myoko Snowsports)</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
             <button class="btn-close" onclick="document.getElementById('dino-secret-modal').classList.add('hidden');" style="position: fixed; top: 20px; right: 20px; font-size: 2.5rem; color: white; background: none; border: none; cursor: pointer;">&times;</button>
         </div>
     </div>
 </body>
 </html>
+
 
 
 
