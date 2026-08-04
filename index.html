@@ -1288,121 +1288,82 @@
             <!-- thumbnails injected here -->
         </div>
     </div>
-        <!-- Secret Dino Modal -->
+            <!-- Secret Dino Modal (Kofukan Version) -->
     <div id="dino-secret-modal" class="modal-overlay hidden" style="z-index: 999999; background: rgba(0, 0, 0, 0.95); flex-direction: column; align-items: center; justify-content: flex-start; padding: 2rem; overflow-y: auto; backdrop-filter: blur(15px);">
-        <div style="width: 100%; max-width: 1000px; margin-top: 2rem; padding-bottom: 4rem;">
-            <div style="text-align: center; margin-bottom: 2rem; animation: glitch 1s infinite alternate;">
-                <h2 style="color: #10B981; font-family: monospace; letter-spacing: 5px; font-size: 1.8rem; text-shadow: 0 0 10px #10B981;">AUTHORIZED ACCESS GRANTED</h2>
-                <h1 style="color: #fff; font-size: 2.5rem; margin-top: 0.5rem; text-shadow: 0 0 20px rgba(255,255,255,0.5);">AGENT DINO</h1>
-                <p style="color: #94A3B8; font-family: monospace; margin-top: 0.5rem;">MISSION: MYOKO 30-DAY SNOWBOARD INTENSIVE</p>
+        <div style="width: 100%; max-width: 900px; margin-top: 2rem; padding-bottom: 4rem;">
+            <div style="text-align: center; margin-bottom: 2.5rem; animation: glitch 1s infinite alternate;">
+                <h2 style="color: #F87171; font-family: monospace; letter-spacing: 5px; font-size: 1.5rem; text-shadow: 0 0 10px #F87171;">MISSION UPDATE: TARGET RELOCATED</h2>
+                <h1 style="color: #fff; font-size: 3rem; margin-top: 0.5rem; text-shadow: 0 0 20px rgba(255,255,255,0.5);">AGENT DINO: KOFUKAN</h1>
+                <p style="color: #94A3B8; font-family: monospace; margin-top: 0.5rem; font-size: 1.1rem;">INTELLIGENCE DOSSIER: 香風館 (RYOKAN KOFUKAN)</p>
             </div>
             
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+            <div style="display: flex; flex-direction: column; gap: 2.5rem;">
                 
-                <!-- Mode 1 Flip Card -->
-                <div class="flip-card dino-flip-card" onclick="this.classList.toggle('active')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front" style="border-color: rgba(16, 185, 129, 0.4);">
-                            <img src="images/dino_mode_1_kanko_1785841839462.jpg" alt="Mode 1">
-                            <div class="flip-card-front-title">
-                                <h3 style="color: #34D399;">👑 模式一：終極財富自由</h3>
-                                <p>🏨 赤倉觀光飯店 (Akakura Kanko)</p>
-                                <div style="margin-top: auto; font-size: 0.8rem; color: #10B981; font-weight: normal; animation: pulse 2s infinite; display: flex; align-items: center; gap: 0.5rem;">
-                                    <span style="font-size: 1.2rem;">🔄</span> 點擊解密詳細情報與地圖
-                                </div>
+                <!-- Section 1: Hotel & Onsen -->
+                <div class="glass-card" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 0; overflow: hidden; display: flex; flex-wrap: wrap;">
+                    <div style="flex: 1 1 400px;">
+                        <img src="images/dino_kofukan_room_1785854891682.jpg" style="width: 100%; height: 100%; object-fit: cover; min-height: 250px;" alt="Kofukan Room">
+                    </div>
+                    <div style="flex: 1 1 400px; padding: 2rem; display: flex; flex-direction: column; justify-content: center;">
+                        <h3 style="color: #FCA5A5; font-size: 1.6rem; margin-bottom: 1rem;">🏯 基地基本情報：香風館</h3>
+                        <p style="color: #E2E8F0; line-height: 1.6; margin-bottom: 1.5rem;">位於妙高高原站步行 10-15 分鐘的平地區域。主打純和室榻榻米，拉開拉門即可見日式庭園與雪景，充滿昭和復古風情與濃厚人情味。<strong>注意：此處並非 Ski-in/out，需搭車前往雪場。</strong></p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Kofukan+Myoko" target="_blank" class="dino-map-btn hotel" style="align-self: flex-start; margin-bottom: 2rem;">📍 導航至 香風館 (Google Map)</a>
+
+                        <h3 style="color: #FCA5A5; font-size: 1.6rem; margin-bottom: 1rem;">♨️ 100% 天然露天風呂</h3>
+                        <p style="color: #E2E8F0; line-height: 1.6;">香風館最大賣點！引進赤倉溫泉源頭 100% 天然溫泉。設有充滿氣氛的「露天風呂」，在攝氏零下的氣溫中看著雪花飄落泡湯，是滑雪後肌肉恢復的最高享受。亦提供私人包場(貸切風呂)。</p>
+                    </div>
+                </div>
+
+                <!-- Section 2: Transport & Ski Resorts -->
+                <div class="glass-card" style="background: rgba(56,189,248,0.03); border: 1px solid rgba(56,189,248,0.2); padding: 0; overflow: hidden; display: flex; flex-wrap: wrap; flex-direction: row-reverse;">
+                    <div style="flex: 1 1 400px;">
+                        <img src="images/dino_myoko_shuttle_1785854924518.jpg" style="width: 100%; height: 100%; object-fit: cover; min-height: 250px;" alt="Myoko Shuttle">
+                    </div>
+                    <div style="flex: 1 1 400px; padding: 2rem;">
+                        <h3 style="color: #38BDF8; font-size: 1.6rem; margin-bottom: 1rem;">🚌 交通戰術與四大雪場</h3>
+                        <p style="color: #E2E8F0; line-height: 1.6; margin-bottom: 1.5rem;"><strong>VIP戰術：</strong>向老闆娘預約飯店專屬接駁車，直達赤倉雪場。<br><strong>探索戰術：</strong>至妙高高原站搭乘 Mt. Myoko Shuttle 巡迴巴士。</p>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border-left: 4px solid #38BDF8;">
+                                <h4 style="color:#fff; margin-bottom: 0.3rem;">1. 赤倉溫泉滑雪場 (最近/新手天堂)</h4>
+                                <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:0.5rem;">距離約 4.5km / 接駁車 10-12 分鐘</p>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Onsen+Ski+Area" target="_blank" class="dino-map-btn resort">🏂 開啟地圖</a>
                             </div>
-                        </div>
-                        <div class="flip-card-back" style="border-color: rgba(16, 185, 129, 0.6); box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1);">
-                            <h4 style="color: #34D399;">👑 終極財富自由模式</h4>
-                            <div class="info-row"><strong>💸 經費(月):</strong><span>約 ¥120萬~¥240萬</span></div>
-                            <div class="info-row"><strong>🚗 距大本營:</strong><span>車程 12-15分</span></div>
-                            <p style="font-size:0.85rem; color:#cbd5e1; margin-bottom: 0.5rem;">建於1937年的日本皇室級飯店，自帶絕景溫泉。雙語天賦讓你體驗極致的「御機嫌」款待！</p>
-                            <div class="dino-map-links">
-                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Kanko+Hotel" target="_blank" class="dino-map-btn hotel">🏨 飯店地圖</a>
-                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Kanko+Resort+Ski+Area" target="_blank" class="dino-map-btn resort">🏂 雪場地圖 (真・Ski-in/out)</a>
-                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Kanko+Hotel" target="_blank" class="dino-map-btn gear">🧳 裝備租借 (飯店內專屬)</a>
+                            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border-left: 4px solid #38BDF8;">
+                                <h4 style="color:#fff; margin-bottom: 0.3rem;">2. 赤倉觀光滑雪場 (Akakan/極致風景)</h4>
+                                <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:0.5rem;">距離約 4.5km / 接駁車 10-12 分鐘</p>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Kanko+Resort+Ski+Area" target="_blank" class="dino-map-btn resort">🏂 開啟地圖</a>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border-left: 4px solid #38BDF8;">
+                                <h4 style="color:#fff; margin-bottom: 0.3rem;">3. 池之平溫泉滑雪場 (超寬廣平緩斜坡)</h4>
+                                <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:0.5rem;">距離約 4km / 巡迴巴士 10 分鐘</p>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Ikenotaira+Onsen+Alpen+Blick+Ski+Resort" target="_blank" class="dino-map-btn resort">🏂 開啟地圖</a>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border-left: 4px solid #38BDF8;">
+                                <h4 style="color:#fff; margin-bottom: 0.3rem;">4. 妙高杉之原滑雪場 (日本最長雪道/野雪)</h4>
+                                <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:0.5rem;">距離約 8km / 巡迴巴士 15-20 分鐘</p>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Myoko+Suginohara+Ski+Resort" target="_blank" class="dino-map-btn resort">🏂 開啟地圖</a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Mode 2 Flip Card -->
-                <div class="flip-card dino-flip-card" onclick="this.classList.toggle('active')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front" style="border-color: rgba(56, 189, 248, 0.4);">
-                            <img src="images/dino_mode_2_arai_1785841860444.jpg" alt="Mode 2">
-                            <div class="flip-card-front-title">
-                                <h3 style="color: #38BDF8;">🚁 模式二：粉雪與現代奢華</h3>
-                                <p>🏨 樂天新井度假村 (Lotte Arai)</p>
-                                <div style="margin-top: auto; font-size: 0.8rem; color: #38BDF8; font-weight: normal; animation: pulse 2s infinite; display: flex; align-items: center; gap: 0.5rem;">
-                                    <span style="font-size: 1.2rem;">🔄</span> 點擊解密詳細情報與地圖
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flip-card-back" style="border-color: rgba(56, 189, 248, 0.6); box-shadow: inset 0 0 20px rgba(56, 189, 248, 0.1);">
-                            <h4 style="color: #38BDF8;">🚁 粉雪與現代奢華模式</h4>
-                            <div class="info-row"><strong>💸 經費(月):</strong><span>約 ¥100萬~¥180萬</span></div>
-                            <div class="info-row"><strong>🚗 距大本營:</strong><span>車程 30-40分</span></div>
-                            <p style="font-size:0.85rem; color:#cbd5e1; margin-bottom: 0.5rem;">亞洲頂尖粉雪與野雪地形，是進階練功房！新井歐美客極多，英日雙語能拓展國際滑雪人脈。</p>
-                            <div class="dino-map-links">
-                                <a href="https://www.google.com/maps/search/?api=1&query=Lotte+Arai+Resort" target="_blank" class="dino-map-btn hotel">🏨 飯店地圖</a>
-                                <a href="https://www.google.com/maps/search/?api=1&query=Lotte+Arai+Resort" target="_blank" class="dino-map-btn resort">🏂 雪場地圖 (專屬粉雪天堂)</a>
-                                <a href="https://www.google.com/maps/search/?api=1&query=Salomon+Station+Lotte+Arai" target="_blank" class="dino-map-btn gear">🧳 裝備租借 (Salomon Station)</a>
-                            </div>
-                        </div>
+                <!-- Section 3: Food & Gear -->
+                <div class="glass-card" style="background: rgba(251,191,36,0.03); border: 1px solid rgba(251,191,36,0.2); padding: 0; overflow: hidden; display: flex; flex-wrap: wrap;">
+                    <div style="flex: 1 1 400px;">
+                        <img src="images/dino_kofukan_food_1785854939900.jpg" style="width: 100%; height: 100%; object-fit: cover; min-height: 250px;" alt="Kofukan Food">
                     </div>
-                </div>
+                    <div style="flex: 1 1 400px; padding: 2rem; display: flex; flex-direction: column; justify-content: center;">
+                        <h3 style="color: #FBBF24; font-size: 1.6rem; margin-bottom: 1rem;">🍣 無敵「一泊二食」與周邊美食</h3>
+                        <p style="color: #E2E8F0; line-height: 1.6; margin-bottom: 1rem;">強烈建議預訂含早晚餐方案！香風館使用新潟越光米、日本海新鮮海產與在地「越後妻有豬」，會席料理極度用心。</p>
+                        <p style="color: #E2E8F0; line-height: 1.6; margin-bottom: 1.5rem;"><strong>周邊打牙祭：</strong>步行可達妙高高原站商圈，必吃在地排隊名店「信濃屋 (Shinanoya)」的熱騰騰蕎麥麵。</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Shinanoya+Myoko" target="_blank" class="dino-map-btn gear" style="align-self: flex-start; margin-bottom: 2.5rem; border-color: #FBBF24; color: #FBBF24;">🍜 信濃屋 蕎麥麵 (Google Map)</a>
 
-                <!-- Mode 3 Flip Card -->
-                <div class="flip-card dino-flip-card" onclick="this.classList.toggle('active')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front" style="border-color: rgba(251, 191, 36, 0.4);">
-                            <img src="images/dino_mode_3_onsen_1785841879808.jpg" alt="Mode 3">
-                            <div class="flip-card-front-title">
-                                <h3 style="color: #FBBF24;">🏮 模式三：溫泉街機能平衡</h3>
-                                <p>🏨 Hotel Alp Myoko / 赤倉飯店</p>
-                                <div style="margin-top: auto; font-size: 0.8rem; color: #FBBF24; font-weight: normal; animation: pulse 2s infinite; display: flex; align-items: center; gap: 0.5rem;">
-                                    <span style="font-size: 1.2rem;">🔄</span> 點擊解密詳細情報與地圖
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flip-card-back" style="border-color: rgba(251, 191, 36, 0.6); box-shadow: inset 0 0 20px rgba(251, 191, 36, 0.1);">
-                            <h4 style="color: #FBBF24;">🏮 溫泉街機能平衡模式</h4>
-                            <div class="info-row"><strong>💸 經費(月):</strong><span>約 ¥50萬~¥90萬</span></div>
-                            <div class="info-row"><strong>🚗 距大本營:</strong><span>車程 7-8分</span></div>
-                            <p style="font-size:0.85rem; color:#cbd5e1; margin-bottom: 0.5rem;">兼顧高級感與接地氣的最佳選擇。精通日文的你絕對能成為溫泉街的「地頭蛇」。</p>
-                            <div class="dino-map-links">
-                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Hotel+Myoko" target="_blank" class="dino-map-btn hotel">🏨 飯店地圖</a>
-                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Onsen+Ski+Area" target="_blank" class="dino-map-btn resort">🏂 雪場地圖 (走路1-3分)</a>
-                                <a href="https://www.google.com/maps/search/?api=1&query=Myoko+Snowsports" target="_blank" class="dino-map-btn gear">🧳 裝備租借 (Myoko Snowsports)</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Mode 4 Flip Card -->
-                <div class="flip-card dino-flip-card" onclick="this.classList.toggle('active')">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front" style="border-color: rgba(244, 63, 94, 0.4);">
-                            <img src="images/dino_mode_4_apartment_1785841900232.jpg" alt="Mode 4">
-                            <div class="flip-card-front-title">
-                                <h3 style="color: #FB7185;">🍳 模式四：隱藏版生活大師</h3>
-                                <p>🏨 頂級酒店式公寓 (Address Akakura)</p>
-                                <div style="margin-top: auto; font-size: 0.8rem; color: #FB7185; font-weight: normal; animation: pulse 2s infinite; display: flex; align-items: center; gap: 0.5rem;">
-                                    <span style="font-size: 1.2rem;">🔄</span> 點擊解密詳細情報與地圖
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flip-card-back" style="border-color: rgba(244, 63, 94, 0.6); box-shadow: inset 0 0 20px rgba(244, 63, 94, 0.1);">
-                            <h4 style="color: #FB7185;">🍳 隱藏版生活大師 (激推)</h4>
-                            <div class="info-row"><strong>💸 經費(月):</strong><span>約 ¥100萬~¥150萬</span></div>
-                            <div class="info-row"><strong>🚗 距大本營:</strong><span>車程 7-8分</span></div>
-                            <p style="font-size:0.85rem; color:#cbd5e1; margin-bottom: 0.5rem;">擁有超大客廳與現代廚房，日文超溜的你可以網購頂級和牛，過上令人嫉妒的生活質感！</p>
-                            <div class="dino-map-links">
-                                <a href="https://www.google.com/maps/search/?api=1&query=Address+Akakura" target="_blank" class="dino-map-btn hotel">🏨 公寓地圖</a>
-                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Onsen+Ski+Area" target="_blank" class="dino-map-btn resort">🏂 雪場地圖 (走路2-5分)</a>
-                                <a href="https://www.google.com/maps/search/?api=1&query=Myoko+Snowsports" target="_blank" class="dino-map-btn gear">🧳 裝備租借 (Myoko Snowsports)</a>
-                            </div>
+                        <h3 style="color: #FBBF24; font-size: 1.6rem; margin-bottom: 1rem;">🧳 雪具租借戰略</h3>
+                        <p style="color: #E2E8F0; line-height: 1.6; margin-bottom: 1rem;">飯店內僅有乾燥室。強烈建議搭乘接駁車至「赤倉溫泉街」租借裝備，並將沉重雪板寄放在店內，兩手空空回飯店泡湯！</p>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <a href="https://www.google.com/maps/search/?api=1&query=Aoyama+Sports+Akakura+Onsen" target="_blank" class="dino-map-btn gear" style="border-color: #FBBF24; color: #FBBF24;">🎒 Aoyama Sports (最大連鎖)</a>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Myoko+Snowsports+Akakura" target="_blank" class="dino-map-btn gear" style="border-color: #FBBF24; color: #FBBF24;">🎒 Myoko Snowsports (極致服務)</a>
                         </div>
                     </div>
                 </div>
@@ -1413,6 +1374,7 @@
     </div>
 </body>
 </html>
+
 
 
 
