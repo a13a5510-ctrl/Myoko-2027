@@ -1,0 +1,1387 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <title>2027 妙高赤倉滑雪旅行 | Myoko Akakura</title>
+    <!-- 引入 Google Fonts，使用具現代感的 Inter 字體 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 降雪特效容器 -->
+            <div class="snowflakes" aria-hidden="true">
+        <div class="snowflake">&#10052;</div>
+        <div class="snowflake">&#10053;</div>
+        <div class="snowflake">&#10052;</div>
+        <div class="snowflake">&#10053;</div>
+        <div class="snowflake">&#10052;</div>
+        <div class="snowflake">&#10053;</div>
+        <div class="snowflake">&#10052;</div>
+        <div class="snowflake">&#10053;</div>
+        <div class="snowflake">&#10052;</div>
+        <div class="snowflake">&#10053;</div>
+    </div>
+
+    <!-- 導覽列 Navbar -->
+    <nav class="navbar">
+        <div class="logo">Myoko 2027</div>
+        <ul class="nav-links">
+            <li><a href="#hero">首頁</a></li>
+            <li><a href="#flights">航班資訊</a></li>
+            <li><a href="#transport">交通住宿</a></li>
+            <li><a href="#itinerary">每日行程</a></li>
+            <li><a href="#resort">雪場周邊</a></li>
+            <li><a href="#expenses">公費分帳</a></li>
+            <li><a href="#gear">裝備清單</a></li>
+            <li><a href="#gallery">影音回憶</a></li>
+            <li><a href="#" id="nav-emergency" style="color: var(--color-danger); font-weight: bold;">🆘 求生資訊</a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- 主視覺 Hero Section -->
+    <section id="hero" class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">2027 妙高赤倉滑雪旅行</h1>
+            <p class="hero-subtitle">Myoko Akakura Snowboard Trip</p>
+            <div class="countdown-container">
+                <h2>距離出發還有</h2>
+                <div id="countdown" class="countdown">
+                    <!-- 倒數計時將由 JavaScript 動態寫入 -->
+                </div>
+            </div>
+            
+            <!-- 天氣即時看板 -->
+            <div id="weather-widget" class="glass-card weather-widget">
+                <div class="weather-item">
+                    <span class="weather-icon">🥶</span>
+                    <span class="weather-value">-3°C</span>
+                    <span class="weather-label">當前氣溫</span>
+                </div>
+                <div class="weather-item">
+                    <span class="weather-icon">🧣</span>
+                    <span class="weather-value">-8°C</span>
+                    <span class="weather-label">體感溫度</span>
+                </div>
+                <div class="weather-item">
+                    <span class="weather-icon">❄️</span>
+                    <span class="weather-value">15cm</span>
+                    <span class="weather-label">今日降雪</span>
+                </div>
+                <div class="weather-item">
+                    <span class="weather-icon">⚠️</span>
+                    <span class="weather-value">強風注意</span>
+                    <span class="weather-label">Gondola可能停駛</span>
+                </div>
+            </div>
+
+            <a href="#flights" class="btn-primary">開始探索</a>
+        </div>
+    </section>
+
+    <!-- 航班資訊 Section -->
+    <section id="flights" class="section tab-group">
+        <div class="container">
+            <h2 class="section-title">航班資訊 <span>Flights</span></h2>
+
+            <!-- 集結橫幅 -->
+            <div class="rendezvous-banner glass-card">
+                <span class="rendezvous-icon">🎯</span>
+                <div class="rendezvous-text">
+                    <span class="rendezvous-label">最終集結點</span>
+                    <span class="rendezvous-main">東京成田機場 (NRT)</span>
+                </div>
+                <div class="rendezvous-divider"></div>
+                <div class="rendezvous-time">
+                    <span class="rendezvous-label">限時抵達</span>
+                    <span class="rendezvous-main">🕒 2027-03-02 (二) 16:30 前</span>
+                </div>
+            </div>
+
+            <!-- 頁簽導覽列 -->
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab-target="tab-vanguard">👑 Bonnie & Leo 航班部隊 <small>(雙國遊)</small></button>
+                <button class="tab-btn" data-tab-target="tab-taiwan">🇹🇼 台灣直飛部隊</button>
+                <button class="tab-btn" data-tab-target="tab-hk">🇭🇰 香港出發大隊</button>
+            </div>
+
+            <!-- Tab 1：Bonnie & Leo 航班部隊 -->
+            <div class="tab-panel active" id="tab-vanguard">
+                <div class="story-box">
+                    <span class="story-icon">✨</span>
+                    <div>
+                        <h4>👑 Bonnie & Leo 航班部隊：香港日本兩國爽透透</h4>
+                        <p>3/1 先飛香港吃爆燒鵝，與香港分部會合後，隔日再一起殺去日本滑雪！回程直飛台北！</p>
+                    </div>
+                </div>
+                <div class="flight-row-container">
+                    <div class="flight-col">
+                        <div class="direction-label">✈️ 去程 (TPE → HKG → NRT)</div>
+                        <div class="cards-grid">
+                            <div class="glass-card flight-card">
+                                <div class="flight-type">第一段 (前進香港) · 3/1 TPE→HKG</div>
+                                <h3 class="flight-number">CX 489</h3>
+                                <div class="flight-details">
+                                    <div class="time-loc"><span class="time">10:45</span><span class="loc">TPE</span></div>
+                                    <div class="arrow">✈️</div>
+                                    <div class="time-loc"><span class="time">13:00</span><span class="loc">HKG</span></div>
+                                </div>
+                                <p class="flight-date">2027-03-01 (一) · 國泰 Cathay Pacific</p>
+                            </div>
+                            <div class="glass-card flight-card" style="margin-top: 1rem;">
+                                <div class="flight-type">第二段 (會合出發) · 3/2 HKG→NRT</div>
+                                <h3 class="flight-number">CX 520</h3>
+                                <div class="flight-details">
+                                    <div class="time-loc"><span class="time">10:30</span><span class="loc">HKG</span></div>
+                                    <div class="arrow">✈️</div>
+                                    <div class="time-loc"><span class="time">15:35</span><span class="loc">NRT</span></div>
+                                </div>
+                                <p class="flight-date">2027-03-02 (二) · 國泰 Cathay Pacific</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flight-col">
+                        <div class="direction-label">🛬 回程 (NRT → TPE)</div>
+                        <div class="cards-grid">
+                            <div class="glass-card flight-card">
+                                <div class="flight-type">回程直飛 · 3/7 NRT→TPE</div>
+                                <h3 class="flight-number">JX 801</h3>
+                                <div class="flight-details">
+                                    <div class="time-loc"><span class="time">14:10</span><span class="loc">NRT</span></div>
+                                    <div class="arrow">✈️</div>
+                                    <div class="time-loc"><span class="time">17:30</span><span class="loc">TPE</span></div>
+                                </div>
+                                <p class="flight-date">2027-03-07 (日) · 星宇航空 STARLUX</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2：台灣直飛 -->
+            <div class="tab-panel" id="tab-taiwan">
+                <div class="story-box">
+                    <span class="story-icon">🧳</span>
+                    <div>
+                        <h4>依據休假彈性，選擇最適合的方案！</h4>
+                        <p>想提前去東京血拼，還是當天直奔雪場？幫你規劃好了兩條完美路線！</p>
+                    </div>
+                </div>
+                
+                <div class="plan-section">
+                    <div class="plan-label plan-a">A計畫：3/2 提前到東京吃喝一晚</div>
+                    <div class="flight-row-container">
+                        <div class="flight-col">
+                            <div class="direction-label">✈️ 去程 (TPE → NRT)</div>
+                            <div class="cards-grid">
+                                <div class="glass-card flight-card">
+                                    <div class="flight-type">推薦早班機 · 3/2 TPE→NRT</div>
+                                    <h3 class="flight-number">JX 800</h3>
+                                    <div class="flight-details">
+                                        <div class="time-loc"><span class="time">08:30</span><span class="loc">TPE</span></div>
+                                        <div class="arrow">✈️</div>
+                                        <div class="time-loc"><span class="time">12:45</span><span class="loc">NRT</span></div>
+                                    </div>
+                                    <p class="flight-date">2027-03-02 (二) · 星宇航空 STARLUX</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flight-col">
+                            <div class="direction-label">🛬 回程 (NRT → TPE)</div>
+                            <div class="cards-grid">
+                                <div class="glass-card flight-card">
+                                    <div class="flight-type">回程直飛 · 3/7 NRT→TPE</div>
+                                    <h3 class="flight-number">JX 801</h3>
+                                    <div class="flight-details">
+                                        <div class="time-loc"><span class="time">14:10</span><span class="loc">NRT</span></div>
+                                        <div class="arrow">✈️</div>
+                                        <div class="time-loc"><span class="time">17:30</span><span class="loc">TPE</span></div>
+                                    </div>
+                                    <p class="flight-date">2027-03-07 (日) · 星宇航空 STARLUX</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flight-notice">⚠️ 航班資訊僅供參考，可隨自己行程調整</div>
+                </div>
+
+                <div class="plan-section">
+                    <div class="plan-label plan-b">B計畫：3/3 台灣起飛直奔妙高</div>
+                    <div class="flight-row-container">
+                        <div class="flight-col">
+                            <div class="direction-label">✈️ 去程 (TPE → NRT)</div>
+                            <div class="cards-grid">
+                                <div class="glass-card flight-card">
+                                    <div class="flight-type">推薦早班機 · 3/3 TPE→NRT</div>
+                                    <h3 class="flight-number">BR 198</h3>
+                                    <div class="flight-details">
+                                        <div class="time-loc"><span class="time">08:50</span><span class="loc">TPE</span></div>
+                                        <div class="arrow">✈️</div>
+                                        <div class="time-loc"><span class="time">12:55</span><span class="loc">NRT</span></div>
+                                    </div>
+                                    <p class="flight-date">2027-03-03 (三) · 長榮 EVA Air</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flight-col">
+                            <div class="direction-label">🛬 回程 (NRT → TPE)</div>
+                            <div class="cards-grid">
+                                <div class="glass-card flight-card">
+                                    <div class="flight-type">回程直飛 · 3/7 NRT→TPE</div>
+                                    <h3 class="flight-number">JX 801</h3>
+                                    <div class="flight-details">
+                                        <div class="time-loc"><span class="time">14:10</span><span class="loc">NRT</span></div>
+                                        <div class="arrow">✈️</div>
+                                        <div class="time-loc"><span class="time">17:30</span><span class="loc">TPE</span></div>
+                                    </div>
+                                    <p class="flight-date">2027-03-07 (日) · 星宇航空 STARLUX</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flight-notice">⚠️ 航班資訊僅供參考，可隨自己行程調整</div>
+                </div>
+            </div>
+
+            <!-- Tab 3：香港大隊 -->
+            <div class="tab-panel" id="tab-hk">
+                <div class="story-box">
+                    <span class="story-icon">🇳🇱</span>
+                    <div>
+                        <h4>香港分部，完美接軌！</h4>
+                        <p>跟 Bonnie & Leo 航班部隊搭乘同一班飛機抵達！落地立刻換特快車，殺進東京市區會合吃晚餐！</p>
+                    </div>
+                </div>
+                <div class="flight-row-container">
+                    <div class="flight-col">
+                        <div class="direction-label">✈️ 去程 (HKG → NRT)</div>
+                        <div class="cards-grid">
+                            <div class="glass-card flight-card">
+                                <div class="flight-type">推薦去程 · 3/2 HKG→NRT</div>
+                                <h3 class="flight-number">CX 520</h3>
+                                <div class="flight-details">
+                                    <div class="time-loc"><span class="time">10:30</span><span class="loc">HKG</span></div>
+                                    <div class="arrow">✈️</div>
+                                    <div class="time-loc"><span class="time">15:35</span><span class="loc">NRT</span></div>
+                                </div>
+                                <p class="flight-date">2027-03-02 (二) · 國泰 Cathay Pacific</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flight-col">
+                        <div class="direction-label">🛬 回程 (NRT → HKG)</div>
+                        <div class="cards-grid">
+                            <div class="glass-card flight-card">
+                                <div class="flight-type">回程 · 3/7 NRT→HKG</div>
+                                <h3 class="flight-number">CX 503</h3>
+                                <div class="flight-details">
+                                    <div class="time-loc"><span class="time">15:35</span><span class="loc">NRT</span></div>
+                                    <div class="arrow">✈️</div>
+                                    <div class="time-loc"><span class="time">19:45</span><span class="loc">HKG</span></div>
+                                </div>
+                                <p class="flight-date">2027-03-07 (日) · 國泰 Cathay Pacific</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flight-notice">⚠️ 航班資訊僅供參考，可隨自己行程調整</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 交通與住宿 Section -->
+    <section id="transport" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">交通與住宿 <span>Transport & Stay</span></h2>
+            
+            <!-- 熱血闖關路線圖 -->
+            <div class="glass-card route-path multi-track-route">
+                <h3>🐾 抓緊冬季貓尾：美食、雪板、溫泉大攻略</h3>
+                <div class="route-steps">
+                    <!-- 第一站 -->
+                    <div class="route-step">
+                        <div class="route-node glow">🇭🇰</div>
+                        <div class="route-step-label">第一站：3/1</div>
+                        <div class="route-info">
+                            <p>TPE ➔ HKG 香港快閃吃燒鵝</p>
+                            <div class="badges">
+                                <span class="badge vanguard">👑 Bonnie & Leo 航班部隊</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="route-arrow">➔</div>
+                    <!-- 第二站 -->
+                    <div class="route-step">
+                        <div class="route-node glow">🍻</div>
+                        <div class="route-step-label">第二站：3/2</div>
+                        <div class="route-info">
+                            <p>機場搭 Skyliner ➔ 東京市區居酒屋狂歡</p>
+                            <div class="badges">
+                                <span class="badge vanguard">👑 Bonnie & Leo 航班部隊</span>
+                                <span class="badge taiwan-a">🇹🇼 台灣A計畫</span>
+                                <span class="badge hk">🇭🇰 香港大隊</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="route-arrow">➔</div>
+                    <!-- 第三站 -->
+                    <div class="route-step">
+                        <div class="route-node glow">🚄</div>
+                        <div class="route-step-label">第三站：3/3</div>
+                        <div class="route-info">
+                            <p>上野站搭乘北陸新幹線 ➔ 妙高高原站</p>
+                            <div class="badges">
+                                <span class="badge vanguard">👑 Bonnie & Leo 航班部隊</span>
+                                <span class="badge taiwan-a">🇹🇼 台灣A計畫</span>
+                                <span class="badge taiwan-b">🇹🇼 台灣B計畫</span>
+                                <span class="badge hk">🇭🇰 香港大隊</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="route-arrow">➔</div>
+                    <!-- 第四站 -->
+                    <div class="route-step">
+                        <div class="route-node glow">🏂</div>
+                        <div class="route-step-label">第四站：3/3~3/6</div>
+                        <div class="route-info">
+                            <p>妙高赤倉滑雪、泡湯、雪屋大餐</p>
+                            <div class="badges">
+                                <span class="badge all">🔥 全員到齊！</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="route-arrow">➔</div>
+                    <!-- 第五站 -->
+                    <div class="route-step">
+                        <div class="route-node glow">✈️</div>
+                        <div class="route-step-label">第五站：3/7</div>
+                        <div class="route-info">
+                            <p>妙高高原站 ➔ 東京成田機場撤退</p>
+                            <div class="badges">
+                                <span class="badge all">👋 依各自航班返回</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 住宿候選 -->
+            <div class="housing-section">
+                <h3 style="text-align: center; margin-bottom: 2rem; font-size: 2rem; color: var(--accent); text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);">🏠 我們的妙高滑雪大本營</h3>
+                
+                <div id="housing-grid" class="housing-grid">
+                    <!-- 卡片將由 JavaScript 動態生成 -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 每日行程表 Section (Timeline) -->
+    <section id="itinerary" class="section tab-group">
+        <div class="container">
+            <h2 class="section-title">每日行程 <span>Itinerary</span></h2>
+            
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab-target="iti-vanguard">👑 Bonnie & Leo 航班部隊</button>
+                <button class="tab-btn" data-tab-target="iti-taiwan-a">🇹🇼 台灣 (A計畫)</button>
+                <button class="tab-btn" data-tab-target="iti-taiwan-b">🇹🇼 台灣 (B計畫)</button>
+                <button class="tab-btn" data-tab-target="iti-hk">🇭🇰 香港大隊</button>
+            </div>
+
+            <!-- 行程 Tab：Bonnie & Leo 航班部隊 -->
+            <div class="tab-panel active" id="iti-vanguard">
+                <div class="timeline">
+                    <div class="timeline-item"><div class="timeline-dot hk"></div><div class="timeline-content glass-card">
+                        <h3>3/1 (一)｜香港快閃吃爆行動</h3>
+                        <p>早上抵達香港，與香港分部會合！維多利亞港打卡、燒鵝吃到撐、晚上去蘭桂坊喝一杯，暖身啟動！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot travel"></div><div class="timeline-content glass-card">
+                        <h3>3/2 (二)｜前進東京，大軍集結</h3>
+                        <p>與香港大隊搭同一班機殺往東京成田。抵達後直奔市區，晚上在居酒屋與「台灣直飛 A計畫」成員大會師！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot snow"></div><div class="timeline-content glass-card">
+                        <h3>3/3 (三)｜新幹線進擊！全員到齊</h3>
+                        <p>早上搭北陸新幹線前往妙高。抵達 Airbnb，與「台灣直飛 B計畫」成員最終會合！下午馬上衝去租雪具，傍晚直接泡個溫泉開局！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot snow"></div><div class="timeline-content glass-card">
+                        <h3>3/4 (四) ~ 3/5 (五)｜妙高連滑！粉雪地獄</h3>
+                        <p>連兩天在赤倉溫泉 / 赤倉觀光滑雪場激戰。初學者推坡摔到飽，老手樹林找樂子。晚上回民宿自己煮火鍋或在溫泉街覓食。</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot party"></div><div class="timeline-content glass-card">
+                        <h3>3/6 (六)｜最終戰與雪地趴踢</h3>
+                        <p>滑雪最終日！把所有力氣用光，下午歸還裝備。晚上全軍舉辦極限慶功宴，乾杯慶祝大家都活著！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot depart"></div><div class="timeline-content glass-card">
+                        <h3>3/7 (日)｜NEX 狂奔，含淚返鄉</h3>
+                        <p>一早告別雪國，搭新幹線回東京轉乘 NEX 成田特快直奔機場。免稅店最後衝刺，帶著滿滿肌肉痠痛搭機回台灣。</p>
+                    </div></div>
+                </div>
+            </div>
+
+            <!-- 行程 Tab：台灣 A計畫 -->
+            <div class="tab-panel" id="iti-taiwan-a">
+                <div class="timeline">
+                    <div class="timeline-item"><div class="timeline-dot prep"></div><div class="timeline-content glass-card">
+                        <h3>3/1 (一)｜行前準備</h3>
+                        <p>最後檢查護照、雪衣褲、護具，準備明天起飛！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot travel"></div><div class="timeline-content glass-card">
+                        <h3>3/2 (二)｜東京我來了！居酒屋會師</h3>
+                        <p>早班機抵達東京，先去市區 check-in。下午瘋狂血拼逛街，晚上跟從香港飛來的 Bonnie & Leo 航班部隊、香港大隊在新宿居酒屋喝到掛！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot snow"></div><div class="timeline-content glass-card">
+                        <h3>3/3 (三)｜踏上雪國，滿員集結</h3>
+                        <p>搭新幹線前往妙高，抵達 Airbnb！幫「台灣直飛 B計畫」的人開門，裝備租借完畢後，開啟泡湯模式！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot snow"></div><div class="timeline-content glass-card">
+                        <h3>3/4 (四) ~ 3/5 (五)｜熱血滑雪瘋狂訓練</h3>
+                        <p>兩天瘋狂滑雪行程！一起在雪地上打滾跌倒，感受妙高無敵雪質。晚上回民宿耍廢打牌！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot party"></div><div class="timeline-content glass-card">
+                        <h3>3/6 (六)｜最後衝刺，不留遺憾</h3>
+                        <p>滑雪最後半天，下午還雪具。晚上全員熱血慶功宴，拍照留念！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot depart"></div><div class="timeline-content glass-card">
+                        <h3>3/7 (日)｜伴手禮掃貨與歸途</h3>
+                        <p>早起搭車回東京，成田機場買爆伴手禮。與所有人擁抱道別，帶著美好回憶飛回台灣。</p>
+                    </div></div>
+                </div>
+            </div>
+
+            <!-- 行程 Tab：台灣 B計畫 -->
+            <div class="tab-panel" id="iti-taiwan-b">
+                <div class="timeline">
+                    <div class="timeline-item"><div class="timeline-dot prep"></div><div class="timeline-content glass-card">
+                        <h3>3/1 (一) ~ 3/2 (二)｜留守台灣，瘋狂打包</h3>
+                        <p>大家都在日本爽了，我在台灣努力上班到最後一刻！下班回家瘋狂打包雪具，準備明天起飛！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot travel"></div><div class="timeline-content glass-card">
+                        <h3>3/3 (三)｜極速狂飆，直奔妙高</h3>
+                        <p>一早直飛成田，降落後立刻執行「大脫逃」路線！Skyliner 轉新幹線，下午殺到妙高 Airbnb，推開門對大家喊：「我來啦！」</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot snow"></div><div class="timeline-content glass-card">
+                        <h3>3/4 (四) ~ 3/5 (五)｜跟上節奏，滑雪特訓</h3>
+                        <p>馬上加入滑雪大隊！雖然晚一天到，但體力滿點！在雪道上盡情奔馳，晚上跟著大家吃吃喝喝泡溫泉。</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot party"></div><div class="timeline-content glass-card">
+                        <h3>3/6 (六)｜燃燒小宇宙</h3>
+                        <p>滑雪最後一日，發揮 100% 實力挑戰中級道。晚上參加大慶功宴，慶祝這趟熱血旅程！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot depart"></div><div class="timeline-content glass-card">
+                        <h3>3/7 (日)｜依依不捨，原路折返</h3>
+                        <p>打包行李，搭乘新幹線轉 NEX 衝成田機場。與大部隊同一天回台，結束難忘的滑雪之旅。</p>
+                    </div></div>
+                </div>
+            </div>
+
+            <!-- 行程 Tab：香港大隊 -->
+            <div class="tab-panel" id="iti-hk">
+                <div class="timeline">
+                    <div class="timeline-item"><div class="timeline-dot prep"></div><div class="timeline-content glass-card">
+                        <h3>3/1 (一)｜Bonnie & Leo 航班部隊接駕，吃喝香港</h3>
+                        <p>歡迎 Bonnie & Leo 航班部隊來到香港！帶他們吃爆地道美食，準備明天一起飛日本！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot travel"></div><div class="timeline-content glass-card">
+                        <h3>3/2 (二)｜東京空降，居酒屋聚首</h3>
+                        <p>抵達東京成田，進市區安頓好後，晚上跟台灣 A計畫的夥伴在新宿居酒屋碰面，台港大交流！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot snow"></div><div class="timeline-content glass-card">
+                        <h3>3/3 (三)｜雪國特急，妙高參上</h3>
+                        <p>搭乘新幹線抵達妙高。下午租借雪具，換上最帥的裝備，晚上享受溫泉洗滌旅途疲憊。</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot snow"></div><div class="timeline-content glass-card">
+                        <h3>3/4 (四) ~ 3/5 (五)｜赤倉激戰，滑雪中毒</h3>
+                        <p>連兩天在雪場奮戰！跌倒不怕，最怕沒拍到帥照！晚上大家一起聚在客廳吃零食聊天。</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot party"></div><div class="timeline-content glass-card">
+                        <h3>3/6 (六)｜雪地絕景與大慶功</h3>
+                        <p>把握最後的雪地時光，欣賞妙高絕景。晚上迎來大慶功宴，瘋狂一整晚！</p>
+                    </div></div>
+                    <div class="timeline-item"><div class="timeline-dot depart"></div><div class="timeline-content glass-card">
+                        <h3>3/7 (日)｜各自安好，期待再聚</h3>
+                        <p>退房回東京成田機場，與台灣部隊分道揚鑣，搭機返回香港。旅程結束，開始存錢準備下一趟！</p>
+                    </div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 雪場與周邊 Section -->
+    <section id="resort" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">雪場與周邊 <span>Resort & Info</span></h2>
+            
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <button id="btn-ski-map" class="btn-primary" onclick="document.getElementById('resort-map-modal').classList.remove('hidden'); document.body.style.overflow='hidden';" style="font-size: 1.2rem; padding: 1rem 3rem;">🗺️ 妙高赤倉全區雪道圖</button>
+            </div>
+
+            <div class="cards-grid three-cols">
+                <!-- 夢幻雪場特搜 -->
+                <div class="glass-card resort-card" onclick="document.querySelectorAll('.resort-card').forEach(c => { if(c !== this) c.classList.remove('active') }); this.classList.toggle('active');">
+                    <h3 class="neon-title">🎿 夢幻雪場特搜</h3>
+                    <p class="resort-hint">點擊揭密粉雪天堂</p>
+                    <div class="resort-expand-panel" id="resort-snow">
+                        <ul class="custom-list">
+                            <li><strong>⛷️ 赤倉溫泉滑雪場：</strong>全日本唯一可直接夜滑到溫泉街的粉雪天堂，雪道超寬適合熱身！</li>
+                            <li><strong>🏔️ 赤倉觀光滑雪場 (Akakan)：</strong>擁有高空無邊際雲海飯店，直下型高爽度雪道，高手極致最愛！</li>
+                            <li><strong>🏂 池之平溫泉滑雪場：</strong>擁有全日本最寬、最平緩的超長巡航雪道，還有極具挑戰性的 Terrain Park！</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- 赤倉美食地圖 -->
+                <div class="glass-card resort-card" onclick="document.querySelectorAll('.resort-card').forEach(c => { if(c !== this) c.classList.remove('active') }); this.classList.toggle('active');">
+                    <h3 class="neon-title">🍽️ 赤倉美食地圖</h3>
+                    <p class="resort-hint">點擊挖掘隱藏美味</p>
+                    <div class="resort-expand-panel" id="resort-food">
+                        <ul class="custom-list">
+                            <li><strong>🥩 Restaurant Shibata：</strong>傳奇爆量炸豬排飯、招牌漢堡排，滑雪後補足熱量的終極大魔王！</li>
+                            <li><strong>🍜 やぶそば (Yabu Soba)：</strong>高原車站前老字號手工蕎麥麵與酥脆天婦羅，在地地酒絕配！</li>
+                            <li><strong>🍕 石窯披薩 Two Pines：</strong>現點現烤柴燒拿坡里披薩，拉絲起司搭配「妙高高原精釀啤酒」簡直天堂！</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- 祕境溫泉鄉 -->
+                <div class="glass-card resort-card" onclick="document.querySelectorAll('.resort-card').forEach(c => { if(c !== this) c.classList.remove('active') }); this.classList.toggle('active');">
+                    <h3 class="neon-title">♨️ 祕境溫泉鄉</h3>
+                    <p class="resort-hint">點擊解鎖美人湯</p>
+                    <div class="resort-expand-panel" id="resort-onsen">
+                        <ul class="custom-list">
+                            <li><strong>🧼 赤倉溫泉 (江戶開湯)：</strong>妙高山直引的天然硫酸鹽「美人湯」，專治全身滑雪酸痛！</li>
+                            <li><strong>🌋 池之平黑泥溫泉：</strong>罕見的天然微泥沙泥湯，深度消除關節疲勞，去角質神效！</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 公費與分帳表 Section -->
+    <section id="expenses" class="section">
+        <div class="container">
+            <h2 class="section-title">公費與分帳表 <span>Expenses & AA Settlement</span></h2>
+            
+            <div class="expense-dashboard">
+
+                <!-- 卡片2：終極清算帳本 -->
+                <div class="glass-card expense-panel" id="settlement-card">
+                    <h3>💸 終極清算帳本</h3>
+                    <p class="subtitle">即時 AI 結算 (AA 防呆機制)</p>
+                    <div class="avatar-filter-container" id="avatar-filter-container">
+                        <!-- 動態插入頭像過濾器 -->
+                    </div>
+                    <div class="settlement-list" id="settlement-list">
+                        <!-- 動態結算指令將注入此處 -->
+                        <div class="empty-state">目前無任何欠款 🎉</div>
+                    </div>
+                </div>
+
+                <!-- 卡片3：即時流水帳 -->
+                <div class="glass-card expense-panel" id="history-card">
+                    <h3>📜 即時流水帳</h3>
+                    <p class="subtitle">最近花費紀錄</p>
+                    <div class="transaction-list" id="transaction-list">
+                        <!-- 動態交易紀錄將注入此處 -->
+                        <div class="empty-state">尚未有任何花費紀錄</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 實時共用採買清單 -->
+            <div class="grocery-dashboard">
+                <div class="glass-card expense-panel" id="grocery-card">
+                    <h3>🛒 實時共用採買清單</h3>
+                    <p class="subtitle">超市採買即時同步</p>
+                    <div class="grocery-input-group">
+                        <input type="text" id="grocery-input" placeholder="想買什麼？(例: 鮮奶 2 瓶)">
+                        <select id="grocery-assignee" class="select-input" style="padding: 0.8rem; border-radius: 8px; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid rgba(255,255,255,0.2);"><option value="">負責人(選填)</option><option value="Bonnie">🐰 Bonnie</option><option value="Leo">🦁 Leo</option><option value="Yuk">🐻 Yuk</option><option value="Dino">🦖 Dino</option><option value="Ian">🐺 Ian</option><option value="總召">👑 總召</option></select>
+                        <button id="btn-add-grocery" class="btn-primary" style="padding: 0.8rem 1.5rem;">新增</button>
+                    </div>
+                    <div class="grocery-list" id="grocery-list">
+                        <!-- Firebase 動態注入 -->
+                        <div class="empty-state">目前清單空空如也</div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- 裝備清單 Section -->
+    <section id="gear" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">裝備清單 <span>Gear Checklist</span></h2>
+            
+            <!-- 旅伴切換器 -->
+            <div class="gear-user-selector">
+                <button class="gear-user-btn active" data-user="Bonnie">🐰 Bonnie</button>
+                <button class="gear-user-btn" data-user="Leo">🦁 Leo</button>
+                <button class="gear-user-btn" data-user="Yuk">🐻 Yuk</button>
+                <button class="gear-user-btn" data-user="Dino">🦖 Dino</button>
+                <button class="gear-user-btn" data-user="Ian">🐺 Ian</button>
+            </div>
+
+            <div class="gear-grid">
+                <label class="gear-card" data-gear-id="snowboard">
+                    <input type="checkbox" class="gear-checkbox">
+                    <div class="gear-img">
+                        <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_snowboard.png" alt="Snowboard">
+                        <div class="checked-overlay">
+                            <span class="tick-icon">✔️</span>
+                        </div>
+                    </div>
+                    <div class="gear-info">
+                        <span class="item-text">雪板 (Snowboard)</span>
+                    </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
+                </label>
+                <label class="gear-card" data-gear-id="boots">
+                    <input type="checkbox" class="gear-checkbox">
+                    <div class="gear-img">
+                        <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_boots.png" alt="Boots">
+                        <div class="checked-overlay">
+                            <span class="tick-icon">✔️</span>
+                        </div>
+                    </div>
+                    <div class="gear-info">
+                        <span class="item-text">雪鞋 (Boots)</span>
+                    </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
+                </label>
+                <label class="gear-card" data-gear-id="bindings">
+                    <input type="checkbox" class="gear-checkbox">
+                    <div class="gear-img">
+                        <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_bindings.png" alt="Bindings">
+                        <div class="checked-overlay">
+                            <span class="tick-icon">✔️</span>
+                        </div>
+                    </div>
+                    <div class="gear-info">
+                        <span class="item-text">固定器 (Bindings)</span>
+                    </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
+                </label>
+                <label class="gear-card" data-gear-id="jacket_pants">
+                    <input type="checkbox" class="gear-checkbox">
+                    <div class="gear-img">
+                        <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_jacket_pants.png" alt="Jacket and Pants" class="crop-left-person">
+                        <div class="checked-overlay">
+                            <span class="tick-icon">✔️</span>
+                        </div>
+                    </div>
+                    <div class="gear-info">
+                        <span class="item-text">防水雪衣 & 雪褲</span>
+                    </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
+                </label>
+                <label class="gear-card" data-gear-id="baselayer">
+                    <input type="checkbox" class="gear-checkbox">
+                    <div class="gear-img">
+                        <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_baselayer.png" alt="Base Layers" class="crop-no-logo">
+                        <div class="checked-overlay">
+                            <span class="tick-icon">✔️</span>
+                        </div>
+                    </div>
+                    <div class="gear-info">
+                        <span class="item-text">保暖排汗內衣褲</span>
+                    </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
+                </label>
+                <label class="gear-card" data-gear-id="helmet">
+                    <input type="checkbox" class="gear-checkbox">
+                    <div class="gear-img">
+                        <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_helmet.png" alt="Helmet">
+                        <div class="checked-overlay">
+                            <span class="tick-icon">✔️</span>
+                        </div>
+                    </div>
+                    <div class="gear-info">
+                        <span class="item-text">滑雪安全帽 (Helmet)</span>
+                    </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
+                </label>
+                <label class="gear-card" data-gear-id="goggles">
+                    <input type="checkbox" class="gear-checkbox">
+                    <div class="gear-img">
+                        <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_goggles.png" alt="Goggles">
+                        <div class="checked-overlay">
+                            <span class="tick-icon">✔️</span>
+                        </div>
+                    </div>
+                    <div class="gear-info">
+                        <span class="item-text">雪鏡 (Goggles)</span>
+                    </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
+                </label>
+                <label class="gear-card" data-gear-id="protection">
+                    <input type="checkbox" class="gear-checkbox">
+                    <div class="gear-img">
+                        <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_protection.png" alt="Protectors">
+                        <div class="checked-overlay">
+                            <span class="tick-icon">✔️</span>
+                        </div>
+                    </div>
+                    <div class="gear-info">
+                        <span class="item-text">防摔護具 (Protectors)</span>
+                    </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
+                </label>
+                <label class="gear-card" data-gear-id="gloves">
+                    <input type="checkbox" class="gear-checkbox">
+                    <div class="gear-img">
+                        <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_gloves.png" alt="Gloves">
+                        <div class="checked-overlay">
+                            <span class="tick-icon">✔️</span>
+                        </div>
+                    </div>
+                    <div class="gear-info">
+                        <span class="item-text">滑雪手套 (Gloves)</span>
+                    </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
+                </label>
+                <label class="gear-card" data-gear-id="socks">
+                    <input type="checkbox" class="gear-checkbox">
+                    <div class="gear-img">
+                        <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_socks.png" alt="Socks">
+                        <div class="checked-overlay">
+                            <span class="tick-icon">✔️</span>
+                        </div>
+                    </div>
+                    <div class="gear-info">
+                        <span class="item-text">滑雪長襪 (Socks)</span>
+                    </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
+                </label>
+                <label class="gear-card" data-gear-id="balaclava">
+                    <input type="checkbox" class="gear-checkbox">
+                    <div class="gear-img">
+                        <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_balaclava.png" alt="Neck Warmer">
+                        <div class="checked-overlay">
+                            <span class="tick-icon">✔️</span>
+                        </div>
+                    </div>
+                    <div class="gear-info">
+                        <span class="item-text">高機能脖圍 (Neck Warmer)</span>
+                    </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
+                </label>
+                <label class="gear-card" data-gear-id="camera">
+                    <input type="checkbox" class="gear-checkbox" checked>
+                    <div class="gear-img">
+                        <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_camera.png" alt="Action Camera">
+                        <div class="checked-overlay">
+                            <span class="tick-icon">✔️</span>
+                        </div>
+                    </div>
+                    <div class="gear-info">
+                        <span class="item-text">Insta360 運動相機</span>
+                    </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
+                </label>
+                <label class="gear-card" data-gear-id="passport">
+                    <input type="checkbox" class="gear-checkbox">
+                    <div class="gear-img">
+                        <img src="https://raw.githubusercontent.com/a13a5510-ctrl/Myoko-2027/main/assets/gear/gear_passport.png" alt="Passport">
+                        <div class="checked-overlay">
+                            <span class="tick-icon">✔️</span>
+                        </div>
+                    </div>
+                    <div class="gear-info">
+                        <span class="item-text">個人護照與機票</span>
+                    </div>
+                    <select class="gear-status-select">
+                        <option value="self">🔵 自備</option>
+                        <option value="reserved">🟡 線上已預約</option>
+                        <option value="rental">🔴 需現場租借</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+    </section>
+
+    <!-- 影音回憶錄 Section -->
+    <section id="gallery" class="section is-locked">
+        <div class="container">
+            <h2 class="section-title">影音回憶錄 <span>Memories</span></h2>
+            <p class="gallery-desc">我們的精彩瞬間將於此呈現。</p>
+            
+            <!-- 專屬密碼鎖區塊 -->
+            <div id="gallery-auth-overlay" class="glass-card auth-container">
+                <div class="auth-icon">🔒</div>
+                <h3>專屬回憶錄</h3>
+                <p>請輸入通行碼以解鎖相簿與影片</p>
+                <div class="auth-input-group">
+                    <input type="password" id="gallery-password" placeholder="請輸入密碼" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                    <button id="btn-unlock-gallery" class="btn-primary">解鎖</button>
+                </div>
+                <p id="gallery-auth-error" class="auth-error hidden">密碼錯誤，請再試一次</p>
+            </div>
+
+            <!-- 解鎖後顯示的內容區塊 -->
+            <div id="gallery-content" class="hidden">
+                <!-- 上傳控制台 -->
+                <div class="upload-console glass-card">
+                    <h4>分享你的精彩瞬間 📸</h4>
+                    <div class="upload-controls">
+                        <input type="file" id="upload-file-input" multiple accept="image/*,video/*" class="file-input">
+                        <select id="upload-category" class="select-input">
+                            <option value="滑雪英姿">🏂 滑雪英姿</option>
+                            <option value="沿途風景">🏔️ 沿途風景</option>
+                            <option value="美食與住宿">🍜 美食與住宿</option>
+                        </select>
+                        <input type="text" id="upload-uploader-name" placeholder="你的名字" class="text-input">
+                        <button id="btn-upload-media" class="btn-primary">確認上傳</button>
+                    </div>
+                    <div id="upload-progress-container" class="hidden">
+                        <p id="upload-progress-text">上傳中... 0%</p>
+                        <div class="progress-bar-bg"><div id="upload-progress-bar" class="progress-bar-fill"></div></div>
+                    </div>
+                </div>
+
+                <!-- 這裡將由 Firebase 即時動態生成分類內容 -->
+                <div id="media-grid" class="media-grid"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2027 Myoko Akakura Snowboard Trip. All rights reserved.</p>
+    </footer>
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <!-- Firebase Realtime Database -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <!-- Firebase Storage -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+        <!-- 💬 聊天室 Modal -->
+        <div id="chat-modal" class="modal-overlay hidden chat-modal-wrapper">
+            <div class="modal-content chat-modal-content">
+                <div class="modal-header">
+                    <h3>💬 雪地對講機</h3>
+                    <button class="btn-close" id="close-chat-modal">&times;</button>
+                </div>
+                
+                <!-- 首次身分選擇 -->
+                <div id="chat-identity-setup" class="chat-identity-setup">
+                    <h4>請先選擇你的身分</h4>
+                    <select id="chat-identity-select" class="creator-select">
+                        <option value="Bonnie">🐰 Bonnie</option>
+                        <option value="Leo">🦁 Leo</option>
+                        <option value="Yuk">🐻 Yuk</option>
+                        <option value="Dino">🦖 Dino</option>
+                        <option value="Ian">🐺 Ian</option>
+                    </select>
+                    <button id="btn-save-identity" class="btn-settle" style="width:100%">進入對講機</button>
+                </div>
+
+                <!-- 聊天內容區塊 -->
+                <div id="chat-messages" class="chat-messages hidden">
+                    <!-- 訊息動態渲染於此 -->
+                </div>
+
+                <!-- 貼圖面板 -->
+                <div id="sticker-panel" class="sticker-panel hidden">
+                    <img src="./assets/stickers/sticker_go.png" alt="衝啊" class="sticker-option" data-sticker="sticker_go">
+                    <img src="./assets/stickers/sticker_cold.png" alt="凍僵了" class="sticker-option" data-sticker="sticker_cold">
+                    <img src="./assets/stickers/sticker_beer.png" alt="居酒屋" class="sticker-option" data-sticker="sticker_beer">
+                    <img src="./assets/stickers/sticker_help.png" alt="求救" class="sticker-option" data-sticker="sticker_help">
+                </div>
+
+                <!-- 底部輸入區塊 -->
+                <div id="chat-input-area" class="chat-input-area hidden">
+                    <button id="btn-toggle-sticker" class="btn-toggle-sticker">😊</button>
+                    <button id="btn-tactical-pin" class="btn-toggle-sticker" style="margin-left: 5px;" title="釘選集合點">📍</button>
+                    <input type="text" id="chat-input" placeholder="說點什麼..." autocomplete="off">
+                    <button id="btn-send-chat" class="btn-send-chat">送出</button>
+                </div>
+            </div>
+        </div>
+
+    <!-- 投票彈出視窗 (Modal) -->
+    <div id="vote-modal" class="vote-modal hidden">
+        <div class="vote-modal-content glass-card">
+            <button class="vote-modal-close" id="close-vote-modal">&times;</button>
+            <h3 id="vote-modal-title">投給房源</h3>
+            
+            <div class="vote-form-group">
+                <label for="voter-name">你的名字</label>
+                <input type="text" id="voter-name" placeholder="輸入姓名 (如: Bonnie)">
+            </div>
+            
+            <div class="vote-form-group">
+                <label>快捷原因</label>
+                <div class="quick-reasons">
+                    <button type="button" class="btn-quick-reason">氛圍不錯</button>
+                    <button type="button" class="btn-quick-reason">價錢合理</button>
+                    <button type="button" class="btn-quick-reason">床看起來很好睡</button>
+                    <button type="button" class="btn-quick-reason">離雪場超近</button>
+                    <button type="button" class="btn-quick-reason">衛浴數量充足</button>
+                </div>
+            </div>
+
+            <div class="vote-form-group">
+                <label for="voter-reason">想投它的原因</label>
+                <textarea id="voter-reason" rows="3" placeholder="點擊上方按鈕，或自己填寫..."></textarea>
+            </div>
+            
+            <input type="hidden" id="vote-house-id">
+            <button id="submit-vote" class="btn-primary" style="width: 100%;">確認送出</button>
+        </div>
+    </div>
+    <!-- 快速記帳 FAB -->
+    <div class="fab-container">
+        <button id="fab-chat" class="fab-btn chat-fab">💬 對講機</button>
+        <button id="fab-add-expense" class="fab-btn glow-effect">
+            <span class="fab-icon">➕</span> <span class="fab-text">快速記帳</span>
+        </button>
+    </div>
+
+    <!-- 記帳 Modal -->
+    <div id="ledger-modal" class="modal-overlay hidden">
+        <div class="ledger-modal-content glass-card">
+            <div class="modal-header">
+                <h3>新增花費</h3>
+                <button class="btn-close" id="close-ledger-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-expense-id" value="">
+                
+                <!-- 記帳操作者 -->
+                <div class="form-group">
+                    <label>記帳操作者 (Created By)</label>
+                    <select id="expense-creator" class="creator-select">
+                        <option value="Bonnie">🐰 Bonnie</option>
+                        <option value="Leo">🦁 Leo</option>
+                        <option value="Yuk">🐻 Yuk</option>
+                        <option value="Dino">🦖 Dino</option>
+                        <option value="Ian">🐺 Ian</option>
+                    </select>
+                </div>
+
+                <!-- 付款人 -->
+                <div class="form-group">
+                    <label>付款人 (Who paid?)</label>
+                    <div class="payer-selector" id="payer-selector">
+                        <button type="button" class="avatar-btn" data-name="Bonnie">🐰</button>
+                        <button type="button" class="avatar-btn" data-name="Leo">🦁</button>
+                        <button type="button" class="avatar-btn" data-name="Yuk">🐻</button>
+                        <button type="button" class="avatar-btn" data-name="Dino">🦖</button>
+                        <button type="button" class="avatar-btn" data-name="Ian">🐺</button>
+                    </div>
+                    <input type="hidden" id="expense-payer">
+                </div>
+
+                <!-- 時間 -->
+                <div class="form-group">
+                    <label for="expense-time">消費時間</label>
+                    <div class="time-input-group">
+                        <input type="datetime-local" id="expense-time" class="time-input">
+                        <button type="button" class="time-btn" data-offset="-30">🕒 1小時以內</button>
+                        <button type="button" class="time-btn" data-offset="-120">🕒 2小時前</button>
+                    </div>
+                </div>
+
+                <!-- 金額與品項 -->
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="expense-amount">
+                            金額 
+                            <button type="button" id="currency-toggle" class="currency-toggle-btn" data-currency="JPY">🇯🇵 JPY</button>
+                        </label>
+                        <input type="number" id="expense-amount" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group half">
+                        <label for="expense-item">品項名稱</label>
+                        <input type="text" id="expense-item" placeholder="例如: 晚餐燒肉">
+                        <div class="quick-categories">
+                            <button type="button" class="quick-category-btn">🍽️ 吃飯</button>
+                            <button type="button" class="quick-category-btn">🥤 飲料</button>
+                            <button type="button" class="quick-category-btn">🍫 點心</button>
+                            <button type="button" class="quick-category-btn">♨️ 溫泉</button>
+                            <button type="button" class="quick-category-btn">🎿 滑雪相關</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 參與均攤名單 -->
+                <div class="form-group">
+                    <label>參與均攤成員 (預設全選)</label>
+                    <div class="participant-selector" id="participant-selector">
+                        <label class="checkbox-item"><input type="checkbox" value="Bonnie" checked><span class="checkmark"></span>🐰 Bonnie</label>
+                        <label class="checkbox-item"><input type="checkbox" value="Leo" checked><span class="checkmark"></span>🦁 Leo</label>
+                        <label class="checkbox-item"><input type="checkbox" value="Yuk" checked><span class="checkmark"></span>🐻 Yuk</label>
+                        <label class="checkbox-item"><input type="checkbox" value="Dino" checked><span class="checkmark"></span>🦖 Dino</label>
+                        <label class="checkbox-item"><input type="checkbox" value="Ian" checked><span class="checkmark"></span>🐺 Ian</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="submit-expense" class="btn-primary" style="width: 100%;">送出記帳</button>
+            </div>
+        </div>
+    </div>
+    <!-- 求生資訊 Modal -->
+    <div id="emergency-modal" class="modal-overlay hidden">
+        <div class="emergency-modal-content glass-card" id="emergency-modal-card">
+            <div class="modal-header">
+                <h3>🆘 求生與緊急資訊</h3>
+                <button class="btn-close" id="close-emergency-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="emergency-phrase">運転手さん、ここへ行ってください。</p>
+                <div class="emergency-address">
+                    〒949-2111<br>
+                    新潟県妙高市赤倉<br>
+                    (Airbnb地址/民宿名稱)
+                </div>
+                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 1.5rem 0;">
+                <h4 style="margin-bottom:1rem; color: var(--color-danger);">緊急電話</h4>
+                <p>🚑 救護車/消防: 119</p>
+                <p>🚓 警察局: 110</p>
+                <p>🏥 妙高醫院: 0255-86-2003</p>
+            </div>
+            <div class="modal-footer">
+                <button id="btn-toggle-bright" class="btn-primary" style="width: 100%; background: #ff9800;">☀️ 切換最高亮度 (給司機看)</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 雪道地圖 Modal -->
+    <div id="resort-map-modal" class="modal-overlay hidden" onclick="if(event.target === this) { this.classList.add('hidden'); document.body.style.overflow=''; }">
+        <div class="glass-card" style="width: 95%; max-width: 1000px; padding: 1rem; position: relative; display: flex; justify-content: center; align-items: center;">
+            <button class="btn-close" id="close-resort-map-modal" onclick="document.getElementById('resort-map-modal').classList.add('hidden'); document.body.style.overflow='';" style="position: absolute; top: 10px; right: 10px; z-index: 10;">&times;</button>
+            <img src="./assets/resort_map.png" style="width: 100%; height: auto; border-radius: 8px;" alt="妙高雪道圖">
+        </div>
+    </div>
+    
+    <!-- 雪具價格詳細列表 Modal -->
+    <div id="gear-price-modal" class="modal-overlay hidden" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="glass-card gear-price-container">
+            <button class="btn-close" id="close-gear-price-modal" onclick="document.getElementById('gear-price-modal').classList.add('hidden')">&times;</button>
+            <div class="gear-price-header">
+                <h3>❄️ 妙高地區・雪具租借價位表</h3>
+                <p>以 Myoko Snowsports 等熱門租借站為參考均價 (含稅)</p>
+                <div class="exchange-rates">
+                    <span class="rate-badge jpy">🇯🇵 JPY</span>
+                    <span class="rate-badge twd">🇹🇼 TWD (~x0.22)</span>
+                    <span class="rate-badge hkd">🇭🇰 HKD (~x0.052)</span>
+                </div>
+            </div>
+            <div class="gear-price-table-wrapper">
+                <table class="gear-price-table">
+                    <thead>
+                        <tr>
+                            <th>裝備品項 Item</th>
+                            <th>租借 1 天</th>
+                            <th>租借 2 天</th>
+                            <th>租借 3 天</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="item-name">
+                                <strong>單板/雙板 + 雪鞋套裝</strong>
+                                <small>Snowboard/Ski & Boots</small>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥4,500</div>
+                                <div class="price-other">NT$990 / HK$234</div>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥8,500</div>
+                                <div class="price-other">NT$1,870 / HK$442</div>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥12,000</div>
+                                <div class="price-other">NT$2,640 / HK$624</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="item-name">
+                                <strong>防水雪衣 + 雪褲套裝</strong>
+                                <small>Jacket & Pants Wear Set</small>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥4,000</div>
+                                <div class="price-other">NT$880 / HK$208</div>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥7,500</div>
+                                <div class="price-other">NT$1,650 / HK$390</div>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥10,500</div>
+                                <div class="price-other">NT$2,310 / HK$546</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="item-name">
+                                <strong>安全帽 / 雪鏡 (單項)</strong>
+                                <small>Helmet or Goggles</small>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥1,000</div>
+                                <div class="price-other">NT$220 / HK$52</div>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥1,800</div>
+                                <div class="price-other">NT$396 / HK$94</div>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥2,500</div>
+                                <div class="price-other">NT$550 / HK$130</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="item-name">
+                                <strong>🎟️ 雪票 (纜車通行證)</strong>
+                                <small>Lift Ticket (赤倉/杉之原等均價)</small>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥7,000</div>
+                                <div class="price-other">NT$1,540 / HK$364</div>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥13,500</div>
+                                <div class="price-other">NT$2,970 / HK$702</div>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥20,000</div>
+                                <div class="price-other">NT$4,400 / HK$1,040</div>
+                            </td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td class="item-name">
+                                <strong>🏆 無腦滑雪全套裝備</strong>
+                                <small>Full Set (板,鞋,衣,褲,帽,鏡)</small>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥9,500</div>
+                                <div class="price-other">NT$2,090 / HK$494</div>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥17,500</div>
+                                <div class="price-other">NT$3,850 / HK$910</div>
+                            </td>
+                            <td>
+                                <div class="price-jpy">¥24,000</div>
+                                <div class="price-other">NT$5,280 / HK$1,248</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="gear-storage-info" style="margin-top: 2rem; background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 1.5rem;">
+                <h4 style="color: #A7F3D0; margin-bottom: 1rem; border-bottom: 1px solid rgba(16, 185, 129, 0.2); padding-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 1.2rem;">🧳</span> Myoko Snowsports 裝備寄放指南
+                </h4>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <!-- 方案一：租借裝備 -->
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);">
+                        <h5 style="color: #60A5FA; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.3rem;">🏂 若在店內「租借」裝備</h5>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9rem; color: #E2E8F0; line-height: 1.5;">
+                            <li style="margin-bottom: 0.8rem;">
+                                <strong style="color: #fff;">雪板與雪杖：</strong><br>
+                                <span style="color: #34D399; font-weight: bold;">免費過夜代客寄放</span> (Valet service)。滑完直接放回專屬架上，隔天再來取！
+                            </li>
+                            <li>
+                                <strong style="color: #fff;">雪靴與個人物品：</strong><br>
+                                店內設有 <span style="color: #F87171;">付費置物櫃 (Lockers)</span> 可供寄放過夜。(註: 3-6歲兒童滑雪課程享免費專屬置物櫃)
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 方案二：自帶裝備 -->
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);">
+                        <h5 style="color: #F87171; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.3rem;">🎒 若「自帶全套」裝備</h5>
+                        <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.9rem; color: #E2E8F0; line-height: 1.5;">
+                            <li style="margin-bottom: 0.8rem;">
+                                <strong style="color: #fff;">店內付費置物櫃：</strong><br>
+                                可租用置物櫃將裝備與私人物品鎖在店內，省去每天扛裝備往返住宿區的麻煩。
+                            </li>
+                            <li>
+                                <strong style="color: #fff;">行情參考：</strong><br>
+                                妙高地區全套雪具寄放過夜公定價大約為 <span style="color: #FBBF24; font-weight: bold; font-size: 1rem;">¥1,000 / 晚</span> (依各店際規定為準)。
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gear-price-footer">
+                <small>* 實際價格可能依租借站與雪季時期略有浮動。多數雪場周邊皆提供此公定價位。</small>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 引入資料檔案與主程式檔案 -->
+    <script src="mediaData.js"></script>
+    <script src="script.js"></script>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox-modal" class="modal-overlay hidden" style="z-index: 10000; background: rgba(0,0,0,0.95); display: flex; flex-direction: column;">
+        <div style="padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;">
+            <span id="lightbox-counter" style="color: white; font-size: 1.2rem; font-family: monospace;">1 / 10</span>
+            <button class="btn-close" onclick="closeLightbox()" style="position: static; font-size: 2.5rem; color: white;">&times;</button>
+        </div>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; position: relative;">
+            <button class="slider-btn prev" onclick="lightboxPrev()" style="left: 5%; font-size: 2rem; z-index: 10001; background: rgba(0,0,0,0.5); border: 2px solid white;">&#10094;</button>
+            <img id="lightbox-img" src="" style="max-width: 85%; max-height: 75vh; object-fit: contain; transition: opacity 0.3s;" alt="Gallery">
+            <button class="slider-btn next" onclick="lightboxNext()" style="right: 5%; font-size: 2rem; z-index: 10001; background: rgba(0,0,0,0.5); border: 2px solid white;">&#10095;</button>
+        </div>
+        <div id="lightbox-thumbnails" style="display: flex; gap: 10px; overflow-x: auto; padding: 1rem; justify-content: center; max-width: 90vw; margin: 0 auto; padding-bottom: 2rem;">
+            <!-- thumbnails injected here -->
+        </div>
+    </div>
+            <!-- Secret Dino Modal (Kofukan Version) -->
+    <div id="dino-secret-modal" class="modal-overlay hidden" style="z-index: 999999; background: rgba(0, 0, 0, 0.95); flex-direction: column; align-items: center; justify-content: flex-start; padding: 2rem; overflow-y: auto; backdrop-filter: blur(15px);">
+        <div style="width: 100%; max-width: 900px; margin-top: 2rem; padding-bottom: 4rem;">
+            <div style="text-align: center; margin-bottom: 2.5rem; animation: glitch 1s infinite alternate;">
+                <h2 style="color: #F87171; font-family: monospace; letter-spacing: 5px; font-size: 1.5rem; text-shadow: 0 0 10px #F87171;">MISSION UPDATE: TARGET RELOCATED</h2>
+                <h1 style="color: #fff; font-size: 3rem; margin-top: 0.5rem; text-shadow: 0 0 20px rgba(255,255,255,0.5);">AGENT DINO: KOFUKAN</h1>
+                <p style="color: #94A3B8; font-family: monospace; margin-top: 0.5rem; font-size: 1.1rem;">INTELLIGENCE DOSSIER: 香風館 (RYOKAN KOFUKAN)</p>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 2.5rem;">
+                
+                <!-- Section 1: Hotel & Onsen -->
+                <div class="glass-card" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 0; overflow: hidden; display: flex; flex-wrap: wrap;">
+                    <div style="flex: 1 1 400px;">
+                        <img src="images/dino_kofukan_room_1785854891682.jpg" style="width: 100%; height: 100%; object-fit: cover; min-height: 250px;" alt="Kofukan Room">
+                    </div>
+                    <div style="flex: 1 1 400px; padding: 2rem; display: flex; flex-direction: column; justify-content: center;">
+                        <h3 style="color: #FCA5A5; font-size: 1.6rem; margin-bottom: 1rem;">🏯 基地基本情報：香風館</h3>
+                        <p style="color: #E2E8F0; line-height: 1.6; margin-bottom: 1.5rem;">位於妙高高原站步行 10-15 分鐘的平地區域。主打純和室榻榻米，拉開拉門即可見日式庭園與雪景，充滿昭和復古風情與濃厚人情味。<strong>注意：此處並非 Ski-in/out，需搭車前往雪場。</strong></p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Kofukan+Myoko" target="_blank" class="dino-map-btn hotel" style="align-self: flex-start; margin-bottom: 2rem;">📍 導航至 香風館 (Google Map)</a>
+
+                        <h3 style="color: #FCA5A5; font-size: 1.6rem; margin-bottom: 1rem;">♨️ 100% 天然露天風呂</h3>
+                        <p style="color: #E2E8F0; line-height: 1.6;">香風館最大賣點！引進赤倉溫泉源頭 100% 天然溫泉。設有充滿氣氛的「露天風呂」，在攝氏零下的氣溫中看著雪花飄落泡湯，是滑雪後肌肉恢復的最高享受。亦提供私人包場(貸切風呂)。</p>
+                    </div>
+                </div>
+
+                <!-- Section 2: Transport & Ski Resorts -->
+                <div class="glass-card" style="background: rgba(56,189,248,0.03); border: 1px solid rgba(56,189,248,0.2); padding: 0; overflow: hidden; display: flex; flex-wrap: wrap; flex-direction: row-reverse;">
+                    <div style="flex: 1 1 400px;">
+                        <img src="images/dino_myoko_shuttle_1785854924518.jpg" style="width: 100%; height: 100%; object-fit: cover; min-height: 250px;" alt="Myoko Shuttle">
+                    </div>
+                    <div style="flex: 1 1 400px; padding: 2rem;">
+                        <h3 style="color: #38BDF8; font-size: 1.6rem; margin-bottom: 1rem;">🚌 交通戰術與四大雪場</h3>
+                        <p style="color: #E2E8F0; line-height: 1.6; margin-bottom: 1.5rem;"><strong>VIP戰術：</strong>向老闆娘預約飯店專屬接駁車，直達赤倉雪場。<br><strong>探索戰術：</strong>至妙高高原站搭乘 Mt. Myoko Shuttle 巡迴巴士。</p>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border-left: 4px solid #38BDF8;">
+                                <h4 style="color:#fff; margin-bottom: 0.3rem;">1. 赤倉溫泉滑雪場 (最近/新手天堂)</h4>
+                                <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:0.5rem;">距離約 4.5km / 接駁車 10-12 分鐘</p>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Onsen+Ski+Area" target="_blank" class="dino-map-btn resort">🏂 開啟地圖</a>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border-left: 4px solid #38BDF8;">
+                                <h4 style="color:#fff; margin-bottom: 0.3rem;">2. 赤倉觀光滑雪場 (Akakan/極致風景)</h4>
+                                <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:0.5rem;">距離約 4.5km / 接駁車 10-12 分鐘</p>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Akakura+Kanko+Resort+Ski+Area" target="_blank" class="dino-map-btn resort">🏂 開啟地圖</a>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border-left: 4px solid #38BDF8;">
+                                <h4 style="color:#fff; margin-bottom: 0.3rem;">3. 池之平溫泉滑雪場 (超寬廣平緩斜坡)</h4>
+                                <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:0.5rem;">距離約 4km / 巡迴巴士 10 分鐘</p>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Ikenotaira+Onsen+Alpen+Blick+Ski+Resort" target="_blank" class="dino-map-btn resort">🏂 開啟地圖</a>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; border-left: 4px solid #38BDF8;">
+                                <h4 style="color:#fff; margin-bottom: 0.3rem;">4. 妙高杉之原滑雪場 (日本最長雪道/野雪)</h4>
+                                <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:0.5rem;">距離約 8km / 巡迴巴士 15-20 分鐘</p>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Myoko+Suginohara+Ski+Resort" target="_blank" class="dino-map-btn resort">🏂 開啟地圖</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Food & Gear -->
+                <div class="glass-card" style="background: rgba(251,191,36,0.03); border: 1px solid rgba(251,191,36,0.2); padding: 0; overflow: hidden; display: flex; flex-wrap: wrap;">
+                    <div style="flex: 1 1 400px;">
+                        <img src="images/dino_kofukan_food_1785854939900.jpg" style="width: 100%; height: 100%; object-fit: cover; min-height: 250px;" alt="Kofukan Food">
+                    </div>
+                    <div style="flex: 1 1 400px; padding: 2rem; display: flex; flex-direction: column; justify-content: center;">
+                        <h3 style="color: #FBBF24; font-size: 1.6rem; margin-bottom: 1rem;">🍣 無敵「一泊二食」與周邊美食</h3>
+                        <p style="color: #E2E8F0; line-height: 1.6; margin-bottom: 1rem;">強烈建議預訂含早晚餐方案！香風館使用新潟越光米、日本海新鮮海產與在地「越後妻有豬」，會席料理極度用心。</p>
+                        <p style="color: #E2E8F0; line-height: 1.6; margin-bottom: 1.5rem;"><strong>周邊打牙祭：</strong>步行可達妙高高原站商圈，必吃在地排隊名店「信濃屋 (Shinanoya)」的熱騰騰蕎麥麵。</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query=Shinanoya+Myoko" target="_blank" class="dino-map-btn gear" style="align-self: flex-start; margin-bottom: 2.5rem; border-color: #FBBF24; color: #FBBF24;">🍜 信濃屋 蕎麥麵 (Google Map)</a>
+
+                        <h3 style="color: #FBBF24; font-size: 1.6rem; margin-bottom: 1rem;">🧳 雪具租借戰略</h3>
+                        <p style="color: #E2E8F0; line-height: 1.6; margin-bottom: 1rem;">飯店內僅有乾燥室。強烈建議搭乘接駁車至「赤倉溫泉街」租借裝備，並將沉重雪板寄放在店內，兩手空空回飯店泡湯！</p>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <a href="https://www.google.com/maps/search/?api=1&query=Aoyama+Sports+Akakura+Onsen" target="_blank" class="dino-map-btn gear" style="border-color: #FBBF24; color: #FBBF24;">🎒 Aoyama Sports (最大連鎖)</a>
+                            <a href="https://www.google.com/maps/search/?api=1&query=Myoko+Snowsports+Akakura" target="_blank" class="dino-map-btn gear" style="border-color: #FBBF24; color: #FBBF24;">🎒 Myoko Snowsports (極致服務)</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <button class="btn-close" onclick="document.getElementById('dino-secret-modal').classList.add('hidden');" style="position: fixed; top: 20px; right: 20px; font-size: 2.5rem; color: white; background: none; border: none; cursor: pointer;">&times;</button>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

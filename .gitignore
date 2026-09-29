@@ -1,0 +1,5 @@
+# 忽略金鑰與部署設定檔
+deploy_config.py
+__pycache__/
+*.pyc
+.env
