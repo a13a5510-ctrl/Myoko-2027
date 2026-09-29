@@ -34,7 +34,7 @@
             <li><a href="#resort">雪場周邊</a></li>
             <li><a href="#expenses">公費分帳</a></li>
             <li><a href="#gear">裝備清單</a></li>
-            <li><a href="#gallery">影音回憶</a></li>
+            <li><a href="#gallery">影音回憶</a></li>`r`n            <li><a href="#" id="nav-members" style="color: var(--accent); font-weight: bold;">👥 成員名單</a></li>
             <li><a href="#" id="nav-emergency" style="color: var(--color-danger); font-weight: bold;">🆘 求生資訊</a></li>
         </ul>
         <div class="hamburger">
@@ -570,7 +570,7 @@
                 <!-- 卡片2：終極清算帳本 -->
                 <div class="glass-card expense-panel" id="settlement-card">
                     <h3>💸 終極清算帳本</h3>
-                    <p class="subtitle">即時 AI 結算 (AA 防呆機制)</p>
+                    <p class="subtitle" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;"><span>即時 AI 結算 (AA 防呆機制)</span><button id="btn-open-members-from-expenses" type="button" style="background: rgba(56, 189, 248, 0.15); border: 1px solid rgba(56, 189, 248, 0.4); color: var(--accent); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;">⚙️ 管理人員名單</button></p>
                     <div class="avatar-filter-container" id="avatar-filter-container">
                         <!-- 動態插入頭像過濾器 -->
                     </div>
@@ -1100,6 +1100,51 @@
         </div>
     </div>
     
+    
+    <!-- 成員名單管理 Modal (隱藏式) -->
+    <div id="members-modal" class="modal-overlay hidden" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="members-modal-content glass-card">
+            <div class="modal-header">
+                <h3>👥 旅伴成員名單管理</h3>
+                <button class="btn-close" id="close-members-modal" onclick="document.getElementById('members-modal').classList.add('hidden')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="subtitle" style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">
+                    💡 這裡可以自訂成員與代表頭像，新增或刪除後會自動同步於「記帳分帳、付款人、採買清單與裝備列表」！
+                </p>
+
+                <!-- 現有成員列表 -->
+                <div class="members-list-wrapper">
+                    <h4 style="color: var(--accent); margin-bottom: 0.8rem; font-size: 1rem;">現有成員 (<span id="member-count-badge">5</span>人)</h4>
+                    <div id="members-card-list" class="members-card-list">
+                        <!-- JS 動態渲染成員卡片 -->
+                    </div>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 1.5rem 0;">
+
+                <!-- 新增成員表單 -->
+                <div class="add-member-form">
+                    <h4 style="color: #4ADE80; margin-bottom: 0.8rem; font-size: 1rem;">➕ 新增成員</h4>
+                    <div class="form-row" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 160px;">
+                            <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 0.4rem;">成員姓名 / 暱稱</label>
+                            <input type="text" id="new-member-name" placeholder="例: Alex" style="width: 100%; padding: 0.7rem 1rem; border-radius: 8px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); color: #fff;">
+                        </div>
+                        <div style="width: 100%;">
+                            <label style="font-size: 0.85rem; color: var(--text-secondary); display: block; margin-bottom: 0.4rem;">選擇代表頭像 (點擊選擇)</label>
+                            <div class="emoji-picker-container" id="emoji-picker-container">
+                                <!-- 預選頭像 -->
+                            </div>
+                            <input type="hidden" id="selected-member-emoji" value="🏂">
+                        </div>
+                    </div>
+                    <button id="btn-add-member" class="btn-primary" style="margin-top: 1.2rem; width: 100%; padding: 0.8rem; font-size: 0.95rem;">加入成員名單</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 雪道地圖 Modal -->
     <div id="resort-map-modal" class="modal-overlay hidden" onclick="if(event.target === this) { this.classList.add('hidden'); document.body.style.overflow=''; }">
         <div class="glass-card" style="width: 95%; max-width: 1000px; padding: 1rem; position: relative; display: flex; justify-content: center; align-items: center;">

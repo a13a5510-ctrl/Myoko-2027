@@ -1,4 +1,4 @@
-// 1. 導覽列 Navbar 的滾動變化與手機版選單切換
+﻿// 1. 導覽列 Navbar 的滾動變化與手機版選單切換
 // --------------------------------------------------------------------------
 const isLocalFile = window.location.protocol === 'file:';
 const navbar = document.querySelector('.navbar');
@@ -1205,14 +1205,10 @@ window.toggleDebtDetails = function(index) {
 
 function calculateAndRenderSettlements(expenses) {
     renderAvatarFilters();
-    const balances = {
-        'Bonnie': 0,
-        'Leo': 0,
-        'Yuk': 0,
-        'Dino': 0,
-        'Ian': 0,
-        'TaiwanBL': 0
-    };
+    const balances = {};
+    const currentMembers = (typeof getStoredMembers === "function") ? getStoredMembers() : [];
+    currentMembers.forEach(m => { balances[m.name] = 0; });
+    balances["TaiwanBL"] = 0;
     
     expenses.forEach(exp => {
         // 付款人餘額增加 (別人欠他)
@@ -1613,25 +1609,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // 綁定使用者切換按鈕事件
-    gearUserBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
+        // 綁定使用者切換按鈕事件 (使用事件代理，支援動態人員切換)
+    const gearSelectorContainer = document.querySelector('.gear-user-selector');
+    if (gearSelectorContainer) {
+        gearSelectorContainer.addEventListener('click', (e) => {
+            const btn = e.target.closest('.gear-user-btn');
+            if (!btn) return;
             e.preventDefault();
-            // 移除所有按鈕的 .active 狀態
-            gearUserBtns.forEach(b => b.classList.remove('active'));
-            // 為當前點擊的按鈕加上 .active
+            gearSelectorContainer.querySelectorAll('.gear-user-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
-            // 移除舊使用者的監聽器
             if(gearRef) {
                 gearRef.child(currentGearUser).off('value');
             }
-            
-            // 更新 currentGearUser 並觸發 Firebase 讀取邏輯
             currentGearUser = btn.getAttribute('data-user');
             loadUserGear(currentGearUser);
         });
-    });
+    }
 
     // 綁定 Checkbox 與 Select 變更事件
     gearCards.forEach(card => {
@@ -2092,3 +2085,199 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 800);
     }
 });
+
+// --------------------------------------------------------------------------
+// 15. 動態成員名單管理器 (Members Manager)
+// --------------------------------------------------------------------------
+const DEFAULT_MEMBERS = [
+    { name: 'Bonnie', emoji: '🐰', role: '總召' },
+    { name: 'Leo', emoji: '🦁', role: '隊長' },
+    { name: 'Yuk', emoji: '🐻', role: '成員' },
+    { name: 'Dino', emoji: '🦖', role: '成員' },
+    { name: 'Ian', emoji: '🐺', role: '成員' }
+];
+
+const AVAILABLE_EMOJIS = [
+    '🏂', '🎿', '⛄', '❄️', '🏔️', '🐰', '🦁', '🐻', '🦖', '🐺',
+    '🦊', '🐱', '🐶', '🐼', '🐨', '🐯', '🐧', '🦅', '🦄', '👑',
+    '🔥', '⚡', '☕', '🍺', '🍙', '🍣', '🍕', '🎮', '🎧', '🚀'
+];
+
+function getStoredMembers() {
+    try {
+        const stored = localStorage.getItem('myoko_members_list');
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+    } catch (e) {
+        console.error("讀取自訂成員清單失敗:", e);
+    }
+    return [...DEFAULT_MEMBERS];
+}
+
+function saveMembers(members) {
+    localStorage.setItem('myoko_members_list', JSON.stringify(members));
+    updateAppWithMembers();
+}
+
+function updateAppWithMembers() {
+    const members = getStoredMembers();
+    
+    // 1. 更新 avatarMap
+    for (let key in avatarMap) {
+        if (key !== 'TaiwanBL') delete avatarMap[key];
+    }
+    members.forEach(m => {
+        avatarMap[m.name] = m.emoji;
+    });
+
+    // 2. 更新記帳視窗中的「記帳操作者」下拉選單
+    const creatorSelect = document.getElementById('expense-creator');
+    if (creatorSelect) {
+        const currentVal = creatorSelect.value;
+        creatorSelect.innerHTML = members.map(m => `<option value="${m.name}">${m.emoji} ${m.name}</option>`).join('');
+        if (members.some(m => m.name === currentVal)) {
+            creatorSelect.value = currentVal;
+        }
+    }
+
+    // 3. 更新記帳視窗中的「付款人」頭像按鈕
+    const payerSelector = document.getElementById('payer-selector');
+    if (payerSelector) {
+        const currentPayer = document.getElementById('expense-payer')?.value;
+        payerSelector.innerHTML = members.map(m => `
+            <button type="button" class="avatar-btn ${currentPayer === m.name ? 'selected' : ''}" data-name="${m.name}">${m.emoji}</button>
+        `).join('');
+    }
+
+    // 4. 更新記帳視窗中的「參與均攤成員」核取方塊
+    const participantSelector = document.getElementById('participant-selector');
+    if (participantSelector) {
+        participantSelector.innerHTML = members.map(m => `
+            <label class="checkbox-item"><input type="checkbox" value="${m.name}" checked><span class="checkmark"></span>${m.emoji} ${m.name}</label>
+        `).join('');
+    }
+
+    // 5. 更新採買清單負責人下拉選單
+    const groceryAssignee = document.getElementById('grocery-assignee');
+    if (groceryAssignee) {
+        const currentAssignee = groceryAssignee.value;
+        groceryAssignee.innerHTML = `<option value="">負責人(選填)</option>` + 
+            members.map(m => `<option value="${m.name}">${m.emoji} ${m.name}</option>`).join('') +
+            `<option value="總召">👑 總召</option>`;
+        groceryAssignee.value = currentAssignee;
+    }
+
+    // 6. 更新裝備清單旅伴切換器
+    const gearUserSelector = document.querySelector('.gear-user-selector');
+    if (gearUserSelector) {
+        const activeBtn = gearUserSelector.querySelector('.gear-user-btn.active');
+        const activeUser = activeBtn ? activeBtn.getAttribute('data-user') : members[0]?.name;
+        gearUserSelector.innerHTML = members.map((m, idx) => `
+            <button class="gear-user-btn ${m.name === activeUser || (!activeBtn && idx === 0) ? 'active' : ''}" data-user="${m.name}">${m.emoji} ${m.name}</button>
+        `).join('');
+    }
+
+    // 7. 更新結算過濾頭像列
+    renderAvatarFilters();
+
+    // 8. 重新渲染成員管理視窗卡片
+    renderMembersModalCards();
+}
+
+function renderMembersModalCards() {
+    const members = getStoredMembers();
+    const container = document.getElementById('members-card-list');
+    const badge = document.getElementById('member-count-badge');
+    if (badge) badge.textContent = members.length;
+    if (!container) return;
+
+    container.innerHTML = members.map(m => `
+        <div class="member-item-card">
+            <div class="member-item-info">
+                <span class="member-item-emoji">${m.emoji}</span>
+                <span class="member-item-name">${m.name}</span>
+                ${m.role ? `<span class="member-item-role">${m.role}</span>` : ''}
+            </div>
+            <button class="btn-delete-member" onclick="deleteMember('${m.name}')">刪除</button>
+        </div>
+    `).join('');
+}
+
+window.deleteMember = function(name) {
+    const members = getStoredMembers();
+    if (members.length <= 1) {
+        alert('至少需要保留一位成員！');
+        return;
+    }
+    if (!confirm(`確定要刪除成員「${name}」嗎？`)) return;
+    const newMembers = members.filter(m => m.name !== name);
+    saveMembers(newMembers);
+};
+
+function initMembersModal() {
+    // 綁定打開視窗按鈕
+    const navBtn = document.getElementById('nav-members');
+    const expBtn = document.getElementById('btn-open-members-from-expenses');
+    const modal = document.getElementById('members-modal');
+
+    const openModal = (e) => {
+        if (e) e.preventDefault();
+        modal?.classList.remove('hidden');
+        renderMembersModalCards();
+    };
+
+    if (navBtn) navBtn.addEventListener('click', openModal);
+    if (expBtn) expBtn.addEventListener('click', openModal);
+
+    // 渲染 Emoji 選擇器
+    const picker = document.getElementById('emoji-picker-container');
+    const emojiInput = document.getElementById('selected-member-emoji');
+    if (picker) {
+        picker.innerHTML = AVAILABLE_EMOJIS.map((emoji, idx) => `
+            <button type="button" class="emoji-choice-btn ${idx === 0 ? 'selected' : ''}" data-emoji="${emoji}">
+                ${emoji}
+            </button>
+        `).join('');
+
+        picker.addEventListener('click', (e) => {
+            const btn = e.target.closest('.emoji-choice-btn');
+            if (!btn) return;
+            picker.querySelectorAll('.emoji-choice-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            if (emojiInput) emojiInput.value = btn.dataset.emoji;
+        });
+    }
+
+    // 新增成員按鈕
+    const addBtn = document.getElementById('btn-add-member');
+    if (addBtn) {
+        addBtn.addEventListener('click', () => {
+            const nameInput = document.getElementById('new-member-name');
+            const name = nameInput ? nameInput.value.trim() : '';
+            const emoji = emojiInput ? emojiInput.value : '🏂';
+
+            if (!name) {
+                alert('請輸入成員姓名或暱稱！');
+                return;
+            }
+
+            const members = getStoredMembers();
+            if (members.some(m => m.name.toLowerCase() === name.toLowerCase())) {
+                alert('該成員名稱已存在，請使用不同暱稱！');
+                return;
+            }
+
+            members.push({ name, emoji, role: '成員' });
+            saveMembers(members);
+            if (nameInput) nameInput.value = '';
+        });
+    }
+
+    // 首次載入同步
+    updateAppWithMembers();
+}
+
+document.addEventListener('DOMContentLoaded', initMembersModal);
+
