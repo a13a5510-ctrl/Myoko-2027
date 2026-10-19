@@ -2281,3 +2281,145 @@ function initMembersModal() {
 
 document.addEventListener('DOMContentLoaded', initMembersModal);
 
+
+// --------------------------------------------------------------------------
+// 16. 滑雪期待感強化引擎 (Hype Quotes, Timeline Badges, Gear Progress, Chat Sync)
+// --------------------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+    // A. 首頁熱血滑雪金句自動輪播
+    const HYPE_QUOTES = [
+        "「妙高 13 公尺深粉雪 (Japow) 正在召喚我們！」",
+        "「跌倒不會痛，沒被 Insta360 拍到帥照才痛！」",
+        "「白天在赤倉溫泉刷粉雪，晚上泡美人湯配精釀啤酒！」",
+        "「東京新宿居酒屋大會師 ➔ 北陸新幹線全員進擊雪國！」",
+        "「不管是推坡新手還是樹林老手，這趟絕對滑到腿軟！」"
+    ];
+    const quoteEl = document.getElementById('hype-quote');
+    if (quoteEl) {
+        let qIdx = 0;
+        setInterval(() => {
+            quoteEl.style.opacity = '0';
+            setTimeout(() => {
+                qIdx = (qIdx + 1) % HYPE_QUOTES.length;
+                quoteEl.textContent = HYPE_QUOTES[qIdx];
+                quoteEl.style.opacity = '1';
+            }, 400);
+        }, 4500);
+    }
+
+    // B. 每日行程 Timeline 自動掛載發光「日期膠囊」與「主題戰術標籤」
+    const TAG_MAP = {
+        '香港': ['#維港打卡', '#燒鵝吃到撐', '#蘭桂坊微醺'],
+        '東京': ['#成田集結', '#Skyliner極速', '#新宿居酒屋會師'],
+        '新幹線': ['#北陸新幹線', '#全員到齊', '#雪具租借', '#溫泉開局'],
+        '連滑': ['#Japow粉雪天堂', '#赤倉溫泉夜滑', '#火鍋派對'],
+        '訓練': ['#無敵粉雪', '#推坡特訓', '#民宿打牌耍廢'],
+        '中毒': ['#赤倉激戰', '#Insta360跟拍', '#客廳零食趴'],
+        '特訓': ['#滿血加入', '#雪道巡航', '#泡湯解痠痛'],
+        '最終': ['#燃燒小宇宙', '#歸還裝備', '#全軍極限慶功宴'],
+        '慶功': ['#妙高絕景', '#最後衝刺', '#大慶功宴乾杯'],
+        '小宇宙': ['#挑戰中級道', '#火力全開', '#雪屋慶功宴'],
+        '返鄉': ['#NEX成田特快', '#免稅店掃貨', '#滿載回憶歸途'],
+        '歸途': ['#伴手禮買爆', '#擁抱道別', '#約定下個雪季'],
+        '折返': ['#新幹線返程', '#成田集合', '#完美收官'],
+        '再聚': ['#台港珍重再見', '#平安返港', '#存錢準備下一趟'],
+        '準備': ['#檢查護照雪衣', '#防摔護具確認', '#蓄勢待發'],
+        '打包': ['#留守台灣最後衝刺', '#行李塞爆', '#準備明日直奔']
+    };
+
+    document.querySelectorAll('#itinerary .timeline-content').forEach(card => {
+        const h3 = card.querySelector('h3');
+        if (h3 && h3.textContent.includes('｜')) {
+            const parts = h3.textContent.split('｜');
+            const dateStr = parts[0].trim();
+            const titleStr = parts[1].trim();
+            h3.innerHTML = `<span class="timeline-day-badge">🗓️ ${dateStr}</span> ${titleStr}`;
+
+            // 自動匹配 Tags
+            let matchedTags = ['#2027妙高滑雪', '#熱血雪國'];
+            for (const key in TAG_MAP) {
+                if (titleStr.includes(key) || card.textContent.includes(key)) {
+                    matchedTags = TAG_MAP[key];
+                    break;
+                }
+            }
+            if (!card.querySelector('.timeline-tags')) {
+                const tagsDiv = document.createElement('div');
+                tagsDiv.className = 'timeline-tags';
+                tagsDiv.innerHTML = matchedTags.map(t => `<span class="timeline-tag">${t}</span>`).join('');
+                card.appendChild(tagsDiv);
+            }
+        }
+    });
+
+    // C. 個人裝備整備度進度條即時計算與更新
+    window.refreshGearProgress = function() {
+        const activeBtn = document.querySelector('.gear-user-selector .gear-user-btn.active');
+        const userLabel = activeBtn ? activeBtn.textContent.trim() : '🐰 Bonnie';
+        const allBoxes = document.querySelectorAll('.gear-grid .gear-checkbox');
+        const checkedBoxes = document.querySelectorAll('.gear-grid .gear-checkbox:checked');
+        if (allBoxes.length === 0) return;
+
+        const pct = Math.round((checkedBoxes.length / allBoxes.length) * 100);
+        const titleEl = document.getElementById('gear-progress-title');
+        const pctEl = document.getElementById('gear-progress-percent');
+        const fillEl = document.getElementById('gear-progress-fill');
+        const statusEl = document.getElementById('gear-progress-status');
+
+        if (titleEl) titleEl.textContent = `${userLabel} 的雪具整備度 (${checkedBoxes.length}/${allBoxes.length})`;
+        if (pctEl) pctEl.textContent = `${pct}%`;
+        if (fillEl) fillEl.style.width = `${pct}%`;
+
+        if (statusEl) {
+            if (pct === 100) {
+                statusEl.innerHTML = `<span style="color: #4ade80; font-weight: 700;">🎉 100% 完美武裝！${userLabel} 隨時可以空降妙高粉雪天堂！</span>`;
+            } else if (pct >= 60) {
+                statusEl.innerHTML = `<span style="color: #38bdf8;">🔥 整備過半！還差 ${allBoxes.length - checkedBoxes.length} 項裝備就全副武裝囉！</span>`;
+            } else {
+                statusEl.textContent = `✨ 點擊下方卡片勾選已備妥或已預約的裝備，目標 100% 完裝出發！`;
+            }
+        }
+    };
+
+    // 監聽裝備勾選與旅伴切換
+    const gearSection = document.getElementById('gear');
+    if (gearSection) {
+        gearSection.addEventListener('change', () => setTimeout(window.refreshGearProgress, 50));
+        gearSection.addEventListener('click', () => setTimeout(window.refreshGearProgress, 120));
+    }
+    setTimeout(window.refreshGearProgress, 400);
+
+    // D. 同步對講機身分選單 (#chat-identity-select) 與動態成員名單
+    const syncChatIdentityWithMembers = () => {
+        if (typeof getStoredMembers !== 'function') return;
+        const members = getStoredMembers();
+        const chatSelect = document.getElementById('chat-identity-select');
+        if (chatSelect) {
+            const currentVal = chatSelect.value;
+            chatSelect.innerHTML = members.map(m => `<option value="${m.name}">${m.emoji} ${m.name}</option>`).join('');
+            if (members.some(m => m.name === currentVal)) {
+                chatSelect.value = currentVal;
+            }
+        }
+    };
+    syncChatIdentityWithMembers();
+
+    // 攔截新增與刪除成員按鈕，確保對講機名單與裝備進度條同步更新
+    const addMemberBtn = document.getElementById('btn-add-member');
+    if (addMemberBtn) {
+        addMemberBtn.addEventListener('click', () => {
+            setTimeout(() => {
+                syncChatIdentityWithMembers();
+                window.refreshGearProgress();
+            }, 100);
+        });
+    }
+    const origDeleteMember = window.deleteMember;
+    if (typeof origDeleteMember === 'function') {
+        window.deleteMember = function(name) {
+            origDeleteMember(name);
+            syncChatIdentityWithMembers();
+            window.refreshGearProgress();
+        };
+    }
+});

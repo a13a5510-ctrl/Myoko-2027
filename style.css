@@ -4145,3 +4145,250 @@ a {
     box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
     transform: scale(1.15);
 }
+
+/* ========================================================================== */
+/* 🚀 2027 滑雪旅遊期待感全面升級樣式 (Japow Hype & Boarding Pass Edition)    */
+/* ========================================================================== */
+
+/* 1. 首頁 Japow 徽章與極光漸層標題 */
+.japow-hero-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, rgba(56, 189, 248, 0.2), rgba(167, 139, 250, 0.25));
+    border: 1px solid rgba(56, 189, 248, 0.5);
+    color: #e0f2fe;
+    padding: 0.45rem 1.2rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
+    animation: pulseGlow 3s infinite ease-in-out;
+    margin-bottom: 0.5rem;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 15px rgba(56, 189, 248, 0.3); transform: translateY(0); }
+    50% { box-shadow: 0 0 28px rgba(56, 189, 248, 0.65); transform: translateY(-2px); }
+}
+
+.aurora-title {
+    background: linear-gradient(135deg, #ffffff 0%, #bae6fd 45%, #38bdf8 80%, #c084fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 6px 24px rgba(14, 165, 233, 0.35));
+}
+
+/* 熱血集氣進度條與金句輪播 */
+.hype-meter-box {
+    margin-top: 1.8rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    text-align: left;
+}
+
+.hype-meter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.88rem;
+}
+
+.hype-status {
+    color: #38bdf8;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.hype-quote {
+    color: #fde047;
+    font-weight: 600;
+    font-style: italic;
+    transition: opacity 0.4s ease;
+}
+
+.hype-bar-track {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.hype-bar-fill {
+    width: 92%;
+    height: 100%;
+    background: linear-gradient(90deg, #38bdf8, #818cf8, #f472b6, #38bdf8);
+    background-size: 200% 100%;
+    border-radius: 10px;
+    animation: shimmerBar 3s linear infinite;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+}
+
+@keyframes shimmerBar {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+/* 2. 真實航空登機證 (Boarding Pass) 航班卡片改造 */
+.flight-card {
+    position: relative;
+    overflow: hidden;
+    border-top: 3px solid var(--accent) !important;
+    background: linear-gradient(165deg, rgba(30, 41, 59, 0.75) 0%, rgba(15, 23, 42, 0.85) 100%) !important;
+    padding: 1.8rem 2rem 1.4rem !important;
+}
+
+/* 登機證頂部 VIP 識別條 */
+.flight-card::before {
+    content: "BOARDING PASS · JAPOW 2027 VIP";
+    display: block;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    color: rgba(56, 189, 248, 0.75);
+    text-align: left;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* 左右半圓形撕票缺口 */
+.flight-card::after {
+    content: "|| |||| ||| | |||| || ||| | |||| ||| ||";
+    display: block;
+    font-family: monospace;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.25);
+    margin-top: 0.8rem;
+}
+
+.flight-date {
+    border-top: 1.5px dashed rgba(56, 189, 248, 0.3) !important;
+    position: relative;
+    padding-top: 1rem !important;
+    font-weight: 500;
+}
+
+/* 3. 雪場與周邊卡片：高畫質實景底圖 + 懸浮微光 */
+.resort-card.has-cover {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(11, 17, 33, 0.55) 0%, rgba(11, 17, 33, 0.92) 100%), var(--card-bg) center/cover no-repeat !important;
+    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.resort-card.has-cover:hover {
+    transform: translateY(-8px) scale(1.01);
+    border-color: var(--accent) !important;
+    box-shadow: 0 16px 40px rgba(56, 189, 248, 0.25) !important;
+}
+
+.resort-card-badge {
+    align-self: center;
+    background: rgba(56, 189, 248, 0.2);
+    border: 1px solid rgba(56, 189, 248, 0.5);
+    color: #7dd3fc;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    margin-bottom: 0.6rem;
+    backdrop-filter: blur(4px);
+}
+
+/* 4. 每日行程 Timeline 日期膠囊與雜誌感高光 */
+.timeline-day-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--accent), #818cf8);
+    color: #0b1121;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.2rem 0.65rem;
+    border-radius: 6px;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+    letter-spacing: 0.5px;
+}
+
+.timeline-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+}
+
+.timeline-tag {
+    font-size: 0.75rem;
+    color: #93c5fd;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    padding: 0.15rem 0.6rem;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+/* 5. 裝備清單：個人整備完成度 ％ 儀表板 */
+.gear-progress-panel {
+    max-width: 720px;
+    margin: 0 auto 2rem;
+    padding: 1.4rem 1.8rem !important;
+    border: 1px solid rgba(56, 189, 248, 0.35) !important;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.65), rgba(15, 23, 42, 0.8)) !important;
+}
+
+.gear-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.gear-progress-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #f8fafc;
+}
+
+.gear-progress-percent {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    text-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+}
+
+.gear-progress-track {
+    width: 100%;
+    height: 12px;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gear-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #38bdf8, #4ade80);
+    border-radius: 20px;
+    transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 0 12px rgba(74, 222, 128, 0.5);
+}
+
+.gear-progress-status {
+    margin-top: 0.7rem;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
