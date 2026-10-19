@@ -4394,7 +4394,7 @@ a {
 }
 
 /* ========================================================================== */
-/* ❄️ 雪白粉雪明亮主題 (Snow White & Ice Crystal Theme)                         */
+/* ❄️ 雪白粉雪明亮主題 (Snow White & Ice Crystal High-Contrast Theme)          */
 /* ========================================================================== */
 :root {
     --bg-main: #F8FAFC;            /* 純淨雪白底色 */
@@ -4403,10 +4403,13 @@ a {
     --text-secondary: #475569;     /* 柔和冷灰次要文字 */
     --accent: #0284C7;             /* 晴空冰晶藍強調色 */
     --accent-hover: #0369A1;       /* 深冰藍懸停色 */
-    --glass-bg: rgba(255, 255, 255, 0.85); /* 雪白冰晶毛玻璃 */
-    --glass-border: rgba(14, 165, 233, 0.22);
+    --color-success: #059669;      /* 高對比翠綠 */
+    --color-danger: #DC2626;       /* 高對比警戒紅 */
+    --color-warning: #D97706;      /* 高對比琥珀橘 */
+    --glass-bg: rgba(255, 255, 255, 0.92); /* 雪白冰晶毛玻璃 */
+    --glass-border: rgba(14, 165, 233, 0.24);
     --glass-shadow: 0 10px 30px -5px rgba(14, 165, 233, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.05);
-    --overlay-blur-bg: rgba(248, 250, 252, 0.88);
+    --overlay-blur-bg: rgba(248, 250, 252, 0.9);
 }
 
 body {
@@ -4416,8 +4419,8 @@ body {
 
 /* 導覽列雪白毛玻璃 */
 .navbar {
-    background: rgba(255, 255, 255, 0.88) !important;
-    border-bottom: 1px solid rgba(14, 165, 233, 0.15) !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    border-bottom: 1px solid rgba(14, 165, 233, 0.18) !important;
     box-shadow: 0 4px 20px rgba(14, 165, 233, 0.08);
 }
 
@@ -4429,27 +4432,43 @@ body {
     color: #0F172A !important;
 }
 
+.nav-links a {
+    color: #334155;
+    font-weight: 600;
+}
+
+.nav-links a:hover {
+    color: var(--accent);
+}
+
 /* 首頁 Hero 調整為明亮雪山視野，底部平滑漸層銜接雪白背景 */
 .hero-section {
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.25) 0%, rgba(15, 23, 42, 0.35) 65%, #F8FAFC 100%), url('assets/myoko_hero_1781516502253.png') center/cover no-repeat !important;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.4) 65%, #F8FAFC 100%), url('assets/myoko_hero_1781516502253.png') center/cover no-repeat !important;
+}
+
+.japow-hero-badge {
+    background: rgba(15, 23, 42, 0.65) !important;
+    border: 1px solid rgba(56, 189, 248, 0.65) !important;
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 .aurora-title {
     background: linear-gradient(135deg, #ffffff 0%, #e0f2fe 55%, #38bdf8 100%) !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
-    filter: drop-shadow(0 4px 16px rgba(15, 23, 42, 0.65)) !important;
+    filter: drop-shadow(0 4px 16px rgba(15, 23, 42, 0.75)) !important;
 }
 
 .hero-subtitle {
     color: #ffffff !important;
-    text-shadow: 0 2px 10px rgba(15, 23, 42, 0.6);
+    text-shadow: 0 2px 10px rgba(15, 23, 42, 0.75);
 }
 
-/* 首頁倒數計時器與天氣看板在雪山圖上維持剔透感 */
+/* 首頁倒數計時器與天氣看板在雪山圖上維持剔透高對比感 */
 .countdown-container {
-    background: rgba(15, 23, 42, 0.6) !important;
-    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    background: rgba(15, 23, 42, 0.68) !important;
+    border: 1px solid rgba(255, 255, 255, 0.28) !important;
     color: #fff;
 }
 .countdown-container h2,
@@ -4461,9 +4480,16 @@ body {
 }
 
 .weather-widget {
-    background: rgba(255, 255, 255, 0.88) !important;
-    border: 1px solid rgba(14, 165, 233, 0.3) !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid rgba(14, 165, 233, 0.35) !important;
     box-shadow: 0 12px 32px rgba(15, 23, 42, 0.15) !important;
+}
+.weather-value {
+    color: #0284C7 !important;
+}
+.weather-label {
+    color: #334155 !important;
+    font-weight: 600;
 }
 
 /* 飄雪特效在雪白背景下呈現冰晶藍光暈 */
@@ -4475,8 +4501,8 @@ body {
 
 /* 通用毛玻璃卡片轉為雪白立體卡片 */
 .glass-card {
-    background: rgba(255, 255, 255, 0.9) !important;
-    border: 1px solid rgba(14, 165, 233, 0.2) !important;
+    background: rgba(255, 255, 255, 0.94) !important;
+    border: 1px solid rgba(14, 165, 233, 0.22) !important;
     box-shadow: var(--glass-shadow) !important;
     color: var(--text-primary);
 }
@@ -4486,11 +4512,25 @@ body {
     box-shadow: 0 14px 36px rgba(2, 132, 199, 0.16) !important;
 }
 
+/* 集結橫幅分隔線與文字 */
+.rendezvous-divider {
+    background: linear-gradient(to bottom, transparent, rgba(2, 132, 199, 0.35), transparent) !important;
+}
+.rendezvous-main {
+    color: #0284C7 !important;
+    text-shadow: none !important;
+}
+.direction-label {
+    color: #1E293B !important;
+    border-bottom: 1px solid #CBD5E1 !important;
+}
+
 /* 頁籤按鈕雪白風 */
 .tab-btn {
     background: #FFFFFF !important;
-    border: 1px solid rgba(14, 165, 233, 0.25) !important;
+    border: 1px solid rgba(14, 165, 233, 0.3) !important;
     color: #334155 !important;
+    font-weight: 600;
     box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
 }
 
@@ -4507,7 +4547,7 @@ body {
     box-shadow: 0 6px 16px rgba(2, 132, 199, 0.3) !important;
 }
 
-/* 故事框、集結橫幅與計畫標籤 */
+/* 故事框、航班提示與計畫標籤 */
 .story-box {
     background: #F0F9FF !important;
     border: 1px solid #BAE6FD !important;
@@ -4523,12 +4563,22 @@ body {
 .plan-label.plan-a {
     color: #047857 !important;
     background: #ECFDF5 !important;
+    border: 1px solid #A7F3D0 !important;
     border-left: 4px solid #10B981 !important;
 }
 .plan-label.plan-b {
     color: #B45309 !important;
     background: #FFFBEB !important;
+    border: 1px solid #FDE68A !important;
     border-left: 4px solid #F59E0B !important;
+}
+
+.flight-notice {
+    color: #B45309 !important;
+    background: #FFFBEB !important;
+    border: 1px solid #FCD34D !important;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.1) !important;
 }
 
 /* 登機證航班卡片轉為雪白航空票卡 */
@@ -4550,10 +4600,143 @@ body {
 .time-loc .time {
     color: #0F172A !important;
 }
+.time-loc .loc {
+    color: #475569 !important;
+    font-weight: 600;
+}
+.flight-date {
+    color: #334155 !important;
+    border-top: 1px dashed rgba(2, 132, 199, 0.25) !important;
+}
 
-/* 每日行程 Timeline 標籤 */
+/* 闖關合流路線圖 Badges 高對比修正 */
+.badge.vanguard {
+    background: #F3E8FF !important;
+    color: #6D28D9 !important;
+    border: 1px solid #C4B5FD !important;
+}
+.badge.taiwan-a {
+    background: #DCFCE7 !important;
+    color: #047857 !important;
+    border: 1px solid #86EFAC !important;
+}
+.badge.taiwan-b {
+    background: #FEF3C7 !important;
+    color: #B45309 !important;
+    border: 1px solid #FCD34D !important;
+}
+.badge.hk {
+    background: #FFEDD5 !important;
+    color: #C2410C !important;
+    border: 1px solid #FDBA74 !important;
+}
+.badge.all {
+    background: #E0F2FE !important;
+    color: #0369A1 !important;
+    border: 1px solid #7DD3FC !important;
+}
+
+/* 房源卡片徽章、投票與周邊機能區塊高對比修正 */
+.housing-section h3 {
+    text-shadow: none !important;
+}
+.badge-parking {
+    background: #DCFCE7 !important;
+    color: #047857 !important;
+    border: 1px solid #86EFAC !important;
+}
+.badge-split {
+    background: #E0F2FE !important;
+    color: #0369A1 !important;
+    border: 1px solid #7DD3FC !important;
+}
+.badge-hkd {
+    background: #FEF3C7 !important;
+    color: #B45309 !important;
+    border: 1px solid #FCD34D !important;
+}
+.badge-airbnb {
+    background: #FFE4E6 !important;
+    color: #BE123C !important;
+    border: 1px solid #FDA4AF !important;
+}
+.guide-pill {
+    background: #F8FAFC !important;
+    border: 1px solid #CBD5E1 !important;
+    color: #334155 !important;
+}
+.guide-pill:hover {
+    background: #F0F9FF !important;
+    border-color: #38BDF8 !important;
+    color: #0F172A !important;
+}
+.guide-pill a {
+    color: #0284C7 !important;
+    font-weight: 700 !important;
+}
+.guide-pill a:hover {
+    color: #0369A1 !important;
+}
+.vote-tag {
+    background: #F8FAFC !important;
+    border: 1px solid #E2E8F0 !important;
+    color: #1E293B !important;
+}
+.vote-separator::before,
+.vote-separator::after {
+    border-bottom: 1px solid #CBD5E1 !important;
+}
+
+/* Local Guide 鄰近機能大補帖與翻轉卡片背面 */
+.local-guide-section {
+    background: #F1F5F9 !important;
+    border-top: 1px solid #E2E8F0 !important;
+}
+.local-guide-card {
+    background: #FFFFFF !important;
+    border: 1px solid #CBD5E1 !important;
+}
+.local-guide-card h5 {
+    color: #0F172A !important;
+}
+.flip-card-front,
+.flip-card-back {
+    border: 1px solid rgba(14, 165, 233, 0.3) !important;
+}
+.flip-card-back {
+    background: linear-gradient(145deg, #0F172A, #1E293B) !important;
+    color: #FFFFFF !important;
+}
+.flip-card-back h5 {
+    color: #38BDF8 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+.flip-card-back p {
+    color: #E2E8F0 !important;
+}
+.flip-card-back .route-badge {
+    background: rgba(16, 185, 129, 0.2) !important;
+    color: #6EE7B7 !important;
+    border: 1px solid rgba(110, 231, 183, 0.4) !important;
+}
+.gear-price-btn {
+    background: #0284C7 !important;
+    border: 1px solid #38BDF8 !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+    text-shadow: none !important;
+}
+.gear-price-btn:hover {
+    background: #0369A1 !important;
+}
+
+/* 每日行程 Timeline 節點與標籤 */
 .timeline::before {
     background-color: #BAE6FD !important;
+}
+.timeline-dot.snow {
+    background-color: #0284C7 !important;
+    box-shadow: 0 0 10px rgba(2, 132, 199, 0.5) !important;
 }
 .timeline-day-badge {
     color: #FFFFFF !important;
@@ -4566,17 +4749,57 @@ body {
 
 /* 實景雪場卡片保持圖片上的白色高對比文字 */
 .resort-card.has-cover {
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.45) 0%, rgba(15, 23, 42, 0.88) 100%), var(--card-bg) center/cover no-repeat !important;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.5) 0%, rgba(15, 23, 42, 0.9) 100%), var(--card-bg) center/cover no-repeat !important;
     color: #FFFFFF !important;
 }
 .resort-card.has-cover h3,
 .resort-card.has-cover p,
-.resort-card.has-cover li,
-.resort-card.has-cover strong {
+.resort-card.has-cover li {
     color: #FFFFFF !important;
 }
+.resort-card.has-cover .custom-list li strong {
+    color: #FDE047 !important;
+}
 
-/* 裝備進度面板與卡片在雪白底下的清晰化 */
+/* 公費分帳、清算項目與流水帳高對比修正 */
+.settlement-item,
+.transaction-item {
+    background: #F8FAFC !important;
+    border: 1px solid #E2E8F0 !important;
+    border-left: 4px solid var(--accent) !important;
+    color: #0F172A !important;
+}
+.settlement-item {
+    border-left-color: #F59E0B !important;
+}
+.settlement-item:hover {
+    background: #F0F9FF !important;
+}
+.settlement-item button.btn-settle {
+    background: #10B981 !important;
+    border: 1px solid #059669 !important;
+    color: #FFFFFF !important;
+    font-weight: 700 !important;
+}
+.settlement-item button.btn-settle:hover {
+    background: #059669 !important;
+    color: #FFFFFF !important;
+}
+.debt-details {
+    border-top: 1px dashed #CBD5E1 !important;
+}
+.filter-avatar-btn {
+    background: #FFFFFF !important;
+    border: 1px solid #CBD5E1 !important;
+    opacity: 0.75;
+}
+.filter-avatar-btn.active {
+    opacity: 1;
+    border-color: var(--accent) !important;
+    background: #E0F2FE !important;
+}
+
+/* 裝備進度面板、勾選狀態與下拉選單清晰化 */
 .gear-progress-panel {
     background: linear-gradient(135deg, #FFFFFF, #F0F9FF) !important;
     border: 1px solid #BAE6FD !important;
@@ -4589,12 +4812,45 @@ body {
 }
 .gear-card {
     background: #FFFFFF !important;
-    border: 1px solid #E2E8F0 !important;
+    border: 1px solid #CBD5E1 !important;
     box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05) !important;
 }
 .gear-info .item-text {
     color: #0F172A !important;
     font-weight: 600;
+}
+/* 修正勾選後裝備文字變白消失的問題 */
+.gear-card:has(input:checked) {
+    background: #F0F9FF !important;
+    border-color: #0284C7 !important;
+}
+.gear-card:has(input:checked) .gear-info .item-text {
+    color: #0284C7 !important;
+    font-weight: 800 !important;
+}
+.gear-card.status-reserved:has(input:checked) {
+    background: #FFFBEB !important;
+    border-color: #F59E0B !important;
+}
+.gear-card.status-reserved:has(input:checked) .gear-info .item-text {
+    color: #B45309 !important;
+}
+.gear-card.status-rental:has(input:checked) {
+    background: #FEF2F2 !important;
+    border-color: #EF4444 !important;
+}
+.gear-card.status-rental:has(input:checked) .gear-info .item-text {
+    color: #B91C1C !important;
+}
+.gear-status-select {
+    background: #F1F5F9 !important;
+    border: 1px solid #CBD5E1 !important;
+    color: #0F172A !important;
+    font-weight: 600;
+}
+.gear-status-select option {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
 }
 .gear-user-btn {
     background: #FFFFFF !important;
@@ -4607,32 +4863,173 @@ body {
     border-color: var(--accent) !important;
 }
 
-/* 採買與表單輸入框雪白化 */
+/* 採買、相簿密碼鎖與所有 Modal 表單輸入框雪白高對比化 */
 .grocery-input-group input,
 .grocery-input-group select,
+#grocery-assignee,
 .text-input,
 .select-input,
-.creator-select {
+.file-input,
+.creator-select,
+.auth-input-group input,
+.vote-form-group input,
+.vote-form-group textarea,
+.form-group input[type="text"],
+.form-group input[type="number"],
+.time-input,
+#new-member-name {
     background: #FFFFFF !important;
     color: #0F172A !important;
     border: 1px solid #CBD5E1 !important;
+    color-scheme: light !important;
+}
+.select-input option,
+.creator-select option,
+#grocery-assignee option {
+    background: #FFFFFF !important;
+    color: #0F172A !important;
 }
 .grocery-item {
     background: #F8FAFC !important;
     border: 1px solid #E2E8F0 !important;
+    color: #0F172A !important;
 }
+.badge-assignee {
+    background: #E0F2FE !important;
+    color: #0369A1 !important;
+    border: 1px solid #7DD3FC !important;
+}
+
+/* 彈出視窗 (記帳、投票、成員管理、求生資訊) 內部按鈕與邊框高對比修正 */
+.modal-header {
+    border-bottom: 1px solid #E2E8F0 !important;
+}
+.glass-card .btn-close,
+.vote-modal-close {
+    background: #F1F5F9 !important;
+    border: 1px solid #CBD5E1 !important;
+    color: #334155 !important;
+}
+.glass-card .btn-close:hover,
+.vote-modal-close:hover {
+    background: #E2E8F0 !important;
+    color: #0F172A !important;
+}
+.avatar-btn {
+    background: #F1F5F9 !important;
+    border: 2px solid #E2E8F0 !important;
+}
+.avatar-btn.selected {
+    background: #E0F2FE !important;
+    border-color: var(--accent) !important;
+}
+.time-btn,
+.quick-category-btn,
+.btn-quick-reason {
+    background: #F1F5F9 !important;
+    border: 1px solid #CBD5E1 !important;
+    color: #334155 !important;
+    font-weight: 600;
+}
+.time-btn:hover,
+.quick-category-btn:hover,
+.btn-quick-reason:hover {
+    background: #E0F2FE !important;
+    color: #0284C7 !important;
+    border-color: #38BDF8 !important;
+}
+.checkbox-item {
+    color: #0F172A !important;
+}
+.checkmark {
+    background-color: #F1F5F9 !important;
+    border: 2px solid #94A3B8 !important;
+}
+
+/* 成員管理彈窗細節 */
 .member-item-card {
     background: #F8FAFC !important;
     border: 1px solid #E2E8F0 !important;
 }
+.member-item-emoji {
+    background: #E0F2FE !important;
+    border: 1px solid #BAE6FD !important;
+}
 .member-item-name {
     color: #0F172A !important;
+}
+.member-item-role {
+    color: #475569 !important;
+    background: #E2E8F0 !important;
+}
+.btn-delete-member {
+    background: #FEF2F2 !important;
+    border: 1px solid #FECACA !important;
+    color: #DC2626 !important;
+    font-weight: 600;
+}
+.btn-delete-member:hover {
+    background: #DC2626 !important;
+    color: #FFFFFF !important;
+}
+.emoji-picker-container {
+    background: #F8FAFC !important;
+    border: 1px solid #CBD5E1 !important;
+}
+.emoji-choice-btn {
+    background: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+}
+.add-member-form h4 {
+    color: #047857 !important;
+}
+
+/* 求生資訊彈窗文字強化 */
+#emergency-modal-card {
+    color: #0F172A !important;
+}
+
+/* 保護深色專屬彈窗：雪具價位表 Modal、對講機 Chat Modal 與 Dino 機密檔案維持深邃高對比 */
+#gear-price-modal .gear-price-container {
+    background: linear-gradient(135deg, #0F172A, #1E293B) !important;
+    border: 1px solid rgba(56, 189, 248, 0.35) !important;
+    color: #F8FAFC !important;
+}
+#gear-price-modal .gear-price-header h3 {
+    color: #38BDF8 !important;
+}
+#gear-price-modal .gear-price-header p {
+    color: #CBD5E1 !important;
+}
+#gear-price-modal .btn-close,
+#chat-modal .btn-close {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #FFFFFF !important;
+}
+#dino-secret-modal .glass-card {
+    background: rgba(15, 23, 42, 0.9) !important;
+    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    color: #F8FAFC !important;
+}
+
+/* 右下角懸浮按鈕 (FAB) 清晰立體化 */
+.fab-btn {
+    background: #0F172A !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(56, 189, 248, 0.5) !important;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.25) !important;
+}
+.chat-fab {
+    background: linear-gradient(135deg, #0284C7, #0EA5E9) !important;
+    color: #FFFFFF !important;
+    border-color: transparent !important;
 }
 
 /* 手機版選單雪白背景 */
 @media screen and (max-width: 768px) {
     .nav-links {
-        background: rgba(255, 255, 255, 0.96) !important;
+        background: rgba(255, 255, 255, 0.98) !important;
         border-bottom: 1px solid rgba(14, 165, 233, 0.2) !important;
     }
 }

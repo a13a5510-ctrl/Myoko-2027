@@ -18,20 +18,17 @@ def run_cmd(cmd, check=True):
     return res
 
 def main():
+    user = "a13a5510-ctrl"
+    repo = "Myoko-2027"
+    branch = "main"
+
     try:
         import deploy_config
+        user = getattr(deploy_config, "GITHUB_USER", user).strip()
+        repo = getattr(deploy_config, "GITHUB_REPO", repo).strip()
+        branch = getattr(deploy_config, "BRANCH", branch).strip()
     except ImportError:
-        print("❌ 找不到 deploy_config.py 設定檔！")
-        return
-
-    user = getattr(deploy_config, "GITHUB_USER", "").strip()
-    repo = getattr(deploy_config, "GITHUB_REPO", "").strip()
-    token = getattr(deploy_config, "GITHUB_TOKEN", "").strip()
-    branch = getattr(deploy_config, "BRANCH", "main").strip()
-
-    if not token or "在此貼上" in token:
-        print("❌ 請先在 deploy_config.py 填入正確的 GITHUB_TOKEN (Personal Access Token)！")
-        return
+        pass
 
     # 1. 檢查並初始化 git
     if not os.path.exists(".git"):
@@ -39,10 +36,8 @@ def main():
         run_cmd("git init")
         run_cmd(f"git branch -M {branch}")
 
-    # 2. 設定獨立的遠端倉庫 URL (嵌入 Token，不影響其他全域帳號)
-    remote_url = f"https://{token}@github.com/{user}/{repo}.git"
-    
-    # 檢查是否已設定 remote origin
+    # 2. 綁定 Windows 憑證管理員中的專屬帳號 a13a5510-ctrl@github.com (避免跟預設帳號 leokung4398 衝突)
+    remote_url = f"https://{user}@github.com/{user}/{repo}.git"
     res = run_cmd("git remote", check=False)
     if "origin" in res.stdout.split():
         run_cmd(f"git remote set-url origin {remote_url}")
@@ -53,7 +48,6 @@ def main():
     print("[Git] 正在加入更新檔案...")
     run_cmd("git add .")
     
-    # 檢查是否有更動需要 commit
     status_res = run_cmd("git status --porcelain", check=False)
     if status_res.stdout.strip():
         commit_msg = "Update via automated deploy script"
@@ -70,12 +64,11 @@ def main():
         print("\n🎉 上傳成功！已順利同步至 GitHub。")
     else:
         print("\n⚠️ 推送遇到衝突，嘗試強制覆蓋/同步中...")
-        # 若為全新本地倉庫，嘗試以 force 推送
         force_res = run_cmd(f"git push -u origin {branch} --force", check=False)
         if force_res.returncode == 0:
             print("\n🎉 強制同步成功！")
         else:
-            print("\n❌ 推送失敗，請確認 Token 權限（需勾選 repo）或 Repository 名稱是否正確。")
+            print("\n❌ 推送失敗，請確認網路連線或 GitHub 登入憑證。")
 
 if __name__ == "__main__":
     main()

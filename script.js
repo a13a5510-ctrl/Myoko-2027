@@ -1,4 +1,4 @@
-﻿// 1. 導覽列 Navbar 的滾動變化與手機版選單切換
+// 1. 導覽列 Navbar 的滾動變化與手機版選單切換
 // --------------------------------------------------------------------------
 const isLocalFile = window.location.protocol === 'file:';
 const navbar = document.querySelector('.navbar');
@@ -307,37 +307,37 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="house-info" style="margin-top: 1rem; font-size: 1.1rem;"><span>🏠</span> ${house.specs}</div>
                     <div class="house-info" style="font-size: 1.1rem;"><span>📍</span> ${house.location}</div>
                     
-                    <div class="route-infographic" style="margin-top: 2rem; padding: 1.2rem; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);">
+                    <div class="route-infographic" style="margin-top: 2rem; padding: 1.2rem; background: #F1F5F9; border: 1px solid #CBD5E1; border-radius: 12px; box-shadow: inset 0 2px 6px rgba(15, 23, 42, 0.05);">
                         <p style="font-size: 1rem; font-weight: bold; color: var(--accent); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><span style="font-size: 1.2rem;">🗺️</span> 距離重點設施</p>
                         
-                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.05); border-radius: 8px; margin-bottom: 0.8rem; position: relative;">
-                            <span style="font-weight: 500; font-size: 0.9rem; z-index: 2;">🏠 大本營</span>
-                            <div style="flex-grow: 1; border-top: 2px dashed var(--color-success); margin: 0 1rem; position: relative; display: flex; justify-content: center; z-index: 1;">
-                                <span style="background: var(--bg-dark); color: var(--color-success); padding: 0 0.5rem; font-size: 0.75rem; transform: translateY(-50%); border-radius: 10px; font-weight: bold;">🚗 開車 6 分鐘</span>
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; margin-bottom: 0.8rem; position: relative;">
+                            <span style="font-weight: 600; font-size: 0.9rem; color: #0F172A; z-index: 2;">🏠 大本營</span>
+                            <div style="flex-grow: 1; border-top: 2px dashed #10B981; margin: 0 1rem; position: relative; display: flex; justify-content: center; z-index: 1;">
+                                <span style="background: #ECFDF5; color: #047857; border: 1px solid #6EE7B7; padding: 0.1rem 0.6rem; font-size: 0.75rem; transform: translateY(-50%); border-radius: 10px; font-weight: bold;">🚗 開車 6 分鐘</span>
                             </div>
-                            <span style="font-weight: 500; font-size: 0.9rem; z-index: 2;">🏂 滑雪用具租用場(Myoko Snowsports)</span>
+                            <span style="font-weight: 600; font-size: 0.9rem; color: #0F172A; z-index: 2;">🏂 滑雪用具租用場(Myoko Snowsports)</span>
                         </div>
 
-                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.05); border-radius: 8px; position: relative;">
-                            <span style="font-weight: 500; font-size: 0.9rem; z-index: 2;">🏠 大本營</span>
-                            <div style="flex-grow: 1; border-top: 2px dashed #60A5FA; margin: 0 1rem; position: relative; display: flex; justify-content: center; z-index: 1;">
-                                <span style="background: var(--bg-dark); color: #60A5FA; padding: 0 0.5rem; font-size: 0.75rem; transform: translateY(-50%); border-radius: 10px; font-weight: bold;">🚗 開車 7 分鐘</span>
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; position: relative;">
+                            <span style="font-weight: 600; font-size: 0.9rem; color: #0F172A; z-index: 2;">🏠 大本營</span>
+                            <div style="flex-grow: 1; border-top: 2px dashed #3B82F6; margin: 0 1rem; position: relative; display: flex; justify-content: center; z-index: 1;">
+                                <span style="background: #EFF6FF; color: #1D4ED8; border: 1px solid #93C5FD; padding: 0.1rem 0.6rem; font-size: 0.75rem; transform: translateY(-50%); border-radius: 10px; font-weight: bold;">🚗 開車 7 分鐘</span>
                             </div>
-                            <span style="font-weight: 500; font-size: 0.9rem; z-index: 2;">⛷️ 赤倉溫泉滑雪場</span>
+                            <span style="font-weight: 600; font-size: 0.9rem; color: #0F172A; z-index: 2;">⛷️ 赤倉溫泉滑雪場</span>
                         </div>
 
-                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: rgba(255,255,255,0.05); border-radius: 8px; margin-top: 0.8rem; position: relative;">
-                            <span style="font-weight: 500; font-size: 0.9rem; z-index: 2;">🏠 大本營</span>
-                            <div style="flex-grow: 1; border-top: 2px dashed #F87171; margin: 0 1rem; position: relative; display: flex; justify-content: center; z-index: 1;">
-                                <span style="background: var(--bg-dark); color: #F87171; padding: 0 0.5rem; font-size: 0.75rem; transform: translateY(-50%); border-radius: 10px; font-weight: bold;">🚗 開車 8 分鐘</span>
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.8rem; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; margin-top: 0.8rem; position: relative;">
+                            <span style="font-weight: 600; font-size: 0.9rem; color: #0F172A; z-index: 2;">🏠 大本營</span>
+                            <div style="flex-grow: 1; border-top: 2px dashed #EF4444; margin: 0 1rem; position: relative; display: flex; justify-content: center; z-index: 1;">
+                                <span style="background: #FEF2F2; color: #B91C1C; border: 1px solid #FCA5A5; padding: 0.1rem 0.6rem; font-size: 0.75rem; transform: translateY(-50%); border-radius: 10px; font-weight: bold;">🚗 開車 8 分鐘</span>
                             </div>
-                            <span style="font-weight: 500; font-size: 0.9rem; z-index: 2;">♨️ 赤倉溫泉街</span>
+                            <span style="font-weight: 600; font-size: 0.9rem; color: #0F172A; z-index: 2;">♨️ 赤倉溫泉街</span>
                         </div>
                     </div>
                                         <div class="house-actions" style="margin-top: 1rem; justify-content: center; display: flex; gap: 1rem; flex-wrap: wrap;">
-                        <a href="https://www.google.com/maps/dir/?api=1&origin=${house.coordinates}&destination=Myoko+Snowsports" target="_blank" class="btn-secondary" style="flex: 1; min-width: 200px; text-align: center; padding: 1rem; font-size: 1.1rem; background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.5); color: #A7F3D0;">🗺️ 導航至 滑雪用具租用場</a>
-                        <a href="https://www.google.com/maps/dir/?api=1&origin=${house.coordinates}&destination=Akakura+Onsen+Ski+Resort" target="_blank" class="btn-secondary" style="flex: 1; min-width: 200px; text-align: center; padding: 1rem; font-size: 1.1rem; background: rgba(96, 165, 250, 0.2); border-color: rgba(96, 165, 250, 0.5); color: #BFDBFE;">🗺️ 導航至 赤倉溫泉滑雪場</a>
-                        <a href="https://www.google.com/maps/dir/?api=1&origin=${house.coordinates}&destination=Akakura+Onsen" target="_blank" class="btn-secondary" style="flex: 1; min-width: 200px; text-align: center; padding: 1rem; font-size: 1.1rem; background: rgba(248, 113, 113, 0.2); border-color: rgba(248, 113, 113, 0.5); color: #FECACA;">🗺️ 導航至 赤倉溫泉街</a>
+                        <a href="https://www.google.com/maps/dir/?api=1&origin=${house.coordinates}&destination=Myoko+Snowsports" target="_blank" class="btn-secondary" style="flex: 1; min-width: 200px; text-align: center; padding: 1rem; font-size: 1.1rem; background: #ECFDF5; border: 2px solid #10B981; color: #047857; font-weight: 700;">🗺️ 導航至 滑雪用具租用場</a>
+                        <a href="https://www.google.com/maps/dir/?api=1&origin=${house.coordinates}&destination=Akakura+Onsen+Ski+Resort" target="_blank" class="btn-secondary" style="flex: 1; min-width: 200px; text-align: center; padding: 1rem; font-size: 1.1rem; background: #EFF6FF; border: 2px solid #3B82F6; color: #1D4ED8; font-weight: 700;">🗺️ 導航至 赤倉溫泉滑雪場</a>
+                        <a href="https://www.google.com/maps/dir/?api=1&origin=${house.coordinates}&destination=Akakura+Onsen" target="_blank" class="btn-secondary" style="flex: 1; min-width: 200px; text-align: center; padding: 1rem; font-size: 1.1rem; background: #FEF2F2; border: 2px solid #EF4444; color: #B91C1C; font-weight: 700;">🗺️ 導航至 赤倉溫泉街</a>
                     </div>
                 </div>
             </div>
@@ -1808,7 +1808,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // 若有負責人，顯示專屬徽章
                     const assigneeBadge = (item.assignee && item.assignee !== '')
-                        ? `<span class="badge-assignee" style="margin-left: 10px; font-size: 0.75rem; background: rgba(56, 189, 248, 0.2); color: #38BDF8; padding: 2px 8px; border-radius: 12px; border: 1px solid rgba(56, 189, 248, 0.4);">負責人: ${item.assignee}</span>`
+                        ? `<span class="badge-assignee" style="margin-left: 10px; font-size: 0.75rem; background: #E0F2FE; color: #0369A1; font-weight: 700; padding: 2px 8px; border-radius: 12px; border: 1px solid #7DD3FC;">負責人: ${item.assignee}</span>`
                         : '';
                     
                     itemEl.innerHTML = `
@@ -2372,9 +2372,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (statusEl) {
             if (pct === 100) {
-                statusEl.innerHTML = `<span style="color: #4ade80; font-weight: 700;">🎉 100% 完美武裝！${userLabel} 隨時可以空降妙高粉雪天堂！</span>`;
+                statusEl.innerHTML = `<span style="color: #047857; font-weight: 700;">🎉 100% 完美武裝！${userLabel} 隨時可以空降妙高粉雪天堂！</span>`;
             } else if (pct >= 60) {
-                statusEl.innerHTML = `<span style="color: #38bdf8;">🔥 整備過半！還差 ${allBoxes.length - checkedBoxes.length} 項裝備就全副武裝囉！</span>`;
+                statusEl.innerHTML = `<span style="color: #0284C7; font-weight: 600;">🔥 整備過半！還差 ${allBoxes.length - checkedBoxes.length} 項裝備就全副武裝囉！</span>`;
             } else {
                 statusEl.textContent = `✨ 點擊下方卡片勾選已備妥或已預約的裝備，目標 100% 完裝出發！`;
             }
