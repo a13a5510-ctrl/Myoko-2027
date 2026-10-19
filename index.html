@@ -35,6 +35,7 @@
             <li><a href="#expenses">公費分帳</a></li>
             <li><a href="#gear">裝備清單</a></li>
             <li><a href="#gallery">影音回憶</a></li>
+            <li><a href="#" id="nav-tldr" onclick="event.preventDefault(); document.getElementById('tldr-modal').classList.remove('hidden');" style="color: #D97706; font-weight: 800; background: #FEF3C7; padding: 0.3rem 0.75rem; border-radius: 20px; border: 1px solid #FCD34D;">⚡ 懶人包</a></li>
             <li><a href="#" id="nav-members" style="color: var(--accent); font-weight: bold;">👥 成員名單</a></li>
             <li><a href="#" id="nav-emergency" style="color: var(--color-danger); font-weight: bold;">🆘 求生資訊</a></li>
         </ul>
@@ -91,7 +92,10 @@
                 </div>
             </div>
 
-            <a href="#flights" class="btn-primary">開始探索</a>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; align-items: center;">
+                <a href="#flights" class="btn-primary">開始探索</a>
+                <button type="button" onclick="document.getElementById('tldr-modal').classList.remove('hidden');" class="btn-tldr-hero">⚡ 30秒入坑懶人包 (給還在猶豫的朋友)</button>
+            </div>
         </div>
     </section>
 
@@ -1114,6 +1118,82 @@
     </div>
     
     
+    <!-- ⚡ 30秒入坑懶人包 Modal (給懶得爬文的朋友) -->
+    <div id="tldr-modal" class="modal-overlay hidden" onclick="if(event.target === this) this.classList.add('hidden')">
+        <div class="tldr-modal-content glass-card">
+            <div class="modal-header">
+                <h3>⚡ 30秒入坑懶人包 <span style="font-size: 0.85rem; font-weight: 600; color: #D97706; background: #FEF3C7; padding: 0.2rem 0.6rem; border-radius: 12px; margin-left: 0.4rem;">不看長文直接懂！</span></h3>
+                <button class="btn-close" id="close-tldr-modal" onclick="document.getElementById('tldr-modal').classList.add('hidden')">&times;</button>
+            </div>
+            <div class="modal-body tldr-body">
+                <p class="tldr-intro">
+                    👋 <strong>給想去但懶得看整頁的朋友：</strong><br>
+                    不用做功課、不用自己扛雪具、不會滑雪也沒關係！住宿大本營已經訂好，你只要<strong>買機票＋人出現</strong>就能一起爽玩日本妙高粉雪！
+                </p>
+
+                <!-- 4 大核心重點卡片 -->
+                <div class="tldr-grid">
+                    <div class="tldr-card">
+                        <div class="tldr-card-icon">🗓️</div>
+                        <div class="tldr-card-title">什麼時候去？請幾天假？</div>
+                        <ul class="tldr-list">
+                            <li><strong>核心雪場日：</strong>2027/3/3 (三) ～ 3/7 (日)</li>
+                            <li><span class="tldr-tag green">A計畫 (爽玩版)</span> <strong>3/2 (二) 飛東京</strong>：先在新宿居酒屋喝一晚，隔天一起搭新幹線（請 4 天假）</li>
+                            <li><span class="tldr-tag amber">B計畫 (省假版)</span> <strong>3/3 (三) 早班機飛東京</strong>：落地直衝妙高大本營會合（<strong>只請 3 天假！</strong>）</li>
+                        </ul>
+                    </div>
+
+                    <div class="tldr-card">
+                        <div class="tldr-card-icon">🏠</div>
+                        <div class="tldr-card-title">住哪裡？還要自己找飯店嗎？</div>
+                        <ul class="tldr-list">
+                            <li><strong>完全不用！已經訂好包棟木屋！</strong></li>
+                            <li><strong>妙高包棟大本營 (Airbnb)：</strong>8 臥室 23 床超大自然木屋，有大客廳跟廚房可以煮火鍋、打牌小酌。</li>
+                            <li>開車 <strong>6～8 分鐘</strong> 直達雪具店、赤倉溫泉滑雪場與溫泉街！</li>
+                        </ul>
+                    </div>
+
+                    <div class="tldr-card">
+                        <div class="tldr-card-icon">🏂</div>
+                        <div class="tldr-card-title">完全不會滑 / 沒裝備怎麼辦？</div>
+                        <ul class="tldr-list">
+                            <li><strong>兩手空空人來就好！</strong>現場 Myoko Snowsports 可直接租<strong>「全套無腦包」</strong>（雪板＋雪鞋＋防水雪衣褲＋安全帽＋雪鏡）。</li>
+                            <li><strong>新手超友善：</strong>赤倉溫泉雪道超寬超平緩，不滑也可以泡百年美人湯、吃爆量炸豬排跟柴燒披薩！</li>
+                        </ul>
+                    </div>
+
+                    <div class="tldr-card highlight">
+                        <div class="tldr-card-icon">💰</div>
+                        <div class="tldr-card-title">預算大概要抓多少？</div>
+                        <ul class="tldr-list">
+                            <li>🏠 <strong>包棟住宿 (4晚)：</strong>總價已付訂，6～8 人均攤約 <strong>NT$ 6,760 ～ 9,000 / 人</strong> (約 HK$ 1,620～2,160)</li>
+                            <li>🎿 <strong>全套裝備租借 (3天)：</strong>約 <strong>¥24,000</strong> (約 NT$ 5,280 / HK$ 1,250)</li>
+                            <li>🎟️ <strong>雪場纜車票 (3天)：</strong>約 <strong>¥20,000</strong> (約 NT$ 4,400 / HK$ 1,040)</li>
+                            <li>🚄 <strong>新幹線＋機票：</strong>依各自出發地購買（台北/香港飛東京成田 NRT）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 3 步驟無腦跟團 -->
+                <div class="tldr-steps-box">
+                    <h4>🚀 想跟團？只要做這 3 件事：</h4>
+                    <div class="tldr-steps-row">
+                        <div class="tldr-step-pill"><span>1</span> 群組喊 <strong>「+1」</strong> 報名卡位</div>
+                        <div class="tldr-step-arrow">➔</div>
+                        <div class="tldr-step-pill"><span>2</span> 買好飛 <strong>東京成田 (NRT)</strong> 機票</div>
+                        <div class="tldr-step-arrow">➔</div>
+                        <div class="tldr-step-pill"><span>3</span> 準備好肚子去吃火鍋＆泡溫泉！</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer tldr-footer">
+                <button type="button" id="btn-copy-tldr" class="btn-primary" onclick="copyTldrSummary()" style="flex: 1; background: linear-gradient(135deg, #0284C7, #0EA5E9);">📋 一鍵複製「推坑懶人包」傳到 LINE / WhatsApp</button>
+                <button type="button" class="btn-secondary" onclick="document.getElementById('tldr-modal').classList.add('hidden'); document.getElementById('members-modal').classList.remove('hidden');" style="margin-top: 0; padding: 0.9rem 1.4rem;">🙋‍♂️ 我要 +1 加入名單</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 成員名單管理 Modal (隱藏式) -->
     <div id="members-modal" class="modal-overlay hidden" onclick="if(event.target === this) this.classList.add('hidden')">
         <div class="members-modal-content glass-card">

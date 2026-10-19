@@ -2423,3 +2423,54 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 });
+
+// ⚡ 一鍵複製「30秒推坑懶人包」到剪貼簿，方便貼到 LINE / WhatsApp 群組
+window.copyTldrSummary = function() {
+    const summaryText = `🏂【2027 日本妙高赤倉・粉雪包棟團 30秒懶人包】❄️
+👉 給想去但懶得爬長文的朋友，看這則就夠：
+
+🗓️ 1. 日期與請假方案：
+• 核心雪場日：2027/3/3 (三) ～ 3/7 (日)
+• 🟢 A計畫 (爽玩版)：3/2 (二) 飛東京成田，當晚新宿居酒屋集合，隔天搭新幹線進妙高 (請4天假)
+• 🟡 B計畫 (省假版)：3/3 (三) 早班機飛東京成田，落地直衝妙高包棟會合 (只請3天假！)
+
+🏠 2. 住宿已經訂好！(不用自己找飯店)
+• 我們包下妙高 8臥室23床 超大木屋 Airbnb (已付訂金、免費停車)
+• 有大客廳＋廚房可煮火鍋喝酒，開車 6~8 分鐘就到雪具店、赤倉溫泉滑雪場＆溫泉街！
+
+🎿 3. 新手 / 沒裝備完全免煩惱：
+• 兩手空空人來就好！現場 Myoko Snowsports 可租「全套無腦包」(雪板+雪鞋+防水雪衣褲+安全帽+雪鏡)
+• 赤倉溫泉雪道超寬超平緩，不滑也能泡百年美人湯、吃爆量炸豬排跟柴燒披薩！
+
+💰 4. 預估花費抓多少？
+• 包棟住宿 (4晚)：6~8人均攤約 NT$ 6,760 ~ 9,000 / 人 (約 HK$ 1,620 ~ 2,160)
+• 全套雪具租借 (3天)：約 ¥24,000 (約 NT$ 5,280 / HK$ 1,250)
+• 雪場纜車票 (3天)：約 ¥20,000 (約 NT$ 4,400 / HK$ 1,040)
+• 機票＋新幹線：各自買飛「東京成田 (NRT)」即可！
+
+🚀 想跟團只要喊「+1」卡位！
+🔗 完整互動網站：https://a13a5510-ctrl.github.io/Myoko-2027/`;
+
+    const btn = document.getElementById('btn-copy-tldr');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(summaryText).then(() => {
+            if (btn) {
+                const origHtml = btn.innerHTML;
+                btn.innerHTML = '✅ 已複製！快去貼給朋友推坑吧！';
+                btn.style.background = '#059669';
+                setTimeout(() => {
+                    btn.innerHTML = origHtml;
+                    btn.style.background = 'linear-gradient(135deg, #0284C7, #0EA5E9)';
+                }, 2500);
+            }
+        });
+    } else {
+        const ta = document.createElement('textarea');
+        ta.value = summaryText;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        if (btn) btn.innerHTML = '✅ 已複製！快去貼給朋友推坑吧！';
+    }
+};

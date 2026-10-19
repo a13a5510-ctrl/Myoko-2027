@@ -5038,3 +5038,209 @@ body {
     background-color: #E2E8F0 !important;
     color: #475569 !important;
 }
+
+/* ========================================================================== */
+/* ⚡ 30秒入坑懶人包 (TL;DR Quick Guide Modal & Hero Button)                   */
+/* ========================================================================== */
+.btn-tldr-hero {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: linear-gradient(135deg, #F59E0B, #EA580C);
+    color: #FFFFFF !important;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    border: 2px solid #FDE68A;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(234, 88, 12, 0.35);
+    transition: all 0.25s ease;
+    font-family: inherit;
+}
+
+.btn-tldr-hero:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 30px rgba(234, 88, 12, 0.5);
+    background: linear-gradient(135deg, #D97706, #C2410C);
+}
+
+.tldr-modal-content {
+    width: 94%;
+    max-width: 780px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2rem;
+    position: relative;
+    background: #FFFFFF !important;
+    border: 2px solid #38BDF8 !important;
+}
+
+.tldr-intro {
+    background: #F0F9FF;
+    border-left: 4px solid #0284C7;
+    padding: 1rem 1.2rem;
+    border-radius: 10px;
+    color: #1E293B;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.tldr-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.tldr-card {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    padding: 1.25rem;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.tldr-card:hover {
+    border-color: #7DD3FC;
+    transform: translateY(-2px);
+}
+
+.tldr-card.highlight {
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+}
+
+.tldr-card-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.4rem;
+}
+
+.tldr-card-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #0F172A;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px dashed #CBD5E1;
+}
+
+.tldr-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    font-size: 0.88rem;
+    color: #334155;
+    line-height: 1.5;
+}
+
+.tldr-list li strong {
+    color: #0F172A;
+}
+
+.tldr-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 8px;
+    margin-right: 0.3rem;
+}
+
+.tldr-tag.green {
+    background: #DCFCE7;
+    color: #047857;
+    border: 1px solid #86EFAC;
+}
+
+.tldr-tag.amber {
+    background: #FEF3C7;
+    color: #B45309;
+    border: 1px solid #FCD34D;
+}
+
+.tldr-steps-box {
+    background: linear-gradient(135deg, #EFF6FF, #E0F2FE);
+    border: 1px solid #BAE6FD;
+    border-radius: 14px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1.2rem;
+}
+
+.tldr-steps-box h4 {
+    color: #0369A1;
+    font-size: 1rem;
+    margin-bottom: 0.9rem;
+    text-align: center;
+}
+
+.tldr-steps-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.tldr-step-pill {
+    flex: 1;
+    min-width: 160px;
+    background: #FFFFFF;
+    border: 1px solid #7DD3FC;
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.86rem;
+    color: #0F172A;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.08);
+}
+
+.tldr-step-pill span {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #0284C7;
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 0.78rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.tldr-step-arrow {
+    color: #0284C7;
+    font-weight: 800;
+    font-size: 1.2rem;
+}
+
+.tldr-footer {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    padding-top: 1rem;
+    border-top: 1px solid #E2E8F0;
+}
+
+@media screen and (max-width: 768px) {
+    .tldr-grid {
+        grid-template-columns: 1fr;
+    }
+    .tldr-steps-row {
+        flex-direction: column;
+    }
+    .tldr-step-arrow {
+        transform: rotate(90deg);
+    }
+    .tldr-modal-content {
+        padding: 1.2rem;
+    }
+}
