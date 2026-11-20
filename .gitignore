@@ -1,5 +1,16 @@
-# 忽略金鑰與部署設定檔
+# 忽略金鑰、暫存與本機開發/部署腳本（避免誤傳至公開 GitHub）
 deploy_config.py
+deploy.py
+run.py
+Serve.ps1
+patch_*.ps1
+patch_*.py
+houses.json
+*.bak
+*.docx
+assets/parsed_docx.md
+assets/*Airbnb.html
+assets/*Airbnb_files/
 __pycache__/
 *.pyc
 .env

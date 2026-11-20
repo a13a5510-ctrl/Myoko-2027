@@ -1,3 +1,35 @@
+// 0. 全域資安防護工具 (XSS HTML 跳脫與媒體網址白名單驗證)
+// --------------------------------------------------------------------------
+function escapeHtml(unsafe) {
+    if (unsafe === null || unsafe === undefined) return '';
+    return String(unsafe)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function sanitizeMediaUrl(rawUrl) {
+    if (!rawUrl) return '';
+    const str = String(rawUrl).trim();
+    if (/^https:\/\/firebasestorage\.googleapis\.com\/v0\/b\/myoko-snowboard-2027\.firebasestorage\.app\//i.test(str)) {
+        return escapeHtml(str);
+    }
+    if (/^(\.\/)?assets\/[a-zA-Z0-9_./ -]+$/.test(str) && !str.includes('..')) {
+        return escapeHtml(str);
+    }
+    return '';
+}
+
+async function sha256Hex(text) {
+    const data = new TextEncoder().encode(String(text));
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+}
+
 // 1. 導覽列 Navbar 的滾動變化與手機版選單切換
 // --------------------------------------------------------------------------
 const isLocalFile = window.location.protocol === 'file:';
@@ -615,12 +647,14 @@ function renderAllVotes(votesData) {
         
         let html = '';
         voteIds.forEach(voteId => {
-            const vote = houseVotes[voteId];
-            const style = getVoterStyle(vote.name);
+            const vote = houseVotes[voteId] || {};
+            const safeName = escapeHtml(String(vote.name || '').slice(0, 40));
+            const safeReason = escapeHtml(String(vote.reason || '').slice(0, 250));
+            const style = getVoterStyle(String(vote.name || ''));
             html += `
                 <div class="vote-tag">
-                    <span class="vote-tag-name" style="color: ${style.color};">${style.avatar} ${vote.name}</span>
-                    <span class="vote-tag-reason">${vote.reason}</span>
+                    <span class="vote-tag-name" style="color: ${style.color};">${style.avatar} ${safeName}</span>
+                    <span class="vote-tag-reason">${safeReason}</span>
                 </div>
             `;
         });
@@ -643,6 +677,9 @@ const galleryAuthError = document.getElementById('gallery-auth-error');
  * 2. 隱藏密碼鎖遮罩
  * 3. 顯示相簿內容
  */
+const GALLERY_PASS_HASH = '3094e7c77f6523c0fd043c320a74eb31a0ae3b1cd0b23709d8ae623df79c994c';
+let gallerySyncStarted = false;
+
 function unlockGallery(animate) {
     if (animate) {
         galleryAuthOverlay.style.opacity = '0';
@@ -657,6 +694,9 @@ function unlockGallery(animate) {
         galleryContent.classList.remove('hidden');
         gallerySection.classList.remove('is-locked');
     }
+    if (typeof window.startGalleryFirebaseSync === 'function') {
+        window.startGalleryFirebaseSync();
+    }
 }
 
 // 檢查是否已解鎖（Session 記憶）
@@ -665,21 +705,22 @@ if (sessionStorage.getItem('galleryUnlocked') === 'true') {
         unlockGallery(false);
     }
 } else {
-    // 確保未解鎖時物理斷絕生效
+    // 確保未解鎖時物理斷絕生效，且不預先抓取雲端相簿網址
     if (gallerySection) {
         gallerySection.classList.add('is-locked');
     }
 }
 
-// 點擊解鎖按鈕
-btnUnlockGallery?.addEventListener('click', () => {
-    if (galleryPasswordInput.value === 'myoko2027') {
+// 點擊解鎖按鈕（使用 SHA-256 雜湊驗證，避免原始碼明文暴露密碼）
+btnUnlockGallery?.addEventListener('click', async () => {
+    const inputVal = galleryPasswordInput ? galleryPasswordInput.value.trim() : '';
+    const inputHash = await sha256Hex(inputVal);
+    if (inputHash === GALLERY_PASS_HASH) {
         sessionStorage.setItem('galleryUnlocked', 'true');
         galleryAuthError.classList.add('hidden');
         unlockGallery(true);
     } else {
         galleryAuthError.classList.remove('hidden');
-        // 輸入框震動動畫
         galleryPasswordInput.style.animation = 'none';
         galleryPasswordInput.offsetHeight; // trigger reflow
         galleryPasswordInput.style.animation = 'shake 0.4s ease';
@@ -694,10 +735,9 @@ galleryPasswordInput?.addEventListener('keypress', (e) => {
 });
 
 // --------------------------------------------------------------------------
-// 8. 影音回憶錄 Firebase 上傳與渲染邏輯
+// 8. 影音回憶錄 Firebase 上傳與渲染邏輯 (含檔案型態、30MB 上限與 XSS 防護)
 // --------------------------------------------------------------------------
 if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !== "YOUR_API_KEY") {
-    // 初始化 Storage
     const storage = firebase.storage();
     const db = firebase.database();
     
@@ -709,9 +749,14 @@ if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !==
     const progressBar = document.getElementById('upload-progress-bar');
     const progressText = document.getElementById('upload-progress-text');
     const mediaGridDynamic = document.getElementById('media-grid');
+    const MAX_MEDIA_BYTES = 30 * 1024 * 1024; // 單檔上限 30MB 防塞爆空間
     
     // 上傳邏輯
     btnUploadMedia?.addEventListener('click', async () => {
+        if (sessionStorage.getItem('galleryUnlocked') !== 'true') {
+            alert('請先解鎖相簿後再上傳檔案！');
+            return;
+        }
         if (!fileInput || !fileInput.files.length) {
             alert('請選擇至少一個檔案！');
             return;
@@ -719,7 +764,7 @@ if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !==
         
         const files = fileInput.files;
         const category = categorySelect.value;
-        const uploaderName = uploaderNameInput.value.trim() || '匿名旅伴';
+        const uploaderName = (uploaderNameInput.value.trim() || '匿名旅伴').slice(0, 30);
         
         progressContainer.classList.remove('hidden');
         btnUploadMedia.disabled = true;
@@ -728,12 +773,21 @@ if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !==
         
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-            const fileName = `${Date.now()}_${file.name}`;
+            if (!/^(image\/(jpeg|png|webp|gif|heic)|video\/(mp4|quicktime|webm))$/i.test(file.type)) {
+                alert(`檔案「${file.name}」格式不支援，僅允許上傳圖片或 MP4/MOV/WEBM 影片！`);
+                continue;
+            }
+            if (file.size > MAX_MEDIA_BYTES) {
+                alert(`檔案「${file.name}」超過 30MB 上限，請壓縮後再上傳！`);
+                continue;
+            }
+            const cleanBaseName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(0, 80);
+            const fileName = `${Date.now()}_${cleanBaseName}`;
             const storageRef = storage.ref(`gallery/${fileName}`);
             const fileType = file.type.startsWith('video') ? 'video' : 'image';
             
             try {
-                const uploadTask = storageRef.put(file);
+                const uploadTask = storageRef.put(file, { contentType: file.type });
                 
                 await new Promise((resolve, reject) => {
                     uploadTask.on('state_changed', 
@@ -773,51 +827,63 @@ if (!isLocalFile && typeof firebase !== 'undefined' && firebaseConfig.apiKey !==
         }, 3000);
     });
     
-    // 即時監聽渲染邏輯
-    const galleryDataRef = db.ref('galleryData').orderByChild('timestamp');
-    galleryDataRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (!data) {
-            if (mediaGridDynamic) mediaGridDynamic.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center;">目前還沒有上傳影音，快來分享你的回憶！</p>';
-            return;
-        }
-        
-        const categorizedData = { '滑雪英姿': [], '沿途風景': [], '美食與住宿': [] };
-        
-        Object.keys(data).forEach(key => {
-            const item = data[key];
-            if (categorizedData[item.category]) {
-                categorizedData[item.category].push(item);
-            } else {
-                if (!categorizedData['其他']) categorizedData['其他'] = [];
-                categorizedData['其他'].push(item);
+    // 解鎖後才啟動即時監聽渲染邏輯，並加上網址白名單與 HTML 跳脫
+    window.startGalleryFirebaseSync = function() {
+        if (gallerySyncStarted) return;
+        gallerySyncStarted = true;
+
+        const galleryDataRef = db.ref('galleryData').orderByChild('timestamp');
+        galleryDataRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (!data) {
+                if (mediaGridDynamic) mediaGridDynamic.innerHTML = '<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center;">目前還沒有上傳影音，快來分享你的回憶！</p>';
+                return;
             }
-        });
-        
-        let html = '';
-        Object.keys(categorizedData).forEach(cat => {
-            const items = categorizedData[cat];
-            if (items.length === 0) return;
             
-            // gallery-category-title 的 grid-column:1/-1 已由 CSS 處理，移除 style 屬性
-            html += `<h3 class="gallery-category-title">${cat}</h3>`;
+            const categorizedData = { '滑雪英姿': [], '沿途風景': [], '美食與住宿': [] };
             
-            items.forEach(item => {
-                // media-item 的 position:relative 已由 CSS 處理
-                html += `<div class="media-item">`;
-                if (item.type === 'image') {
-                    html += `<img src="${item.url}" alt="${cat}" loading="lazy">`;
-                } else if (item.type === 'video') {
-                    html += `<video src="${item.url}" controls></video>`;
+            Object.keys(data).forEach(key => {
+                const item = data[key];
+                if (!item) return;
+                if (categorizedData[item.category]) {
+                    categorizedData[item.category].push(item);
+                } else {
+                    if (!categorizedData['其他']) categorizedData['其他'] = [];
+                    categorizedData['其他'].push(item);
                 }
-                // 上傳者標籤改用 CSS class
-                html += `<div class="media-uploader-badge">📸 ${item.uploader}</div>`;
-                html += `</div>`;
             });
+            
+            let html = '';
+            Object.keys(categorizedData).forEach(cat => {
+                const items = categorizedData[cat];
+                if (items.length === 0) return;
+                const safeCat = escapeHtml(cat);
+                
+                html += `<h3 class="gallery-category-title">${safeCat}</h3>`;
+                
+                items.forEach(item => {
+                    const safeUrl = sanitizeMediaUrl(item.url);
+                    if (!safeUrl) return;
+                    const safeUploader = escapeHtml(String(item.uploader || '旅伴').slice(0, 30));
+
+                    html += `<div class="media-item">`;
+                    if (item.type === 'image') {
+                        html += `<img src="${safeUrl}" alt="${safeCat}" loading="lazy">`;
+                    } else if (item.type === 'video') {
+                        html += `<video src="${safeUrl}" controls preload="metadata"></video>`;
+                    }
+                    html += `<div class="media-uploader-badge">📸 ${safeUploader}</div>`;
+                    html += `</div>`;
+                });
+            });
+            
+            if (mediaGridDynamic) mediaGridDynamic.innerHTML = html;
         });
-        
-        if (mediaGridDynamic) mediaGridDynamic.innerHTML = html;
-    });
+    };
+
+    if (sessionStorage.getItem('galleryUnlocked') === 'true') {
+        window.startGalleryFirebaseSync();
+    }
 }
 
 // --------------------------------------------------------------------------
@@ -1136,26 +1202,44 @@ function renderTransactions(expenses) {
         const date = exp.timestamp
             ? new Date(exp.timestamp).toLocaleDateString('zh-TW', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
             : '';
-        const jpyDisplay = exp.originalJPY ? `<div class="tx-amount-jpy">(¥${exp.originalJPY.toLocaleString()})</div>` : '';
-        const creatorDisplay = exp.createdBy ? ` · 建立者: ${exp.createdBy}` : '';
+        const safeAmount = Number(exp.amount || 0).toLocaleString();
+        const jpyDisplay = exp.originalJPY ? `<div class="tx-amount-jpy">(¥${Number(exp.originalJPY || 0).toLocaleString()})</div>` : '';
+        const creatorDisplay = exp.createdBy ? ` · 建立者: ${escapeHtml(exp.createdBy)}` : '';
+        const safeItem = escapeHtml(exp.item);
+        const safePayer = escapeHtml(exp.payer);
+        const safeId = escapeHtml(exp.id);
 
         return `
             <div class="transaction-item">
                 <div class="tx-content">
-                    <div class="tx-title">${exp.item}</div>
-                    <div class="tx-meta">${date} · 由 ${exp.payer} 付款${creatorDisplay}</div>
+                    <div class="tx-title">${safeItem}</div>
+                    <div class="tx-meta">${escapeHtml(date)} · 由 ${safePayer} 付款${creatorDisplay}</div>
                 </div>
                 <div class="tx-amount-group">
-                    <div class="tx-amount">NT$ ${exp.amount.toLocaleString()}</div>
+                    <div class="tx-amount">NT$ ${safeAmount}</div>
                     ${jpyDisplay}
                 </div>
                 <div class="tx-actions">
-                    <button class="btn-edit-tx" onclick="window.editTransaction('${exp.id}')">✏️</button>
-                    <button class="btn-delete-tx" onclick="window.deleteTransaction('${exp.id}')">🗑️</button>
+                    <button class="btn-edit-tx" data-edit-tx="${safeId}">✏️</button>
+                    <button class="btn-delete-tx" data-delete-tx="${safeId}">🗑️</button>
                 </div>
             </div>
         `;
     }).join('');
+}
+
+if (transactionList) {
+    transactionList.addEventListener('click', (e) => {
+        const editBtn = e.target.closest('[data-edit-tx]');
+        if (editBtn) {
+            window.editTransaction(editBtn.getAttribute('data-edit-tx'));
+            return;
+        }
+        const delBtn = e.target.closest('[data-delete-tx]');
+        if (delBtn) {
+            window.deleteTransaction(delBtn.getAttribute('data-delete-tx'));
+        }
+    });
 }
 
 const avatarMap = {
@@ -1190,11 +1274,16 @@ function renderAvatarFilters() {
     const container = document.getElementById('avatar-filter-container');
     if (!container) return;
     container.innerHTML = Object.keys(avatarMap).map(name => `
-        <div class="filter-avatar-btn ${currentAvatarFilter === name ? 'active' : ''}" onclick="window.toggleAvatarFilter('${name}')" title="${name}">
-            ${avatarMap[name]}
+        <div class="filter-avatar-btn ${currentAvatarFilter === name ? 'active' : ''}" data-avatar-filter="${escapeHtml(name)}" title="${escapeHtml(name)}">
+            ${escapeHtml(avatarMap[name])}
         </div>
     `).join('');
 }
+
+document.getElementById('avatar-filter-container')?.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-avatar-filter]');
+    if (btn) window.toggleAvatarFilter(btn.getAttribute('data-avatar-filter'));
+});
 
 window.toggleDebtDetails = function(index) {
     const detailsDiv = document.getElementById(`debt-details-${index}`);
@@ -1269,7 +1358,7 @@ function calculateAndRenderSettlements(expenses) {
         }
 
         if (settlements.length === 0) {
-            settlementList.innerHTML = `<div class="empty-state">目前與 ${currentAvatarFilter} 無任何相關欠款 🎉</div>`;
+            settlementList.innerHTML = `<div class="empty-state">目前與 ${escapeHtml(currentAvatarFilter)} 無任何相關欠款 🎉</div>`;
             return;
         }
 
@@ -1284,10 +1373,10 @@ function calculateAndRenderSettlements(expenses) {
             if (relatedExpenses.length > 0) {
                 detailsHtml = relatedExpenses.map(e => {
                     const date = e.timestamp ? new Date(e.timestamp).toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric' }) : '';
-                    const share = Math.round(e.amount / e.participants.length);
+                    const share = Math.round(Number(e.amount || 0) / Math.max(1, e.participants.length));
                     return `
                         <div class="debt-history-item">
-                            <span>${date} ${e.item} (${e.payer}付)</span>
+                            <span>${escapeHtml(date)} ${escapeHtml(e.item)} (${escapeHtml(e.payer)}付)</span>
                             <span>均攤 NT$ ${share}</span>
                         </div>
                     `;
@@ -1296,25 +1385,44 @@ function calculateAndRenderSettlements(expenses) {
                 detailsHtml = `<div class="debt-history-item">無直接交易紀錄 (可能經由演算法合併)</div>`;
             }
 
+            const safeFrom = escapeHtml(s.from);
+            const safeTo = escapeHtml(s.to);
+            const safeFromAvatar = escapeHtml(avatarMap[s.from] || '');
+            const safeToAvatar = escapeHtml(avatarMap[s.to] || '');
+            const safeAmt = Number(s.amount) || 0;
+
             return `
-            <div class="settlement-item" onclick="window.toggleDebtDetails(${index})">
+            <div class="settlement-item" onclick="window.toggleDebtDetails(${Number(index)})">
                 <div class="settlement-header">
                     <div>
-                        <strong>${avatarMap[s.from] || ''} ${s.from}</strong> 應給 <strong>${avatarMap[s.to] || ''} ${s.to}</strong>
+                        <strong>${safeFromAvatar} ${safeFrom}</strong> 應給 <strong>${safeToAvatar} ${safeTo}</strong>
                         <div class="tx-meta">點擊展開溯源明細 · 點右側可結清還款</div>
                     </div>
                     <div class="settle-row" onclick="event.stopPropagation()">
-                        <span class="settle-amount">NT$ ${s.amount.toLocaleString()}</span>
-                        <button class="btn-settle" onclick="window.settleDebt('${s.from}', '${s.to}', ${s.amount})">確認結清</button>
+                        <span class="settle-amount">NT$ ${safeAmt.toLocaleString()}</span>
+                        <button class="btn-settle" data-settle-from="${safeFrom}" data-settle-to="${safeTo}" data-settle-amount="${safeAmt}">確認結清</button>
                     </div>
                 </div>
-                <div class="debt-details" id="debt-details-${index}" onclick="event.stopPropagation()">
+                <div class="debt-details" id="debt-details-${Number(index)}" onclick="event.stopPropagation()">
                     ${detailsHtml}
                 </div>
             </div>
             `;
         }).join('');
     }
+}
+
+if (settlementList) {
+    settlementList.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-settle-from]');
+        if (!btn) return;
+        e.stopPropagation();
+        window.settleDebt(
+            btn.getAttribute('data-settle-from'),
+            btn.getAttribute('data-settle-to'),
+            Number(btn.getAttribute('data-settle-amount')) || 0
+        );
+    });
 }
 
 /* -------------------------------------------------------------------------- */
@@ -1446,25 +1554,27 @@ if (chatMessagesRef) {
     });
 }
 
-// 渲染單筆訊息
+// 渲染單筆訊息 (含貼圖檔名白名單與傳送者名稱跳脫)
 function renderSingleMessage(msg) {
-    if (!chatMessagesArea) return;
+    if (!chatMessagesArea || !msg) return;
     
     const isMine = (msg.sender === chatCurrentUser);
     const alignClass = isMine ? 'message-mine' : 'message-others';
+    const safeSender = escapeHtml(String(msg.sender || '旅伴').slice(0, 30));
+    const safeAvatar = escapeHtml(avatarMap[msg.sender] || '👤');
     
     let contentHtml = '';
     if (msg.type === 'sticker') {
-        // 貼圖
-        contentHtml = `<img src="./assets/stickers/${msg.text}.png" class="chat-sticker" alt="Sticker">`;
+        const safeSticker = String(msg.text || '').replace(/[^a-zA-Z0-9_-]/g, '');
+        if (!safeSticker) return;
+        contentHtml = `<img src="./assets/stickers/${safeSticker}.png" class="chat-sticker" alt="Sticker">`;
     } else {
-        // 文字
         contentHtml = `<div class="chat-bubble">${escapeHtml(msg.text)}</div>`;
     }
 
     const msgHtml = `
         <div class="chat-message ${alignClass}">
-            <div class="message-sender">${avatarMap[msg.sender] || '👤'} ${msg.sender}</div>
+            <div class="message-sender">${safeAvatar} ${safeSender}</div>
             ${contentHtml}
         </div>
     `;
@@ -1485,15 +1595,7 @@ function scrollToChatBottom() {
     }
 }
 
-function escapeHtml(unsafe) {
-    if (!unsafe) return '';
-    return String(unsafe)
-         .replace(/&/g, "&amp;")
-         .replace(/</g, "&lt;")
-         .replace(/>/g, "&gt;")
-         .replace(/"/g, "&quot;")
-         .replace(/'/g, "&#039;");
-}
+// escapeHtml 已統一移至檔案頂部全域防護工具區
 
 // 結清欠款 (自動寫入一筆還款交易)
 window.settleDebt = async function(from, to, amount) {
@@ -1536,19 +1638,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 更新卡片發光效果與打勾
     const updateCardState = (card, checked, status) => {
-        // 先移除所有狀態 class
+        const safeStatus = ['self', 'reserved', 'rental'].includes(status) ? status : 'self';
         card.classList.remove('status-self', 'status-reserved', 'status-rental');
-        
-        card.classList.add(`status-${status}`);
+        card.classList.add(`status-${safeStatus}`);
         
         const checkbox = card.querySelector('.gear-checkbox');
-        if (checkbox && checkbox.checked !== checked) {
-            checkbox.checked = checked;
+        if (checkbox && checkbox.checked !== Boolean(checked)) {
+            checkbox.checked = Boolean(checked);
         }
         
         const select = card.querySelector('.gear-status-select');
-        if (select && select.value !== status) {
-            select.value = status;
+        if (select && select.value !== safeStatus) {
+            select.value = safeStatus;
         }
     };
 
@@ -1803,18 +1904,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 Object.keys(data).forEach(key => {
                     const item = data[key];
+                    if (!item) return;
                     const itemEl = document.createElement('div');
                     itemEl.className = `grocery-item ${item.purchased ? 'purchased' : ''}`;
 
+                    const safeName = escapeHtml(String(item.name || '').slice(0, 80));
+                    const safeAssignee = escapeHtml(String(item.assignee || '').slice(0, 30));
+                    const safeCreatedBy = escapeHtml(String(item.createdBy || '').slice(0, 30));
+                    const safeKey = escapeHtml(key);
+
                     // 若有負責人，顯示專屬徽章
-                    const assigneeBadge = (item.assignee && item.assignee !== '')
-                        ? `<span class="badge-assignee" style="margin-left: 10px; font-size: 0.75rem; background: #E0F2FE; color: #0369A1; font-weight: 700; padding: 2px 8px; border-radius: 12px; border: 1px solid #7DD3FC;">負責人: ${item.assignee}</span>`
+                    const assigneeBadge = safeAssignee
+                        ? `<span class="badge-assignee" style="margin-left: 10px; font-size: 0.75rem; background: #E0F2FE; color: #0369A1; font-weight: 700; padding: 2px 8px; border-radius: 12px; border: 1px solid #7DD3FC;">負責人: ${safeAssignee}</span>`
                         : '';
                     
                     itemEl.innerHTML = `
-                        <span class="grocery-name">${item.name}${assigneeBadge}</span>
-                        <span class="grocery-meta" style="font-size:0.75rem;color:var(--text-secondary);margin-right:0.5rem;">${item.createdBy || ''}</span>
-                        <input type="checkbox" class="grocery-check" ${item.purchased ? 'checked' : ''} data-key="${key}">
+                        <span class="grocery-name">${safeName}${assigneeBadge}</span>
+                        <span class="grocery-meta" style="font-size:0.75rem;color:var(--text-secondary);margin-right:0.5rem;">${safeCreatedBy}</span>
+                        <input type="checkbox" class="grocery-check" ${item.purchased ? 'checked' : ''} data-key="${safeKey}">
                     `;
                     groceryListEl.appendChild(itemEl);
                 });
@@ -2136,7 +2243,7 @@ function updateAppWithMembers() {
     const creatorSelect = document.getElementById('expense-creator');
     if (creatorSelect) {
         const currentVal = creatorSelect.value;
-        creatorSelect.innerHTML = members.map(m => `<option value="${m.name}">${m.emoji} ${m.name}</option>`).join('');
+        creatorSelect.innerHTML = members.map(m => `<option value="${escapeHtml(m.name)}">${escapeHtml(m.emoji)} ${escapeHtml(m.name)}</option>`).join('');
         if (members.some(m => m.name === currentVal)) {
             creatorSelect.value = currentVal;
         }
@@ -2147,7 +2254,7 @@ function updateAppWithMembers() {
     if (payerSelector) {
         const currentPayer = document.getElementById('expense-payer')?.value;
         payerSelector.innerHTML = members.map(m => `
-            <button type="button" class="avatar-btn ${currentPayer === m.name ? 'selected' : ''}" data-name="${m.name}">${m.emoji}</button>
+            <button type="button" class="avatar-btn ${currentPayer === m.name ? 'selected' : ''}" data-name="${escapeHtml(m.name)}">${escapeHtml(m.emoji)}</button>
         `).join('');
     }
 
@@ -2155,7 +2262,7 @@ function updateAppWithMembers() {
     const participantSelector = document.getElementById('participant-selector');
     if (participantSelector) {
         participantSelector.innerHTML = members.map(m => `
-            <label class="checkbox-item"><input type="checkbox" value="${m.name}" checked><span class="checkmark"></span>${m.emoji} ${m.name}</label>
+            <label class="checkbox-item"><input type="checkbox" value="${escapeHtml(m.name)}" checked><span class="checkmark"></span>${escapeHtml(m.emoji)} ${escapeHtml(m.name)}</label>
         `).join('');
     }
 
@@ -2164,7 +2271,7 @@ function updateAppWithMembers() {
     if (groceryAssignee) {
         const currentAssignee = groceryAssignee.value;
         groceryAssignee.innerHTML = `<option value="">負責人(選填)</option>` + 
-            members.map(m => `<option value="${m.name}">${m.emoji} ${m.name}</option>`).join('') +
+            members.map(m => `<option value="${escapeHtml(m.name)}">${escapeHtml(m.emoji)} ${escapeHtml(m.name)}</option>`).join('') +
             `<option value="總召">👑 總召</option>`;
         groceryAssignee.value = currentAssignee;
     }
@@ -2175,7 +2282,7 @@ function updateAppWithMembers() {
         const activeBtn = gearUserSelector.querySelector('.gear-user-btn.active');
         const activeUser = activeBtn ? activeBtn.getAttribute('data-user') : members[0]?.name;
         gearUserSelector.innerHTML = members.map((m, idx) => `
-            <button class="gear-user-btn ${m.name === activeUser || (!activeBtn && idx === 0) ? 'active' : ''}" data-user="${m.name}">${m.emoji} ${m.name}</button>
+            <button class="gear-user-btn ${m.name === activeUser || (!activeBtn && idx === 0) ? 'active' : ''}" data-user="${escapeHtml(m.name)}">${escapeHtml(m.emoji)} ${escapeHtml(m.name)}</button>
         `).join('');
     }
 
@@ -2196,14 +2303,19 @@ function renderMembersModalCards() {
     container.innerHTML = members.map(m => `
         <div class="member-item-card">
             <div class="member-item-info">
-                <span class="member-item-emoji">${m.emoji}</span>
-                <span class="member-item-name">${m.name}</span>
-                ${m.role ? `<span class="member-item-role">${m.role}</span>` : ''}
+                <span class="member-item-emoji">${escapeHtml(m.emoji)}</span>
+                <span class="member-item-name">${escapeHtml(m.name)}</span>
+                ${m.role ? `<span class="member-item-role">${escapeHtml(m.role)}</span>` : ''}
             </div>
-            <button class="btn-delete-member" onclick="deleteMember('${m.name}')">刪除</button>
+            <button class="btn-delete-member" data-delete-member="${escapeHtml(m.name)}">刪除</button>
         </div>
     `).join('');
 }
+
+document.getElementById('members-card-list')?.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-delete-member]');
+    if (btn) window.deleteMember(btn.getAttribute('data-delete-member'));
+});
 
 window.deleteMember = function(name) {
     const members = getStoredMembers();
@@ -2372,7 +2484,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (statusEl) {
             if (pct === 100) {
-                statusEl.innerHTML = `<span style="color: #047857; font-weight: 700;">🎉 100% 完美武裝！${userLabel} 隨時可以空降妙高粉雪天堂！</span>`;
+                statusEl.innerHTML = `<span style="color: #047857; font-weight: 700;">🎉 100% 完美武裝！${escapeHtml(userLabel)} 隨時可以空降妙高粉雪天堂！</span>`;
             } else if (pct >= 60) {
                 statusEl.innerHTML = `<span style="color: #0284C7; font-weight: 600;">🔥 整備過半！還差 ${allBoxes.length - checkedBoxes.length} 項裝備就全副武裝囉！</span>`;
             } else {
@@ -2396,7 +2508,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const chatSelect = document.getElementById('chat-identity-select');
         if (chatSelect) {
             const currentVal = chatSelect.value;
-            chatSelect.innerHTML = members.map(m => `<option value="${m.name}">${m.emoji} ${m.name}</option>`).join('');
+            chatSelect.innerHTML = members.map(m => `<option value="${escapeHtml(m.name)}">${escapeHtml(m.emoji)} ${escapeHtml(m.name)}</option>`).join('');
             if (members.some(m => m.name === currentVal)) {
                 chatSelect.value = currentVal;
             }
